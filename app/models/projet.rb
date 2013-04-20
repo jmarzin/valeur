@@ -13,11 +13,11 @@ class Projet
       event :abandonner, :transitions_to => :abandonne
     end
     state :soumis do
-      event :accepter, :transitions_to => :approuve
-      event :rejeter, :transitions_to => :rejete
+      event :accepter, :transitions_to => :accepte
+      event :refuser, :transitions_to => :refuse
     end
     state :abandonne
-    state :approuve do
+    state :accepte do
       event :lancer, :transitions_to => :en_cours
       event :abandonner, :transitions_to => :abandonne
     end
@@ -26,7 +26,7 @@ class Projet
       event :abandonner, :transitions_to => :abandonne
     end
     state :en_cours do
-      event :finir, :transitions_to => :termine
+      event :terminer, :transitions_to => :termine
       event :abandonner, :transitions_to => :abandonne
     end
   end
