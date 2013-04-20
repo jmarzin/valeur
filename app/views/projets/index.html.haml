@@ -1,0 +1,37 @@
+%h1 Listing projets
+
+%table
+  %tr
+    %th Code
+    %th Nom
+    %th Ministere
+    %th Public
+    %th Etat
+    %th Description
+    %th Entites concernees
+    %th Date debut
+    %th Type de produit
+    %th Duree de vie
+    %th
+    %th
+    %th
+
+  - @projets.each do |projet|
+    %tr
+      %td= projet.code
+      %td= projet.nom
+      %td= projet.ministere
+      %td= projet.public
+      %td= projet.etat
+      %td= projet.description
+      %td= projet.entites_concernees
+      %td= projet.date_debut
+      %td= projet.type_de_produit
+      %td= projet.duree_de_vie
+      %td= link_to 'Show', projet
+      %td= link_to 'Edit', edit_projet_path(projet)
+      %td= link_to 'Destroy', projet, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Projet', new_projet_path

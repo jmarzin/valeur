@@ -1,0 +1,36 @@
+%p#notice= notice
+
+%p
+  %b Code:
+  = @projet.code
+%p
+  %b Nom:
+  = @projet.nom
+%p
+  %b Ministere:
+  = @projet.ministere
+%p
+  %b Public:
+  = @projet.public
+%p
+  %b Etat:
+  = @projet.etat
+%p
+  %b Description:
+  = @projet.description
+%p
+  %b Entites concernees:
+  = @projet.entites_concernees
+%p
+  %b Date debut:
+  = @projet.date_debut
+%p
+  %b Type de produit:
+  = @projet.type_de_produit
+%p
+  %b Duree de vie:
+  = @projet.duree_de_vie
+
+= link_to 'Edit', edit_projet_path(@projet)
+\|
+= link_to 'Back', projets_path

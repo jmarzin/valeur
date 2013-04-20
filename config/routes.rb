@@ -1,4 +1,7 @@
 Valeur::Application.routes.draw do
+  resources :projets
+
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

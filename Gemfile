@@ -5,6 +5,7 @@ source 'http://gemcutter.org'
 
 gem 'rails', '3.2.13'
 gem "mongoid", "~> 3.1.2"
+gem 'workflow_on_mongoid'
 gem 'haml'
 gem 'haml-rails'
 
@@ -34,6 +35,7 @@ end
 
 group :test do
   gem "factory_girl_rails", ">= 1.6.0"
+  gem 'mongoid-rspec'
   gem "cucumber-rails", ">= 1.2.1", :require => false
   gem 'cucumber-rails-training-wheels' # some pre-fabbed step definitions  
   gem "capybara", ">= 1.1.2"
