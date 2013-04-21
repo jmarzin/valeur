@@ -1,6 +1,14 @@
 source 'https://rubygems.org'
 
+require 'rubygems'
+source 'http://gemcutter.org'
+
 gem 'rails', '3.2.13'
+gem "mongoid", "~> 3.1.2"
+gem 'workflow_on_mongoid'
+gem 'haml'
+gem 'haml-rails'
+
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -20,6 +28,21 @@ group :assets do
 end
 
 gem 'jquery-rails'
+
+group :development, :test do
+  gem "rspec-rails", ">= 2.8.1"
+end
+
+group :test do
+  gem "factory_girl_rails", ">= 1.6.0"
+  gem "cucumber-rails", ">= 1.2.1", :require => false
+  gem 'cucumber-rails-training-wheels' # some pre-fabbed step definitions  
+  gem "capybara", ">= 1.1.2"
+  gem "database_cleaner"
+  gem "ZenTest"
+  gem 'spork'
+  gem "launchy"
+end
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'

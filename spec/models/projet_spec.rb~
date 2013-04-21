@@ -67,13 +67,13 @@ describe Projet do
         describe "Cas statut rejeté" do
           before(:each) { @projet.rejeter! }
           it "Un projet rejeté peut être ré étudier" do
-            @projet.current_state.events[:re_etudier].transitions_to.should be :a_l_etude
+            pending
           end
           it "Un projet rejeté peut être abandonné" do
-            @projet.current_state.events[:abandonner].transitions_to.should be :abandonne
+            pending
           end
           it "Pas d'autres évènements pour un projet rejeté" do
-            @projet.current_state.events.keys.sort.should == [:abandonner,:re_etudier]
+            pending
           end
         end
       end

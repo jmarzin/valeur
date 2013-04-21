@@ -16,6 +16,7 @@ class Projet
       event :accepter, :transitions_to => :accepte
       event :rejeter, :transitions_to => :rejete
     end
+    state :abandonne
     state :accepte do
       event :lancer, :transitions_to => :en_cours
       event :abandonner, :transitions_to => :abandonne
@@ -25,11 +26,9 @@ class Projet
       event :abandonner, :transitions_to => :abandonne
     end
     state :en_cours do
-      event :terminer, :transitions_to => :termine
+      event :achever, :transitions_to => :acheve
       event :abandonner, :transitions_to => :abandonne
     end
-    state :abandonne
-    state :termine
   end
   field :description, type: String
   field :entites_concernees, type: String

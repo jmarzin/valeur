@@ -14,8 +14,9 @@ class Projet
     end
     state :soumis do
       event :accepter, :transitions_to => :accepte
-      event :rejeter, :transitions_to => :rejete
+      event :refuser, :transitions_to => :refuse
     end
+    state :abandonne
     state :accepte do
       event :lancer, :transitions_to => :en_cours
       event :abandonner, :transitions_to => :abandonne
@@ -28,8 +29,6 @@ class Projet
       event :terminer, :transitions_to => :termine
       event :abandonner, :transitions_to => :abandonne
     end
-    state :abandonne
-    state :termine
   end
   field :description, type: String
   field :entites_concernees, type: String

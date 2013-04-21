@@ -1,12 +1,5 @@
 class Projet
-  include Mongoid::Document
-  field :code, type: String
-  field :nom, type: String
-  field :ministere, type: String
-  field :public, type: Boolean
-  field :etat, type: Symbol
   include Workflow
-  workflow_column :etat
   workflow do
     state :a_l_etude do
       event :soumettre, :transitions_to => :soumis
@@ -31,9 +24,4 @@ class Projet
     state :abandonne
     state :termine
   end
-  field :description, type: String
-  field :entites_concernees, type: String
-  field :date_debut, type: Date
-  field :type_de_produit, type: Symbol
-  field :duree_de_vie, type: Integer
 end
