@@ -1,1 +1,0 @@
-rails generate scaffold Projet code:string nom:string ministere:string public:boolean etat:symbol description:string entites_concernees:string date_debut:date type_de_produit:symbol duree_de_vie:integer

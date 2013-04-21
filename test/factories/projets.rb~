@@ -8,6 +8,6 @@ FactoryGirl.define do
     description "Description"
     entites_concernees "Entités concernées"
     type_de_produit :front_office
-    duree_de_vie 5
+ #   duree_de_vie 5
   end
 end

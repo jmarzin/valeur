@@ -10,6 +10,7 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
 RSpec.configure do |config|
   config.mock_with :rspec
+  config.include Mongoid::Matchers
 
   config.before :each do
     Mongoid.purge!
