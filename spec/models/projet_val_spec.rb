@@ -1,6 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
+
 describe Projet do
   it { should have_fields(:code) }
   it { should validate_presence_of(:code) }

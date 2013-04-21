@@ -1,6 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
+
 describe Projet do
   it { should have_fields(:code) }
   it { should validate_presence_of(:code) }
@@ -21,5 +22,4 @@ describe Projet do
   it { should validate_inclusion_of(:type_de_produit).to_allow([:front_office, :back_office, :valeur]) }
   it { should have_fields(:duree_de_vie) }
   it { should validate_presence_of(:duree_de_vie)}
-  projet = FactoryGirl.create(:projet)
 end

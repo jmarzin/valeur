@@ -1,12 +1,12 @@
 # encoding: utf-8
 # Read about factories at https://github.com/thoughtbot/factory_girl
-
+include RandomText
 FactoryGirl.define do
   factory :projet do
-    code "Code"
-    nom "Nom"
-    description "Description"
-    entites_concernees "Entités concernées"
+    code Lorem.word.upcase
+    nom Lorem.word.capitalize+" "+Lorem.word
+    description Lorem.sentence
+    entites_concernees Lorem.sentence
     type_de_produit :front_office
     duree_de_vie 5
   end
