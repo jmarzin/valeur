@@ -1,6 +1,22 @@
 # encoding: utf-8
+
+class CoherenceEtude < ActiveModel::Validator
+  def validate(rec)
+    test = rec.date_etude_lancement && rec.cout_etude_lancement && rec.dr_etude_lancement
+    if rec.etat >= :lance && test == nil
+      rec.errors[:base] << "Les données de lancement sont obligatoires pour un projet lancé"
+    end
+#    if options[:fields].any?{|field| record.send(field) == "Evil" }
+#      record.errors[:base] << "This person is evil"
+#    end
+  end
+end
+
+
 class Projet
   include Mongoid::Document
+  include ActiveModel::Validations
+  validates_with(CoherenceEtude)
   field :code, type: String
   validates :code, :presence => {:message => "Le code est obligatoire"}
   validates :code, :uniqueness => {:message => "Le code doit être unique"}
@@ -57,4 +73,7 @@ class Projet
   field :dr_derniere_etude, type:Float
   field :derive_cout, type:Float
   field :derive_dr, type:Float
+
 end
+
+

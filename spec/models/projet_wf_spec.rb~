@@ -56,11 +56,17 @@ describe Projet do
                 @projet.current_state.events.should be_empty
               end
             end
-            describe "Cas statut arreté" do
+            describe "Cas statut arrêté" do
               it "Un projet arrêté ne peut plus évoluer" do
                 @projet.arreter!
                 @projet.current_state.events.should be_empty
               end
+            end
+          end
+          describe "Cas statut abandonné" do
+            it "Un projet abandonné ne peut plus évoluer" do
+              @projet.abandonner!
+              @projet.current_state.events.should be_empty
             end
           end
         end
@@ -74,6 +80,7 @@ describe Projet do
           end
           it "Pas d'autres évènements pour un projet rejeté" do
             @projet.current_state.events.keys.sort.should == [:abandonner,:re_etudier]
+            p @projet.errors
           end
         end
       end
