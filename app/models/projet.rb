@@ -49,4 +49,12 @@ class Projet
     :message => "%{value} n'est pas une valeur valide" }
   field :duree_de_vie, type: Integer
   validates :duree_de_vie, :presence => {:message => "La durée de vie du produit est obligatoire"}
+  field :date_etude_lancement, type:Date
+  field :cout_etude_lancement, type:Float
+  field :dr_etude_lancement, type:Float
+  field :date_derniere_etude, type:Date
+  field :cout_derniere_etude, type:Float
+  field :dr_derniere_etude, type:Float
+  field :derive_cout, type:Float
+  field :derive_dr, type:Float
 end
