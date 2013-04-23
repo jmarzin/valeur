@@ -22,34 +22,19 @@ describe Projet do
   it { should validate_inclusion_of(:type_de_produit).to_allow([:front_office, :back_office, :valeur]) }
   it { should have_fields(:duree_de_vie) }
   it { should validate_presence_of(:duree_de_vie)}
-  it { should have_fields(:date_etude_lancement) }
-  it { should have_fields(:cout_etude_lancement) }
-  it { should have_fields(:dr_etude_lancement) }
-  it { should have_fields(:date_derniere_etude) }
-  it { should have_fields(:cout_derniere_etude) }
-  it { should have_fields(:dr_derniere_etude) }
+  it { should embed_many(:resumes) }
+  it "Si le statut est lancé, ou terminé, ou arrêté, il y a ou moins un résumé" do
+    FactoryGirl.build(:projet, etat: :lance, resumes: []).should be_invalid
+    resume1 = FactoryGirl.build(:resume, date: '01.01.2013', cout: 100000, dr: 4.5)
+    FactoryGirl.build(:projet, etat: :lance, resumes: [resume1]).should be_valid
+  end
+  it "Chaque résumé doit être complet" do
+    resume1 = FactoryGirl.build(:resume, date: '01.01.2013', cout: 100000, dr: 4.5)
+    resume2 = FactoryGirl.build(:resume, date: '01.01.2013', cout: nil,dr: 4.5)
+    FactoryGirl.build(:projet,etat: :lance, resumes: [resume1,resume2]).should be_invalid
+    resume2.cout = 50000
+    FactoryGirl.build(:projet,etat: :lance, resumes: [resume1,resume2]).should be_valid
+  end
   it { should have_fields(:derive_cout) }
   it { should have_fields(:derive_dr) }
-  it "Si le statut est lancé, ou terminé, ou arrêté, :date_, cout_ et dr_etude_lancement sont présents" do
-    FactoryGirl.build(:projet, :etat => :lance, :date_etude_lancement => nil,
-	:cout_etude_lancement => nil, :dr_etude_lancement => nil).should be_invalid
-    FactoryGirl.build(:projet, :etat => :lance, :date_etude_lancement => '01.01.2013',
-	:cout_etude_lancement => nil, :dr_etude_lancement => nil).should be_invalid
-    FactoryGirl.build(:projet, :etat => :lance, :date_etude_lancement => '01.01.2013',
-	:cout_etude_lancement => 1000000.00, :dr_etude_lancement => nil).should be_invalid
-    FactoryGirl.build(:projet, :etat => :arrete, :date_etude_lancement => '01.01.2013',
-	:cout_etude_lancement => 1000000.00, :dr_etude_lancement => nil).should be_invalid
-  end
-  it "Si le statut n'est ni lancé, ni terminé, ni arrêté, :date_, cout_ et dr_etude_lancement sont absents" do
-    pending "A développer"
-  end
-  it "Si la date_etude_lancement n'est pas fournie, date_, cout_ et dr_derniere_etude sont absents" do
-    pending "A développer"
-  end
-  it "Les date_, cout_ et dr_derniere_etude, sont soit toutes absentes, soit toutes présentes" do
-    pending "A développer"
-  end
-  it "Si la date_derniere_etude est fournie, alors la derive cout et dr sont présents" do
-    pending "A développer"
-  end
 end

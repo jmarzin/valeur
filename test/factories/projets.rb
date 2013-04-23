@@ -2,6 +2,8 @@
 # Read about factories at https://github.com/thoughtbot/factory_girl
 include RandomText
 FactoryGirl.define do
+  factory :resume do
+  end
   factory :projet do
     code Lorem.word.upcase
     nom Lorem.word.capitalize+" "+Lorem.word

@@ -2,20 +2,25 @@
 
 class CoherenceEtude < ActiveModel::Validator
   def validate(rec)
-    test = rec.date_etude_lancement && rec.cout_etude_lancement && rec.dr_etude_lancement
-    if [:lance,:termine,:arrete].include?(rec.etat) && test == nil
-      rec.errors[:base] << "Les données de lancement sont obligatoires pour un projet lancé"
+    if [:lance,:termine,:arrete].include?(rec.etat) && rec.resumes.empty?
+      rec.errors[:base] << "Un projet lancé doit avoir au moins un résumé d'étude"
     end
-#    if options[:fields].any?{|field| record.send(field) == "Evil" }
-#      record.errors[:base] << "This person is evil"
-#    end
+    rec.resumes.each do |r|
+      rec.errors[:base] << "Chaque résumé doit être complet" unless r.date && r.cout && r.dr
+    end
   end
 end
 
+class Resume
+  include Mongoid::Document
+  field :date, type: Date
+  field :cout, type: Float
+  field :dr, type: Float
+  embedded_in :projet
+end
 
 class Projet
   include Mongoid::Document
-  include ActiveModel::Validations
   validates_with(CoherenceEtude)
   field :code, type: String
   validates :code, :presence => {:message => "Le code est obligatoire"}
@@ -65,14 +70,11 @@ class Projet
     :message => "%{value} n'est pas une valeur valide" }
   field :duree_de_vie, type: Integer
   validates :duree_de_vie, :presence => {:message => "La durée de vie du produit est obligatoire"}
-  field :date_etude_lancement, type:Date
-  field :cout_etude_lancement, type:Float
-  field :dr_etude_lancement, type:Float
-  field :date_derniere_etude, type:Date
-  field :cout_derniere_etude, type:Float
-  field :dr_derniere_etude, type:Float
   field :derive_cout, type:Float
   field :derive_dr, type:Float
+  field :quotation_disic, type:Integer
+
+  embeds_many :resumes
 
 end
 
