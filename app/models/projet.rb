@@ -40,13 +40,13 @@ class Projet
   include Mongoid::Document
   validates_with(CoherenceEtude)
   field :code, type: String
-  validates :code, :presence => {:message => "Le code est obligatoire"}
-  validates :code, :uniqueness => {:message => "Le code doit être unique"}
+  validates :code, :presence => {:message => "obligatoire"}
+  validates :code, :uniqueness => {:message => "doit être unique"}
   field :nom, type: String
-  validates :nom, :presence => {:message => "Le nom est obligatoire"}
+  validates :nom, :presence => {:message => "obligatoire"}
   field :ministere, type: String
   field :public, type: Boolean, default: true
-  validates :public, :presence => {:message => "L'indicateur public est obligatoire"}
+  validates :public, :presence => {:message => "obligatoire"}
   field :etat, type: Symbol
   include Workflow
   workflow_column :etat
@@ -76,22 +76,22 @@ class Projet
     state :arrete
   end
   field :description, type: String
-  validates :description, :presence => {:message => "La description est obligatoire"}
+  validates :description, :presence => {:message => "obligatoire"}
   field :entites_concernees, type: String
-  validates :entites_concernees, :presence => {:message => "Vous devez préciser les entités concernées"}
+  validates :entites_concernees, :presence => {:message => "à préciser"}
   field :date_debut, type: Date
-  validates :date_debut, :presence => {:message => "La date de début est obligatoire pour un projet lancé",
+  validates :date_debut, :presence => {:message => "obligatoire pour un projet lancé",
 	 :if => "[:en_cours,:arrete,:termine].include?(self.current_state)" }
   field :type_de_produit, type: Symbol
   validates :type_de_produit, :inclusion => { :in => [:front_office,:back_office,:valeur],
-    :message => "%{value} n'est pas une valeur valide" }
+    :message => "%{value} invalide" }
   field :duree_de_vie, type: Integer
-  validates :duree_de_vie, :presence => {:message => "La durée de vie du produit est obligatoire"}
+  validates :duree_de_vie, :presence => {:message => "obligatoire"}
   field :derive_cout, type:Float
   field :derive_dr, type:Float
   field :quotation_disic, type:Integer
   validates :quotation_disic, :inclusion => { :in => [0,1,2,3,4,5],
-    :message => "%{value} n'est pas une valeur valide" }
+    :message => "%{value} invalide" }
   embeds_many :resumes
 
 end

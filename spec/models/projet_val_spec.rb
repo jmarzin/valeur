@@ -52,5 +52,4 @@ describe Projet do
   end
   it { should have_fields(:quotation_disic) }
   it { should validate_inclusion_of(:quotation_disic).to_allow([0,1,2,3,4,5]) }
-  p FactoryGirl.build(:projet)
 end
