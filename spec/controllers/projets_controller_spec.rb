@@ -30,7 +30,8 @@ describe ProjetsController do
     "description" => "Description",
     "entites_concernees" => "Entités concernées",
     "type_de_produit" => :front_office,
-    "duree_de_vie" => 5 }
+    "duree_de_vie" => 5, 
+    "quotation_disic" => 5}
   end
 
   # This should return the minimal set of values that should be in the session

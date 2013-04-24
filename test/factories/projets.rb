@@ -11,5 +11,6 @@ FactoryGirl.define do
     entites_concernees Lorem.sentence
     type_de_produit :front_office
     duree_de_vie 5
+    quotation_disic {rand(6)}
   end
 end

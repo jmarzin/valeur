@@ -8,6 +8,23 @@ class CoherenceEtude < ActiveModel::Validator
     rec.resumes.each do |r|
       rec.errors[:base] << "Chaque résumé doit être complet" unless r.date && r.cout && r.dr
     end
+    nb = 0
+    rec.resumes.each do |e| nb += 1 end 
+    if nb <= 1
+      if rec.derive_cout
+        rec.errors[:base] << "Le calcul de la dérive des coûts nécessite 2 études"
+      end
+      if rec.derive_dr
+        rec.errors[:base] << "Le calcul de la dérive du délai de retour nécessite 2 études"
+      end
+    else 
+      if not rec.derive_cout
+        rec.errors[:base] << "La dérive des coûts est calculée s'il y a plusieurs études"
+      end
+      if not rec.derive_dr
+        rec.errors[:base] << "La dérive du délai de retour est calculée s'il y a plusieurs études"
+      end
+    end      
   end
 end
 
@@ -73,7 +90,8 @@ class Projet
   field :derive_cout, type:Float
   field :derive_dr, type:Float
   field :quotation_disic, type:Integer
-
+  validates :quotation_disic, :inclusion => { :in => [0,1,2,3,4,5],
+    :message => "%{value} n'est pas une valeur valide" }
   embeds_many :resumes
 
 end
