@@ -1,4 +1,4 @@
-%h1 Listing projets
+%h1 Liste des projets de l'Etat
 
 %table
   %tr
@@ -9,6 +9,7 @@
     %th Etat
     %th Date début
     %th Montant
+    %th Retour
     %th Delta coût
     %th Delta retour
     %th Quotation
@@ -21,13 +22,14 @@
       %td= projet.code
       %td= projet.nom
       %td= projet.ministere
-      %td= projet.public
-      %td= projet.etat
-      %td= projet.description
-      %td= projet.entites_concernees
+      %td= "#{if projet.public then "Oui" else "Non" end}"
+      %td= projet.etat.capitalize
       %td= projet.date_debut
-      %td= projet.type_de_produit
-      %td= projet.duree_de_vie
+      %td= "#{sprintf('%9.1f',projet.resumes[-1].cout) if projet.resumes[-1]}"
+      %td= "#{sprintf('%5.1f',projet.resumes[-1].dr) if projet.resumes[-1]}"
+      %td= "#{sprintf('+%3d %',projet.derive_cout) if projet.derive_cout}"
+      %td= "#{sprintf('+%3d %',projet.derive_dr) if projet.derive_dr}"
+      %td= projet.quotation_disic
       %td= link_to 'Show', projet
       %td= link_to 'Edit', edit_projet_path(projet)
       %td= link_to 'Destroy', projet, :method => :delete, :data => { :confirm => 'Are you sure?' }

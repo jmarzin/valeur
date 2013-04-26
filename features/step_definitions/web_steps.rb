@@ -51,7 +51,7 @@ Quand /^(?:|I )go to (.+)$/ do |page_name|
   visit path_to(page_name)
 end
 
-Quand /^(?:|I )press "([^"]*)"$/ do |button|
+Quand /^(?:|je )clique sur (.+)$/ do |button|
   click_button(button)
 end
 

@@ -1,7 +1,7 @@
 = form_for @projet do |f|
   - if @projet.errors.any?
     #error_explanation
-      %h2= "#{pluralize(@projet.errors.count, "error")} prohibited this projet from being saved:"
+      %h2= "#{pluralize(@projet.errors.count, "erreurs")} : ce projet n'a pas pu être enregistré"
       %ul
         - @projet.errors.full_messages.each do |msg|
           %li= msg
@@ -19,9 +19,6 @@
     = f.label :public
     = f.check_box :public
   .field
-    = f.label :etat
-    = f.text_field :etat
-  .field
     = f.label :description
     = f.text_field :description
   .field
@@ -36,5 +33,8 @@
   .field
     = f.label :duree_de_vie
     = f.number_field :duree_de_vie
+  .field
+    = f.label :quotation_disic
+    = f.number_field :quotation_disic
   .actions
     = f.submit 'Save'
