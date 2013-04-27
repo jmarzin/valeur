@@ -47,15 +47,15 @@ Quand /^(?:|je )suis sur la page (.+)$/ do |page_name|
   visit path_to(page_name)
 end
 
-Quand /^(?:|I )go to (.+)$/ do |page_name|
-  visit path_to(page_name)
+Quand /^(?:|je )vais sur la page (.+)$/ do |page_name|
+  visit page_name
 end
 
 Quand /^(?:|je )clique sur (.+)$/ do |button|
   click_button(button)
 end
 
-Quand /^(?:|I )follow "([^"]*)"$/ do |link|
+Quand /^(?:|je )suis le lien (.+)$/ do |link|
   click_link(link)
 end
 

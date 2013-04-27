@@ -7,14 +7,11 @@
   %b Nom:
   = @projet.nom
 %p
-  %b Ministere:
+  %b Ministère:
   = @projet.ministere
 %p
   %b Public:
   = @projet.public
-%p
-  %b Etat:
-  = @projet.etat
 %p
   %b Description:
   = @projet.description
@@ -22,9 +19,15 @@
   %b Entites concernees:
   = @projet.entites_concernees
 %p
-  %b Date debut:
+  %b Date début:
   = @projet.date_debut
+%p
+  %b Etat:
+  = @projet.etat
+%p
+  %b Quotation DISIC
+  = @projet.quotation_disic
 
-= link_to 'Edit', edit_projet_path(@projet)
+= link_to 'Modif', edit_projet_path(@projet)
 \|
 = link_to 'Back', projets_path

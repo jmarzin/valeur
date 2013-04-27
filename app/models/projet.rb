@@ -42,6 +42,14 @@ class Projet
     ['Intermin','Aff.Etrangères','Agriculture','Culture','Défense','Ecologie','Finances','Intérieur','Sociaux','Serv. PM']
   end
 
+  def self.liste_quotations
+    [nil,0,1,2,3,4,5]
+  end
+
+  def liste_etats
+    tableau = ([self.current_state.to_sym] << self.current_state.events.keys).flatten
+  end
+
   include Mongoid::Document
   validates_with(CoherenceEtude)
   field :_id, type:Integer, default: ->{ if Projet.count == 0 then 1 else Projet.last._id + 1 end }

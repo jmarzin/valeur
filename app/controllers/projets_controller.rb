@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class ProjetsController < ApplicationController
   # GET /projets
   # GET /projets.json
@@ -44,7 +46,7 @@ class ProjetsController < ApplicationController
 
     respond_to do |format|
       if @projet.save
-        format.html { redirect_to @projet, notice: 'Projet was successfully created.' }
+        format.html { redirect_to @projet, notice: 'Le projet a été correctement créé.' }
         format.json { render json: @projet, status: :created, location: @projet }
       else
         format.html { render action: "new" }

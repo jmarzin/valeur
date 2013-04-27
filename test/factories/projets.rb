@@ -3,6 +3,9 @@
 include RandomText
 FactoryGirl.define do
   factory :resume do
+    date '2013-01-01'
+    cout 100.00
+    dr 2.5
   end
   factory :projet do
     code Lorem.word.upcase

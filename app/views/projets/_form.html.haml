@@ -5,7 +5,6 @@
       %ul
         - @projet.errors.full_messages.each do |msg|
           %li= msg
-
   .field
     = f.label :code, 'Code'
     = f.text_field :code
@@ -27,5 +26,13 @@
   .field
     = f.label :date_debut, 'Date début'
     = f.date_select :date_debut
+  = if params["action"] != "new" then
+    .field
+      = f.label :etat, 'Etat'
+      = f.select :etat, @projet.liste_etats
+    .field
+      = f.label :quotation_disic, 'Quotation'
+      = f.select :quotation_disic, Projet.liste_quotations
+ 
   .actions
     = f.submit 'Save'

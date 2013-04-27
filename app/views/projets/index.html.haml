@@ -1,38 +1,40 @@
 %h1 Liste des projets de l'Etat
 
-%table
-  %tr
-    %th Code
-    %th Nom
-    %th Ministère
-    %th Public
-    %th Etat
-    %th Date début
-    %th Montant
-    %th Retour
-    %th Delta coût
-    %th Delta retour
-    %th Quotation
-    %th
-    %th
-    %th
+- if not @projets.empty? then
 
-  - @projets.each do |projet|
+  %table
     %tr
-      %td= projet.code
-      %td= projet.nom
-      %td= projet.ministere
-      %td= "#{if projet.public then "Oui" else "Non" end}"
-      %td= projet.etat.capitalize
-      %td= projet.date_debut
-      %td= "#{sprintf('%9.1f',projet.resumes[-1].cout) if projet.resumes[-1]}"
-      %td= "#{sprintf('%5.1f',projet.resumes[-1].dr) if projet.resumes[-1]}"
-      %td= "#{sprintf('+%3d %',projet.derive_cout) if projet.derive_cout}"
-      %td= "#{sprintf('+%3d %',projet.derive_dr) if projet.derive_dr}"
-      %td= projet.quotation_disic
-      %td= link_to 'Show', projet
-      %td= link_to 'Edit', edit_projet_path(projet)
-      %td= link_to 'Destroy', projet, :method => :delete, :data => { :confirm => 'Are you sure?' }
+      %th Code
+      %th Nom
+      %th Ministère
+      %th Public
+      %th Etat
+      %th Date début
+      %th Montant
+      %th Retour
+      %th Delta coût
+      %th Delta retour
+      %th Quotation
+      %th
+      %th
+      %th
+
+    - @projets.each do |projet|
+      %tr
+        %td= projet.code
+        %td= projet.nom
+        %td= projet.ministere
+        %td= "#{if projet.public then "Oui" else "Non" end}"
+        %td= projet.etat.capitalize
+        %td= projet.date_debut
+        %td= "#{sprintf('%9.1f',projet.resumes[-1].cout) if projet.resumes[-1]}"
+        %td= "#{sprintf('%5.1f',projet.resumes[-1].dr) if projet.resumes[-1]}"
+        %td= "#{sprintf('+%3d %',projet.derive_cout) if projet.derive_cout}"
+        %td= "#{sprintf('+%3d %',projet.derive_dr) if projet.derive_dr}"
+        %td= projet.quotation_disic
+        %td= link_to 'Détail', projet
+        %td= link_to 'Modif', edit_projet_path(projet)
+        %td= link_to 'Supp', projet, :method => :delete, :data => { :confirm => 'Are you sure?' }
 
 %br
 
