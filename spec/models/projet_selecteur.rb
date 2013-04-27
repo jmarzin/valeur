@@ -12,4 +12,4 @@ describe "Gestion des sélecteurs" do
     projet = FactoryGirl.build(:projet)
     expect(projet.liste_etats).to eq([:a_l_etude,:soumettre,:abandonner])
   end
-end
+end 
