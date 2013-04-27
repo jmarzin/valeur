@@ -29,8 +29,7 @@ describe ProjetsController do
     "nom" => "Nom",
     "description" => "Description",
     "entites_concernees" => "Entités concernées",
-    "type_de_produit" => :front_office,
-    "duree_de_vie" => 5, 
+    "ministere" => "Finances",
     "quotation_disic" => 5}
   end
 

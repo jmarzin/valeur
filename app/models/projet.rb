@@ -37,6 +37,11 @@ class Resume
 end
 
 class Projet
+
+  def self.liste_ministeres
+    ['Intermin','Aff.Etrangères','Agriculture','Culture','Défense','Ecologie','Finances','Intérieur','Sociaux','Serv. PM']
+  end
+
   include Mongoid::Document
   validates_with(CoherenceEtude)
   field :_id, type:Integer, default: ->{ if Projet.count == 0 then 1 else Projet.last._id + 1 end }
@@ -46,6 +51,7 @@ class Projet
   field :nom, type: String
   validates :nom, :presence => {:message => "obligatoire"}
   field :ministere, type: String
+  validates :ministere, :presence => {:message => "obligatoire"}
   field :public, type: Boolean, default: true
   validates :public, :presence => {:message => "obligatoire"}
   field :etat, type: Symbol
@@ -83,15 +89,10 @@ class Projet
   field :date_debut, type: Date
   validates :date_debut, :presence => {:message => "obligatoire pour un projet lancé",
 	 :if => "[:en_cours,:arrete,:termine].include?(self.current_state)" }
-  field :type_de_produit, type: Symbol
-  validates :type_de_produit, :inclusion => { :in => [:front_office,:back_office,:valeur],
-    :message => "%{value} invalide" }
-  field :duree_de_vie, type: Integer
-  validates :duree_de_vie, :presence => {:message => "obligatoire"}
   field :derive_cout, type:Float
   field :derive_dr, type:Float
   field :quotation_disic, type:Integer
-  validates :quotation_disic, :inclusion => { :in => [0,1,2,3,4,5],
+  validates :quotation_disic, :inclusion => { :in => [nil,0,1,2,3,4,5],
     :message => "%{value} invalide" }
   embeds_many :resumes
 

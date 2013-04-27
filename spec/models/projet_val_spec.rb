@@ -9,6 +9,7 @@ describe Projet do
   it { should have_fields(:nom) }
   it { should validate_presence_of(:nom) }
   it { should have_fields(:ministere) }
+  it { should validate_presence_of(:ministere) }
   it { should have_fields(:public) }
   it { should validate_presence_of(:public) }
   it { should have_fields(:etat) } # les valeurs prises sont pilotées par le workflow
@@ -18,10 +19,6 @@ describe Projet do
   it { should validate_presence_of(:entites_concernees) }
   it { should have_fields(:date_debut) }
   it { should validate_presence_of(:date_debut) }
-  it { should have_fields(:type_de_produit) }
-  it { should validate_inclusion_of(:type_de_produit).to_allow([:front_office, :back_office, :valeur]) }
-  it { should have_fields(:duree_de_vie) }
-  it { should validate_presence_of(:duree_de_vie)}
   it { should embed_many(:resumes) }
   before(:each) { @resume1 = FactoryGirl.build(:resume, date: '01.01.2013', cout: 100000, dr: 4.5) }
   it "Si le statut est lancé, ou terminé, ou arrêté, il y a ou moins un résumé" do

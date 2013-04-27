@@ -7,10 +7,9 @@ FactoryGirl.define do
   factory :projet do
     code Lorem.word.upcase
     nom Lorem.word.capitalize+" "+Lorem.word
+    ministere 'Finances'
     description Lorem.sentence
     entites_concernees Lorem.sentence
-    type_de_produit :front_office
-    duree_de_vie 5
     quotation_disic {rand(6)}
   end
 end

@@ -44,6 +44,7 @@ group :test do
   gem 'spork'
   gem "launchy"
   gem "random_text"
+  gem 'simplecov'
 end
 
 # To use ActiveModel has_secure_password

@@ -23,15 +23,13 @@ end
 Etantdonné(/^que je saisis les donnees du formulaire$/) do
   fill_in('projet_code', :with => "XXXX")
   fill_in('projet_nom', :with => "Chorus")
-  fill_in('projet_ministere', :with => "Finances")
+  select('Finances', :from => 'Ministères')
   fill_in('projet_description', :with => "Description")
   fill_in('projet_entites_concernees', :with => "Entités")
-  fill_in('projet_type_de_produit', :with => "back_office")
-  fill_in('projet_duree_de_vie', :with => 5)
-  fill_in('projet_quotation_disic', :with => 4)
 end
 
 Alors(/^je ne vois pas d'erreur$/) do
+  click_button('Save')
   page.should_not have_content "ce projet n'a pas pu être enregistré"
 end
 
@@ -45,10 +43,16 @@ end
 
 Quand(/^je ne saisis rien dans la zone (.+)$/) do |zone|
   fill_in("projet_#{zone}", :with => "")
+  click_button('Save')
+end
+
+Quand(/^je sélectionne "(.*?)" dans la zone (.+)$/) do |valeur,champ|
+  select(valeur, :from => champ)
+  click_button('Save')
 end
 
 Alors(/^je vois le message (.+)$/) do |message|
-  page.should_not have_content message
+  page.should have_content message
 end
 
 Etantdonné(/^les projets suivants:$/) do |table|

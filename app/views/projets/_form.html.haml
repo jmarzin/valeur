@@ -13,8 +13,8 @@
     = f.label :nom, 'Nom'
     = f.text_field :nom
   .field
-    = f.label :ministere, 'Ministère'
-    = f.text_field :ministere
+    = f.label :ministere, 'Ministères'
+    = f.select :ministere, Projet.liste_ministeres
   .field
     = f.label :public, 'Public'
     = f.check_box :public
@@ -27,14 +27,5 @@
   .field
     = f.label :date_debut, 'Date début'
     = f.date_select :date_debut
-  .field
-    = f.label :type_de_produit, 'Type de produit'
-    = f.text_field :type_de_produit
-  .field
-    = f.label :duree_de_vie, 'Durée de vie'
-    = f.number_field :duree_de_vie
-  .field
-    = f.label :quotation_disis, 'Quotation DISIC'
-    = f.number_field :quotation_disic
   .actions
     = f.submit 'Save'
