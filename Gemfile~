@@ -43,6 +43,7 @@ group :test do
   gem "ZenTest"
   gem 'spork'
   gem "launchy"
+  gem "random_text"
 end
 
 # To use ActiveModel has_secure_password

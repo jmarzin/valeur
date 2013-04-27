@@ -1,0 +1,34 @@
+validates_with
+
+This helper passes the record to a separate class for validation.
+class Person < ActiveRecord::Base
+  validates_with GoodnessValidator
+end
+ 
+class GoodnessValidator < ActiveModel::Validator
+  def validate(record)
+    if record.first_name == "Evil"
+      record.errors[:base] << "This person is evil"
+    end
+  end
+end
+
+Errors added to record.errors[:base] relate to the state of the record as a whole, and not to a specific attribute.
+
+The validates_with helper takes a class, or a list of classes to use for validation. There is no default error message for validates_with. You must manually add errors to the record’s errors collection in the validator class.
+
+To implement the validate method, you must have a record parameter defined, which is the record to be validated.
+
+Like all other validations, validates_with takes the :if, :unless and :on options. If you pass any other options, it will send those options to the validator class as options:
+class Person < ActiveRecord::Base
+  validates_with GoodnessValidator, :fields => [:first_name, :last_name]
+end
+ 
+class GoodnessValidator < ActiveModel::Validator
+  def validate(record)
+    if options[:fields].any?{|field| record.send(field) == "Evil" }
+      record.errors[:base] << "This person is evil"
+    end
+  end
+end
+

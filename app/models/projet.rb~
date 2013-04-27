@@ -2,29 +2,70 @@
 
 class CoherenceEtude < ActiveModel::Validator
   def validate(rec)
-    test = rec.date_etude_lancement && rec.cout_etude_lancement && rec.dr_etude_lancement
-    if rec.etat >= :lance && test == nil
-      rec.errors[:base] << "Les données de lancement sont obligatoires pour un projet lancé"
+    if [:lance,:termine,:arrete].include?(rec.etat) && rec.resumes.empty?
+      rec.errors[:base] << "Un projet lancé doit avoir au moins un résumé d'étude"
     end
-#    if options[:fields].any?{|field| record.send(field) == "Evil" }
-#      record.errors[:base] << "This person is evil"
-#    end
+    rec.resumes.each do |r|
+      rec.errors[:base] << "Chaque résumé doit être complet" unless r.date && r.cout && r.dr
+    end
+    nb = 0
+    rec.resumes.each do |e| nb += 1 end 
+    if nb <= 1
+      if rec.derive_cout
+        rec.errors[:base] << "Le calcul de la dérive des coûts nécessite 2 études"
+      end
+      if rec.derive_dr
+        rec.errors[:base] << "Le calcul de la dérive du délai de retour nécessite 2 études"
+      end
+    else 
+      if not rec.derive_cout
+        rec.errors[:base] << "La dérive des coûts est calculée s'il y a plusieurs études"
+      end
+      if not rec.derive_dr
+        rec.errors[:base] << "La dérive du délai de retour est calculée s'il y a plusieurs études"
+      end
+    end      
   end
 end
 
+class Resume
+  include Mongoid::Document
+  field :date, type: Date
+  field :cout, type: Float
+  field :dr, type: Float
+  embedded_in :projet
+end
 
 class Projet
+
+  def self.liste_ministeres
+    ['Intermin','Aff.Etrangères','Agriculture','Culture','Défense','Ecologie','Finances','Intérieur','Sociaux','Serv. PM']
+  end
+
+  def self.liste_quotations
+    [nil,0,1,2,3,4,5]
+  end
+
+  def liste_etats
+    if self.current_state == "accepte" && self.resumes == []
+      [:accepte,:abandonner]
+    else
+      ([self.current_state.to_sym] << self.current_state.events.keys).flatten
+    end
+  end
+
   include Mongoid::Document
-  include ActiveModel::Validations
   validates_with(CoherenceEtude)
+  field :_id, type:Integer, default: ->{ if Projet.count == 0 then 1 else Projet.last._id + 1 end }
   field :code, type: String
-  validates :code, :presence => {:message => "Le code est obligatoire"}
-  validates :code, :uniqueness => {:message => "Le code doit être unique"}
+  validates :code, :presence => {:message => "obligatoire"}
+  validates :code, :uniqueness => {:message => "doit être unique"}
   field :nom, type: String
-  validates :nom, :presence => {:message => "Le nom est obligatoire"}
+  validates :nom, :presence => {:message => "obligatoire"}
   field :ministere, type: String
+  validates :ministere, :presence => {:message => "obligatoire"}
   field :public, type: Boolean, default: true
-  validates :public, :presence => {:message => "L'indicateur public est obligatoire"}
+  validates :public, :presence => {:message => "obligatoire"}
   field :etat, type: Symbol
   include Workflow
   workflow_column :etat
@@ -54,25 +95,18 @@ class Projet
     state :arrete
   end
   field :description, type: String
-  validates :description, :presence => {:message => "La description est obligatoire"}
+  validates :description, :presence => {:message => "obligatoire"}
   field :entites_concernees, type: String
-  validates :entites_concernees, :presence => {:message => "Vous devez préciser les entités concernées"}
+  validates :entites_concernees, :presence => {:message => "à préciser"}
   field :date_debut, type: Date
-  validates :date_debut, :presence => {:message => "La date de début est obligatoire pour un projet lancé",
+  validates :date_debut, :presence => {:message => "obligatoire pour un projet lancé",
 	 :if => "[:en_cours,:arrete,:termine].include?(self.current_state)" }
-  field :type_de_produit, type: Symbol
-  validates :type_de_produit, :inclusion => { :in => [:front_office,:back_office,:valeur],
-    :message => "%{value} n'est pas une valeur valide" }
-  field :duree_de_vie, type: Integer
-  validates :duree_de_vie, :presence => {:message => "La durée de vie du produit est obligatoire"}
-  field :date_etude_lancement, type:Date
-  field :cout_etude_lancement, type:Float
-  field :dr_etude_lancement, type:Float
-  field :date_derniere_etude, type:Date
-  field :cout_derniere_etude, type:Float
-  field :dr_derniere_etude, type:Float
   field :derive_cout, type:Float
   field :derive_dr, type:Float
+  field :quotation_disic, type:Integer
+  validates :quotation_disic, :inclusion => { :in => [nil,0,1,2,3,4,5],
+    :message => "%{value} invalide" }
+  embeds_many :resumes
 
 end
 

@@ -1,0 +1,46 @@
+# language: fr
+
+Fonctionnalité: Modification des projets
+  En tant que gestionnaire de projet
+  De façon à tenir compte des changements
+  Je veux pouvoir les modifier
+
+  Contexte: Il y a un projet non lancé et sans étude dans la base
+    Etant donné un projet sans étude dans la base
+    Quand je suis sur la page projets
+    Quand je suis le lien Modif
+
+  Scénario: contrôle de la navigation
+    Alors je me retrouve sur la page /projets/1/edit
+
+  Scénario: gestion de la quotation
+    Alors je vois un sélecteur de Quotation
+
+  Scénario: gestion de l'état
+    Alors je vois un sélecteur d'Etat
+
+  Plan du scénario: gestion de l'état
+    Etant donné l'<Etat>
+    Alors je vois cet état comme option et les <Options>
+
+  Exemples:
+    |Etat      |Options               |
+    |a_l_etude |soumettre,abandonner  |
+    |soumis    |accepter,rejeter      |
+    |accepte   |abandonner            |
+    |rejete    |re_etudier,abandonner |
+    |abandonne |                      |
+
+  Plan du scénario: lancement d'un projet
+    Si le projet est complété par une étude
+    Etant donné l'<Etat>
+    Alors je vois cet état comme option et les <Options>
+
+  Exemples:
+    |Etat      |Options               |
+    |accepte   |abandonner,lancer     |
+    |lance     |terminer,arreter      |
+    |termine   |                      |
+    |arrete    |                      |
+      
+ 
