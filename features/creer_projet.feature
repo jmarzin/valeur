@@ -14,7 +14,7 @@ Fonctionnalité: Création d'un projet
 
    Scénario: Quand tout est saisi, je peux valider
      Quand je clique sur Save
-     Alors je me retrouve sur la page projets
+     Alors je me retrouve sur la page /projets/1
      Et je vois mon projet
 
    Scénario: Créer un projet, code obligatoire

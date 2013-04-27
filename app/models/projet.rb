@@ -39,6 +39,7 @@ end
 class Projet
   include Mongoid::Document
   validates_with(CoherenceEtude)
+  field :_id, type:Integer, default: ->{ if Projet.count == 0 then 1 else Projet.last._id + 1 end }
   field :code, type: String
   validates :code, :presence => {:message => "obligatoire"}
   validates :code, :uniqueness => {:message => "doit être unique"}

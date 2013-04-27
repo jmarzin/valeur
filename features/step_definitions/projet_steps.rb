@@ -36,7 +36,7 @@ Alors(/^je ne vois pas d'erreur$/) do
 end
 
 Alors(/^je me retrouve sur la page (.+)$/) do |page|
-  current_path.should match(/^\/#{page}/)
+  current_path.to_s.should == page
 end
 
 Alors(/^je vois mon projet$/) do

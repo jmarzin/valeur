@@ -52,4 +52,10 @@ describe Projet do
   end
   it { should have_fields(:quotation_disic) }
   it { should validate_inclusion_of(:quotation_disic).to_allow([0,1,2,3,4,5]) }
+  it "L'identifiant est calculé en incrémentant le plus grand identifiant de la base" do
+    3.times do |i|
+      if Projet.count == 0 then plus_grand = 0 else plus_grand = Projet.last._id end
+      FactoryGirl.create(:projet,code: i.to_s)._id.should be == plus_grand + 1
+    end
+  end
 end
