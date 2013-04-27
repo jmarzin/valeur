@@ -47,7 +47,11 @@ class Projet
   end
 
   def liste_etats
-    tableau = ([self.current_state.to_sym] << self.current_state.events.keys).flatten
+    if self.current_state == :accepte && self.resumes == []
+      [:accepte,:abandonner]
+    else
+      ([self.current_state.to_sym] << self.current_state.events.keys).flatten
+    end
   end
 
   include Mongoid::Document

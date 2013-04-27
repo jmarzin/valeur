@@ -89,6 +89,10 @@ Alors(/^je vois cet état (.+ )comme option et les options (.+)$/) do |etat,opti
   expect(page.has_select?('Etat', :with_options => (etat+options).split)).to eq(true)
 end
 
+Alors(/^je ne vois pas les options (.+)/) do |options|
+  options.split.each { |op| expect(page.has_select?('Etat', :with_options => [op])).to eq(false) }
+end
+
 Alors(/^je vois cet état (.+) comme option et les options $/) do  |etat|
   page.has_select?('Etat', :with_options => [etat])
 end
