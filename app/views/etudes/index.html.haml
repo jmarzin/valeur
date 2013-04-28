@@ -1,0 +1,39 @@
+%h1 Listing etudes
+
+%table
+  %tr
+    %th Stade
+    %th Code
+    %th Description
+    %th Type produit
+    %th Date debut
+    %th Date publication
+    %th Duree projet
+    %th Duree vie
+    %th Publie
+    %th Cout
+    %th Delai retour
+    %th
+    %th
+    %th
+
+  - @etudes.each do |etude|
+    %tr
+      %td= etude.stade
+      %td= etude.code
+      %td= etude.description
+      %td= etude.type_produit
+      %td= etude.date_debut
+      %td= etude.date_publication
+      %td= etude.duree_projet
+      %td= etude.duree_vie
+      %td= etude.publie
+      %td= etude.cout
+      %td= etude.delai_retour
+      %td= link_to 'Show', etude
+      %td= link_to 'Edit', edit_etude_path(etude)
+      %td= link_to 'Destroy', etude, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Etude', new_etude_path

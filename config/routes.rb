@@ -1,5 +1,8 @@
 Valeur::Application.routes.draw do
-  resources :projets
+  
+  resources :projets do
+    resources :etudes
+  end
 
 
   # The priority is based upon order of creation:

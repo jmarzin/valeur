@@ -6,7 +6,7 @@ class CoherenceEtude < ActiveModel::Validator
       rec.errors[:base] << "Un projet lancé doit avoir au moins un résumé d'étude"
     end
     rec.resumes.each do |r|
-      rec.errors[:base] << "Chaque résumé doit être complet" unless r.date && r.cout && r.dr
+      rec.errors[:base] << "Chaque résumé doit être complet" unless r.date && r.cout && r.delai
     end
     nb = 0
     rec.resumes.each do |e| nb += 1 end 
@@ -14,14 +14,14 @@ class CoherenceEtude < ActiveModel::Validator
       if rec.derive_cout
         rec.errors[:base] << "Le calcul de la dérive des coûts nécessite 2 études"
       end
-      if rec.derive_dr
+      if rec.derive_delai
         rec.errors[:base] << "Le calcul de la dérive du délai de retour nécessite 2 études"
       end
     else 
       if not rec.derive_cout
         rec.errors[:base] << "La dérive des coûts est calculée s'il y a plusieurs études"
       end
-      if not rec.derive_dr
+      if not rec.derive_delai
         rec.errors[:base] << "La dérive du délai de retour est calculée s'il y a plusieurs études"
       end
     end      
@@ -32,7 +32,7 @@ class Resume
   include Mongoid::Document
   field :date, type: Date
   field :cout, type: Float
-  field :dr, type: Float
+  field :delai, type: Float
   embedded_in :projet
 end
 
@@ -102,11 +102,12 @@ class Projet
   validates :date_debut, :presence => {:message => "obligatoire pour un projet lancé",
 	 :if => "[:en_cours,:arrete,:termine].include?(self.current_state)" }
   field :derive_cout, type:Float
-  field :derive_dr, type:Float
+  field :derive_delai, type:Float
   field :quotation_disic, type:Integer
   validates :quotation_disic, :inclusion => { :in => [nil,0,1,2,3,4,5],
     :message => "%{value} invalide" }
   embeds_many :resumes
+  has_many :etudes
 
 end
 

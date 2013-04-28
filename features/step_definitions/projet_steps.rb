@@ -3,25 +3,25 @@
 Quand(/^il n'y pas de projet$/) do
 end
 
-Alors(/^je ne vois pas Code,Nom,Ministère,Public,Etat,Date début,Montant,Retour,Delta coût,Delta retour,Quotation$/) do
+Alors(/^je ne vois pas Code,Nom,Ministère,Public,Etat,Date début,Montant,Délai,Delta coût,Delta délai,Quotation$/) do
   p page.text
   page.text.should_not =~ /Code/  
-#	match(/Code\W+/)#Nom\W+Ministère\W+Public\W+Etat\W+Date début\W+Montant\W+Retour\W+Delta coût\W+Delta retour\W+Quotation/
+#	match(/Code\W+/)#Nom\W+Ministère\W+Public\W+Etat\W+Date début\W+Montant\W+Délai\W+Delta coût\W+Delta délai\W+Quotation/
 end
 
 
-Alors(/^je vois Code,Nom,Ministère,Public,Etat,Date début,Montant,Retour,Delta coût,Delta retour,Quotation$/) do
-  page.text.should match(/Code\W+Nom\W+Ministère\W+Public\W+Etat\W+Date début\W+Montant\W+Retour\W+Delta coût\W+Delta retour\W+Quotation/)
+Alors(/^je vois Code,Nom,Ministère,Public,Etat,Date début,Montant,Délai,Delta coût,Delta délai,Quotation$/) do
+  page.text.should match(/Code\W+Nom\W+Ministère\W+Public\W+Etat\W+Date début\W+Montant\W+Délai\W+Delta coût\W+Delta délai\W+Quotation/)
 end
 
 Etantdonné(/^un projet complet dans la base$/) do
-  resume1 = FactoryGirl.build(:resume, date: '01.01.2012', cout: 100.000, dr: 2.5)
-  resume2 = FactoryGirl.build(:resume, date: '01.01.2013', cout: 150.264, dr: 3.0)
+  resume1 = FactoryGirl.build(:resume, date: '01.01.2012', cout: 100.000, delai: 2.5)
+  resume2 = FactoryGirl.build(:resume, date: '01.01.2013', cout: 150.264, delai: 3.0)
   FactoryGirl.create(:projet, code: "XXXX", nom: "Chorus", ministere: "Finances", etat: :lance, date_debut: '01.01.2012',
-	resumes: [resume1,resume2], derive_cout: 50, derive_dr: 20, quotation_disic: 3)
+	resumes: [resume1,resume2], derive_cout: 50, derive_delai: 20, quotation_disic: 3)
 end
 
-Alors(/^je vois ses Code,Nom,Ministère,Public,Etat,Date début,Montant,Retour,Delta coût,Delta dr,Quotation$/) do
+Alors(/^je vois ses Code,Nom,Ministère,Public,Etat,Date début,Montant,Délai,Delta coût,Delta délai,Quotation$/) do
   page.text.should match(/XXXX\W+Chorus\W+Finances\W+Oui\W+Lance\W+2012-01-01\W+150\.3\W+3\.0\W+ 50 %\W+\+ 20 %\W+3/)
 end
 

@@ -11,9 +11,9 @@
       %th Etat
       %th Date début
       %th Montant
-      %th Retour
+      %th Délai
       %th Delta coût
-      %th Delta retour
+      %th Delta délai
       %th Quotation
       %th
       %th
@@ -28,9 +28,9 @@
         %td= projet.etat.capitalize
         %td= projet.date_debut
         %td= "#{sprintf('%9.1f',projet.resumes[-1].cout) if projet.resumes[-1]}"
-        %td= "#{sprintf('%5.1f',projet.resumes[-1].dr) if projet.resumes[-1]}"
+        %td= "#{sprintf('%5.1f',projet.resumes[-1].delai) if projet.resumes[-1]}"
         %td= "#{sprintf('+%3d %',projet.derive_cout) if projet.derive_cout}"
-        %td= "#{sprintf('+%3d %',projet.derive_dr) if projet.derive_dr}"
+        %td= "#{sprintf('+%3d %',projet.derive_delai) if projet.derive_delai}"
         %td= projet.quotation_disic
         %td= link_to 'Détail', projet
         %td= link_to 'Modif', edit_projet_path(projet)

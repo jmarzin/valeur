@@ -1,0 +1,39 @@
+%p#notice= notice
+
+%p
+  %b Stade:
+  = @etude.stade
+%p
+  %b Code:
+  = @etude.code
+%p
+  %b Description:
+  = @etude.description
+%p
+  %b Type produit:
+  = @etude.type_produit
+%p
+  %b Date debut:
+  = @etude.date_debut
+%p
+  %b Date publication:
+  = @etude.date_publication
+%p
+  %b Duree projet:
+  = @etude.duree_projet
+%p
+  %b Duree vie:
+  = @etude.duree_vie
+%p
+  %b Publie:
+  = @etude.publie
+%p
+  %b Cout:
+  = @etude.cout
+%p
+  %b Delai retour:
+  = @etude.delai_retour
+
+= link_to 'Edit', edit_etude_path(@etude)
+\|
+= link_to 'Back', etudes_path

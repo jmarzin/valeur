@@ -1,0 +1,2 @@
+module EtudesHelper
+end

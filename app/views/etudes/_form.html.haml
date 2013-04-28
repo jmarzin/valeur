@@ -1,0 +1,43 @@
+= form_for @etude do |f|
+  - if @etude.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@etude.errors.count, "error")} prohibited this etude from being saved:"
+      %ul
+        - @etude.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :stade
+    = f.text_field :stade
+  .field
+    = f.label :code
+    = f.text_field :code
+  .field
+    = f.label :description
+    = f.text_field :description
+  .field
+    = f.label :type_produit
+    = f.text_area :type_produit
+  .field
+    = f.label :date_debut
+    = f.text_field :date_debut
+  .field
+    = f.label :date_publication
+    = f.date_select :date_publication
+  .field
+    = f.label :duree_projet
+    = f.text_field :duree_projet
+  .field
+    = f.label :duree_vie
+    = f.number_field :duree_vie
+  .field
+    = f.label :publie
+    = f.check_box :publie
+  .field
+    = f.label :cout
+    = f.text_field :cout
+  .field
+    = f.label :delai_retour
+    = f.text_field :delai_retour
+  .actions
+    = f.submit 'Save'
