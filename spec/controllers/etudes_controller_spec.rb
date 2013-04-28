@@ -22,22 +22,22 @@ describe EtudesController do
   describe "GET index" do
     it "assigns all etudes as @etudes" do
       etude = @projet.etudes.create! valid_attributes
-      get :index, {}, valid_session
-      assigns(:projet_etudes).should eq([etude])
+      get :index,{:projet_id => @projet._id}, valid_session
+      assigns(:etudes).should eq([etude])
     end
   end
 
   describe "GET show" do
     it "assigns the requested etude as @etude" do
       etude = @projet.etudes.create! valid_attributes
-      get :show, {:id => etude.to_param}, valid_session
+      get :show, {:projet_id => @projet._id,:id => etude.to_param}, valid_session 
       assigns(:etude).should eq(etude)
     end
   end
 
   describe "GET new" do
     it "assigns a new etude as @etude" do
-      get :new, {}, valid_session
+      get :new, {:projet_id => @projet._id}, valid_session
       assigns(:etude).should be_a_new(Etude)
     end
   end
@@ -45,7 +45,7 @@ describe EtudesController do
   describe "GET edit" do
     it "assigns the requested etude as @etude" do
       etude = @projet.etudes.create! valid_attributes
-      get :edit, {:id => etude.to_param}, valid_session
+      get :edit, {:projet_id => @projet._id,:id => etude.to_param}, valid_session
       assigns(:etude).should eq(etude)
     end
   end
@@ -54,19 +54,19 @@ describe EtudesController do
     describe "with valid params" do
       it "creates a new Etude" do
         expect {
-          post :create, {:etude => valid_attributes}, valid_session
+          post :create, {:projet_id => @projet._id,:etude => valid_attributes}, valid_session
         }.to change(Etude, :count).by(1)
       end
 
       it "assigns a newly created etude as @etude" do
-        post :create, {:etude => valid_attributes}, valid_session
+        post :create, {:projet_id => @projet._id,:etude => valid_attributes}, valid_session
         assigns(:etude).should be_a(Etude)
         assigns(:etude).should be_persisted
       end
 
       it "redirects to the created etude" do
-        post :create, {:etude => valid_attributes}, valid_session
-        response.should redirect_to(Etude.last)
+        post :create, {:projet_id => @projet._id,:etude => valid_attributes}, valid_session
+        response.should redirect_to([@projet,Etude.last])
       end
     end
 
@@ -74,14 +74,14 @@ describe EtudesController do
       it "assigns a newly created but unsaved etude as @etude" do
         # Trigger the behavior that occurs when invalid params are submitted
         Etude.any_instance.stub(:save).and_return(false)
-        post :create, {:etude => { "stade" => "invalid value" }}, valid_session
+        post :create, {:projet_id => @projet._id,:etude => { "stade" => "invalid value" }}, valid_session
         assigns(:etude).should be_a_new(Etude)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         Etude.any_instance.stub(:save).and_return(false)
-        post :create, {:etude => { "stade" => "invalid value" }}, valid_session
+        post :create, {:projet_id => @projet._id,:etude => { "stade" => "invalid value" }}, valid_session
         response.should render_template("new")
       end
     end
@@ -96,19 +96,19 @@ describe EtudesController do
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
         Etude.any_instance.should_receive(:update_attributes).with({ "stade" => "MyString" })
-        put :update, {:id => etude.to_param, :etude => { "stade" => "MyString" }}, valid_session
+        put :update, {:projet_id => @projet._id,:id => etude.to_param, :etude => { "stade" => "MyString" }}, valid_session
       end
 
       it "assigns the requested etude as @etude" do
         etude = @projet.etudes.create! valid_attributes
-        put :update, {:id => etude.to_param, :etude => valid_attributes}, valid_session
+        put :update, {:projet_id => @projet._id,:id => etude.to_param, :etude => valid_attributes}, valid_session
         assigns(:etude).should eq(etude)
       end
 
       it "redirects to the etude" do
         etude = @projet.etudes.create! valid_attributes
-        put :update, {:id => etude.to_param, :etude => valid_attributes}, valid_session
-        response.should redirect_to(etude)
+        put :update, {:projet_id => @projet._id,:id => etude.to_param, :etude => valid_attributes}, valid_session
+        response.should redirect_to([@projet,etude])
       end
     end
 
@@ -117,7 +117,7 @@ describe EtudesController do
         etude = @projet.etudes.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         Etude.any_instance.stub(:save).and_return(false)
-        put :update, {:id => etude.to_param, :etude => { "stade" => "invalid value" }}, valid_session
+        put :update, {:projet_id => @projet._id,:id => etude.to_param, :etude => { "stade" => "invalid value" }}, valid_session
         assigns(:etude).should eq(etude)
       end
 
@@ -125,7 +125,7 @@ describe EtudesController do
         etude = @projet.etudes.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         Etude.any_instance.stub(:save).and_return(false)
-        put :update, {:id => etude.to_param, :etude => { "stade" => "invalid value" }}, valid_session
+        put :update, {:projet_id => @projet._id,:id => etude.to_param, :etude => { "stade" => "invalid value" }}, valid_session
         response.should render_template("edit")
       end
     end
@@ -135,14 +135,14 @@ describe EtudesController do
     it "destroys the requested etude" do
       etude = @projet.etudes.create! valid_attributes
       expect {
-        delete :destroy, {:id => etude.to_param}, valid_session
+        delete :destroy, {:projet_id => @projet._id,:id => etude.to_param}, valid_session
       }.to change(Etude, :count).by(-1)
     end
 
     it "redirects to the etudes list" do
       etude = @projet.etudes.create! valid_attributes
-      delete :destroy, {:id => etude.to_param}, valid_session
-      response.should redirect_to(etudes_url)
+      delete :destroy, {:projet_id => @projet._id,:id => etude.to_param}, valid_session
+      response.should redirect_to(projet_etudes_path(@projet))
     end
   end
 end

@@ -30,10 +30,10 @@
       %td= etude.publie
       %td= etude.cout
       %td= etude.delai_retour
-      %td= link_to 'Show', etude
-      %td= link_to 'Edit', edit_etude_path(etude)
-      %td= link_to 'Destroy', etude, :method => :delete, :data => { :confirm => 'Are you sure?' }
+      %td= link_to 'Show', projet_etude_path(@projet, etude) 
+      %td= link_to 'Edit', edit_projet_etude_path(@projet, etude)
+      %td= link_to 'Destroy', [@projet, etude], confirm: 'Are you sure?', method: :delete
 
 %br
 
-= link_to 'New Etude', new_etude_path
+= link_to 'New Etude', new_projet_etude_path(@projet)

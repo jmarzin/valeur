@@ -2,6 +2,6 @@
 
 = render 'form'
 
-= link_to 'Show', @etude
+= link_to 'Show', projet_etude_path(@projet, @etude) 
 \|
-= link_to 'Back', etudes_path
+= link_to 'Back', projet_etudes_path(@projet)

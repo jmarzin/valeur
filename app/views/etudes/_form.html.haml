@@ -1,4 +1,4 @@
-= form_for @etude do |f|
+= form_for ([@projet, @etude]) do |f|
   - if @etude.errors.any?
     #error_explanation
       %h2= "#{pluralize(@etude.errors.count, "error")} prohibited this etude from being saved:"
