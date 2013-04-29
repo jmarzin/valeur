@@ -2,33 +2,33 @@ require "spec_helper"
 
 describe EtudesController do
   describe "routing" do
-
+    before(:each) {FactoryGirl.create(:projet)}
     it "routes to #index" do
-      get("/etudes").should route_to("etudes#index")
+      get("/projets/1/etudes").should route_to("etudes#index","projet_id"=>"1")
     end
 
     it "routes to #new" do
-      get("/etudes/new").should route_to("etudes#new")
+      get("/projets/1/etudes/new").should route_to("etudes#new","projet_id"=>"1")
     end
 
     it "routes to #show" do
-      get("/etudes/1").should route_to("etudes#show", :id => "1")
+      get("/projets/1/etudes/1").should route_to("etudes#show", "projet_id"=>"1", :id => "1")
     end
 
     it "routes to #edit" do
-      get("/etudes/1/edit").should route_to("etudes#edit", :id => "1")
+      get("/projets/1/etudes/1/edit").should route_to("etudes#edit", "projet_id"=>"1", :id => "1")
     end
 
     it "routes to #create" do
-      post("/etudes").should route_to("etudes#create")
+      post("projets/1/etudes").should route_to("etudes#create","projet_id"=>"1")
     end
 
     it "routes to #update" do
-      put("/etudes/1").should route_to("etudes#update", :id => "1")
+      put("projets/1/etudes/1").should route_to("etudes#update", "projet_id"=>"1", :id => "1")
     end
 
     it "routes to #destroy" do
-      delete("/etudes/1").should route_to("etudes#destroy", :id => "1")
+      delete("projets/1/etudes/1").should route_to("etudes#destroy", "projet_id"=>"1", :id => "1")
     end
 
   end

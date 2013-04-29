@@ -3,21 +3,21 @@ require 'spec_helper'
 
 
 describe Projet do
-  it { should have_fields(:code) }
+  it { should have_field(:code) }
   it { should validate_presence_of(:code) }
   it { should validate_uniqueness_of(:code) }
-  it { should have_fields(:nom) }
+  it { should have_field(:nom) }
   it { should validate_presence_of(:nom) }
-  it { should have_fields(:ministere) }
+  it { should have_field(:ministere) }
   it { should validate_presence_of(:ministere) }
-  it { should have_fields(:public) }
+  it { should have_field(:public) }
   it { should validate_presence_of(:public) }
-  it { should have_fields(:etat) } # les valeurs prises sont pilotées par le workflow
-  it { should have_fields(:description) }
+  it { should have_field(:etat) } # les valeurs prises sont pilotées par le workflow
+  it { should have_field(:description) }
   it { should validate_presence_of(:description) }
-  it { should have_fields(:entites_concernees) }
+  it { should have_field(:entites_concernees) }
   it { should validate_presence_of(:entites_concernees) }
-  it { should have_fields(:date_debut) }
+  it { should have_field(:date_debut) }
   it { should validate_presence_of(:date_debut) }
   it { should embed_many(:resumes) }
   it { should have_many(:etudes) }
@@ -26,12 +26,12 @@ describe Projet do
     FactoryGirl.build(:projet, etat: :lance, resumes: []).should be_invalid
     FactoryGirl.build(:projet, etat: :lance, resumes: [@resume1]).should be_valid
   end
-  it { should have_fields(:derive_cout) }
+  it { should have_field(:derive_cout) }
   it "Pas de dérive des coûts s'il n'y a qu'une étude" do
     FactoryGirl.build(:projet,etat: :lance, resumes: [@resume1], derive_cout: 50).should be_invalid
     FactoryGirl.build(:projet,etat: :lance, resumes: [], derive_cout: 50).should be_invalid
   end
-  it { should have_fields(:derive_delai) }
+  it { should have_field(:derive_delai) }
   it "Pas de dérive du délai s'il n'y a qu'une étude" do
     FactoryGirl.build(:projet,etat: :lance, resumes: [@resume1], derive_cout: 50, derive_delai: 10).should be_invalid
     FactoryGirl.build(:projet,etat: :lance, resumes: [], derive_cout: 50, derive_delai: 10).should be_invalid
@@ -48,7 +48,7 @@ describe Projet do
   it "S'il y a plusieurs études, la dérive du délai est servie" do
     FactoryGirl.build(:projet,etat: :lance, resumes: [@resume1,@resume2], derive_cout: 50, derive_delai: nil).should be_invalid
   end
-  it { should have_fields(:quotation_disic) }
+  it { should have_field(:quotation_disic) }
   it { should validate_inclusion_of(:quotation_disic).to_allow([0,1,2,3,4,5]) }
   it "L'identifiant est calculé en incrémentant le plus grand identifiant de la base" do
     3.times do |i|
