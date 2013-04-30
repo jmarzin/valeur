@@ -9,7 +9,13 @@ describe EtudesController do
   # Etude. As you add validations to Etude, be sure to
   # update the return value of this method accordingly.
   def valid_attributes
-    { "stade" => "projet" }
+    { "stade" => "projet",
+      "code" => '1',
+      "description" => 'd',
+      "date_debut" => '2013.01.01',
+      "duree_projet" => 8,
+      "type_produit" => :back_office,
+      "duree_vie" => 10  }
   end
 
   # This should return the minimal set of values that should be in the session

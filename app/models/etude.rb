@@ -4,6 +4,7 @@ class Etude
   include Mongoid::Document
   validates_with(CoherenceProjet)
   belongs_to :projet
+  field :_id, type: Integer, default: ->{ if Etude.count == 0 then 1 else Etude.last._id + 1 end }
   field :stade, type: Symbol
   validates :stade, :presence => {:message => "obligatoire"}
   field :code, type: String

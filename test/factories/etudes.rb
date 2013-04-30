@@ -4,6 +4,7 @@ include RandomText
 FactoryGirl.define do
   factory :etude do
     code Lorem.word.upcase
+    stade :projet
     description Lorem.sentence
     date_debut '2013.01.01'
     duree_projet 8
