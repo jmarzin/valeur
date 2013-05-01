@@ -2,7 +2,7 @@
 class CoherenceProjet < ActiveModel::Validator
   def validate(rec)
     if rec.class == Projet then
-      if [:lance,:termine,:arrete].include?(rec.etat) && rec.resumes.empty?
+      if [:en_cours,:termine,:arrete].include?(rec.etat) && rec.resumes.empty?
         rec.errors[:base] << "Un projet lancé doit avoir au moins un résumé d'étude"
       end
       rec.resumes.each do |r|

@@ -62,7 +62,7 @@ class ProjetsController < ApplicationController
 
     respond_to do |format|
       if @projet.update_attributes(params[:projet])
-        format.html { redirect_to @projet, notice: 'Projet was successfully updated.' }
+        format.html { redirect_to @projet, notice: 'Le projet a été créé.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }

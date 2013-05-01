@@ -8,6 +8,7 @@ FactoryGirl.define do
     delai 2.5
   end
   factory :projet do
+    etat :a_l_etude
     code Lorem.word.upcase
     nom Lorem.word.capitalize+" "+Lorem.word
     ministere 'Finances'

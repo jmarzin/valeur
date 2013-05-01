@@ -3,26 +3,24 @@
 Quand(/^il n'y pas de projet$/) do
 end
 
-Alors(/^je ne vois pas Code,Nom,Ministère,Public,Etat,Date début,Montant,Délai,Delta coût,Delta délai,Quotation$/) do
-  p page.text
+Alors(/^je ne vois pas Id,Code,Nom,Ministère,Public,Etat,Date début,Montant,Délai,Delta coût,Delta délai,Quotation$/) do
   page.text.should_not =~ /Code/  
-#	match(/Code\W+/)#Nom\W+Ministère\W+Public\W+Etat\W+Date début\W+Montant\W+Délai\W+Delta coût\W+Delta délai\W+Quotation/
 end
 
 
-Alors(/^je vois Code,Nom,Ministère,Public,Etat,Date début,Montant,Délai,Delta coût,Delta délai,Quotation$/) do
-  page.text.should match(/Code\W+Nom\W+Ministère\W+Public\W+Etat\W+Date début\W+Montant\W+Délai\W+Delta coût\W+Delta délai\W+Quotation/)
+Alors(/^je vois Id,Code,Nom,Ministère,Public,Etat,Date début,Montant,Délai,Delta coût,Delta délai,Quotation$/) do
+  page.text.should match(/Id\W+Code\W+Nom\W+Ministère\W+Public\W+Etat\W+Date début\W+Montant\W+Délai\W+Delta coût\W+Delta délai\W+Quotation/)
 end
 
 Etantdonné(/^un projet complet dans la base$/) do
   resume1 = FactoryGirl.build(:resume, date: '01.01.2012', cout: 100.000, delai: 2.5)
   resume2 = FactoryGirl.build(:resume, date: '01.01.2013', cout: 150.264, delai: 3.0)
-  FactoryGirl.create(:projet, code: "XXXX", nom: "Chorus", ministere: "Finances", etat: :lance, date_debut: '01.01.2012',
+  FactoryGirl.create(:projet, code: "XXXX", nom: "Chorus", ministere: "Finances", etat: :en_cours, date_debut: '01.01.2012',
 	resumes: [resume1,resume2], derive_cout: 50, derive_delai: 20, quotation_disic: 3)
 end
 
-Alors(/^je vois ses Code,Nom,Ministère,Public,Etat,Date début,Montant,Délai,Delta coût,Delta délai,Quotation$/) do
-  page.text.should match(/XXXX\W+Chorus\W+Finances\W+Oui\W+Lance\W+2012-01-01\W+150\.3\W+3\.0\W+ 50 %\W+\+ 20 %\W+3/)
+Alors(/^je vois ses Id,Code,Nom,Ministère,Public,Etat,Date début,Montant,Délai,Delta coût,Delta délai,Quotation$/) do
+  page.text.should match(/1\W+XXXX\W+Chorus\W+Finances\W+Oui\W+En_cours\W+2012-01-01\W+150\.3\W+3\.0\W+ 50 %\W+\+ 20 %\W+3/)
 end
 
 Etantdonné(/^que je suis sur la page de création d'un projet$/) do
@@ -54,12 +52,12 @@ Alors(/^je vois mon projet$/) do
   page.should have_content "Chorus"
 end
 
-Quand(/^je ne saisis rien dans la zone (.+)$/) do |zone|
-  fill_in("projet_#{zone}", :with => "")
+Quand(/^(?:que je|je) ne saisis rien dans la zone (.+)$/) do |zone|
+  fill_in(zone, :with => "")
   click_button('Save')
 end
 
-Quand(/^je sélectionne "(.*?)" dans la zone (.+)$/) do |valeur,champ|
+Quand(/^(?:que je|je) sélectionne "(.*?)" dans la zone (.+)$/) do |valeur,champ|
   select(valeur, :from => champ)
   click_button('Save')
 end
@@ -82,7 +80,7 @@ end
 
 Etantdonné(/^un projet avec étude dans l'état (.+)$/) do |etat|
   resume = FactoryGirl.build(:resume)
-  FactoryGirl.create(:projet,etat: etat.to_sym,resumes: [resume])
+  @projet = FactoryGirl.create(:projet,etat: etat.to_sym, date_debut: '2013.01.01', resumes: [resume])
 end
 
 Alors(/^je vois cet état (.+ )comme option et les options (.+)$/) do |etat,options|
@@ -97,6 +95,9 @@ Alors(/^je vois cet état (.+) comme option et les options $/) do  |etat|
   page.has_select?('Etat', :with_options => [etat])
 end
 
+Alors(/^je vois l'option (.+)$/) do  |etat|
+  page.has_select?('Etat', :with_options => [etat])
+end
 
 Etantdonné(/^les projets suivants:$/) do |table|
   # table is a Cucumber::Ast::Table
@@ -114,4 +115,8 @@ end
 
 Alors /^I should see the following projets:$/ do |expected_projets_table|
   expected_projets_table.diff!(tableish('table tr', 'td,th'))
+end
+
+Alors(/^je ne vois pas l'option (.+)$/) do |option|
+  expect(page.has_select?('Etat', :with_options => [option])).to eq(false)
 end

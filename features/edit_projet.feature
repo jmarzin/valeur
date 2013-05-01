@@ -7,7 +7,7 @@ Fonctionnalité: Modification des projets
 
   Scénario: contrôle de la navigation
     Etant donné un projet sans étude dans la base
-    Quand je suis sur la page projets
+    Quand je suis sur la page /projets
     Quand je suis le lien Modif
     Alors je me retrouve sur la page /projets/1/edit
 
@@ -28,12 +28,12 @@ Fonctionnalité: Modification des projets
     Et je ne vois pas les options <Absentes>
 
   Exemples:
-    |Etat      |Présentes             |Absentes                                                                 |
-    |a_l_etude |soumettre abandonner  |accepter rejeter lancer re_etudier terminer arreter                      |
-    |soumis    |accepter rejeter      |soumettre abandonner lancer re_etudier terminer arreter                  |
-    |accepte   |abandonner            |soumettre accepter rejeter lancer re_etudier terminer arreter            |
-    |rejete    |re_etudier abandonner |soumettre accepter rejeter lancer terminer arreter                       |
-    |abandonne |                      |soumettre abandonner accepter rejeter lancer re_etudier terminer arreter |
+    |Etat      |Présentes             |Absentes                                                |
+    |a_l_etude |soumis abandonne      |accepte rejete en_cours termine arrete                  |
+    |soumis    |accepte refuse        |abandonne en_cours a_l_etude termine arrete             |
+    |accepte   |abandonne             |soumis refuse en_cours a_l_etude termine arrete         |
+    |refuse    |a_l_etude abandonne   |soumis accepte en_cours termine arrete                  |
+    |abandonne |                      |soumis accepte refuse en_cours a_l_etude termine arrete |
 
   Plan du scénario: lancement d'un projet
     Etant donné un projet avec étude dans l'état <Etat>
@@ -42,10 +42,26 @@ Fonctionnalité: Modification des projets
     Et je ne vois pas les options <Absentes>
 
   Exemples:
-    |Etat      |Options               |Absentes                                                                 |
-    |accepte   |abandonner lancer     |soumettre accepter rejeter re_etudier terminer arreter                   |
-    |en_cours  |terminer arreter      |soumettre abandonner accepter rejeter lancer re_etudier                  |
-    |termine   |                      |soumettre abandonner accepter rejeter lancer re_etudier terminer arreter |
-    |arrete    |                      |soumettre abandonner accepter rejeter lancer re_etudier terminer arreter |
+    |Etat      |Options               |Absentes                                                  |
+    |accepte   |abandonne en_cours    |soumis refuse a_l_etude termine arrete                    |
+    |en_cours  |termine arrete        |soumis abandonne accepte refuse a_l_etude                 |
+    |termine   |                      |soumis abandonne accepte refuse en_cours a_l_etude arrete |
+    |arrete    |                      |soumis abandonne accepte refuse en_cours a_l_etude termine|
       
- 
+  Scénario: La liste des états permis évolue si l'état est modifié
+    Etant donné un projet avec étude dans l'état a_l_etude
+    Etant donné que je suis sur la page /projets/1/edit
+    Etant donné que je sélectionne "soumis" dans la zone Etat
+    Quand je suis le lien Modif
+    Alors je ne vois pas l'option a_l_etude
+    Etant donné que je sélectionne "accepte" dans la zone Etat
+    Quand je suis le lien Modif
+    Alors je ne vois pas l'option soumis
+
+  Scénario: La liste des états permis ne doit pas changer en cas d'erreur après modification
+    Etant donné un projet avec étude dans l'état a_l_etude
+    Etant donné que je suis sur la page /projets/1/edit
+    Etant donné que je ne saisis rien dans la zone projet_code
+    Etant donné que je sélectionne "soumis" dans la zone Etat
+    Quand je clique sur Save
+    Alors je vois l'option a_l_etude

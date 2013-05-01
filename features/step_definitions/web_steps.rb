@@ -25,11 +25,7 @@ Quand /^(.*) within (.*[^:]):$/ do |step, parent, table_or_string|
   with_scope(parent) { Quand "#{step}:", table_or_string }
 end
 
-Quand /^(?:que je |je )suis sur la page (.+)$/ do |page_name|
-  visit path_to(page_name)
-end
-
-Quand /^(?:|je )vais sur la page (.+)$/ do |page_name|
+Quand /^(?:que je |je )(?:suis|vais) sur la page (\/.*)$/ do |page_name|
   visit page_name
 end
 

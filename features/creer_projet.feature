@@ -20,22 +20,22 @@ Fonctionnalité: Création d'un projet
      Et je vois mon projet
 
    Scénario: Créer un projet, code obligatoire
-     Quand je ne saisis rien dans la zone code
+     Quand je ne saisis rien dans la zone projet_code
      Quand je clique sur Save
      Alors je vois le message Code obligatoire
 
    Scénario: Créer un projet, nom obligatoire
-     Quand je ne saisis rien dans la zone nom
+     Quand je ne saisis rien dans la zone projet_nom
      Quand je clique sur Save
      Alors je vois le message Nom obligatoire
 
   Scénario: Créer un projet, description obligatoire
-     Quand je ne saisis rien dans la zone description
+     Quand je ne saisis rien dans la zone projet_description
      Quand je clique sur Save
      Alors je vois le message Description obligatoire
 
    Scénario: Créer un projet, entités concernées obligatoire
-     Quand je ne saisis rien dans la zone entites_concernees
+     Quand je ne saisis rien dans la zone projet_entites_concernees
      Quand je clique sur Save
      Alors je vois le message Entites concernees à préciser
 	

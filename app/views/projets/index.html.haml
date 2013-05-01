@@ -4,6 +4,7 @@
 
   %table
     %tr
+      %th Id
       %th Code
       %th Nom
       %th Ministère
@@ -21,6 +22,7 @@
 
     - @projets.each do |projet|
       %tr
+        %td= projet._id
         %td= projet.code
         %td= projet.nom
         %td= projet.ministere
