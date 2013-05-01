@@ -16,17 +16,17 @@
     = f.label :description
     = f.text_field :description
   .field
-    = f.label :date_debut
+    = f.label :date_debut, 'Date début'
     = f.date_select :date_debut
   .field
-    = f.label :duree_projet
+    = f.label :duree_projet, 'Durée du projet'
     = f.text_field :duree_projet
   .field
     = f.label :type_produit
     = f.select :type_produit, @etude.liste_types_produit
   .field
-    = f.label :duree_vie
+    = f.label :duree_vie, 'Durée de vie'
     = f.number_field :duree_vie
 
   .actions
-    = f.submit 'Save'
+    = f.submit 'Enregistrer'

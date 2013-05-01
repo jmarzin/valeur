@@ -63,5 +63,5 @@ Fonctionnalité: Modification des projets
     Etant donné que je suis sur la page /projets/1/edit
     Etant donné que je ne saisis rien dans la zone projet_code
     Etant donné que je sélectionne "soumis" dans la zone Etat
-    Quand je clique sur Save
+    Quand je clique sur Enregistrer
     Alors je vois l'option a_l_etude

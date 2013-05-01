@@ -62,3 +62,7 @@ end
 Alors(/^l'étude est créée$/) do
   page.text.should =~ /L'étude a été créée/
 end
+
+Quand(/^je saisis (\d+) dans la zone (.+)$/) do |valeur,zone|
+  fill_in(zone, :with => valeur)
+end

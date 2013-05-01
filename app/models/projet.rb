@@ -39,6 +39,7 @@ class Projet
   end
 
   include Mongoid::Document
+  include Mongoid::MultiParameterAttributes
   validates_with(CoherenceProjet)
   field :_id, type:Integer, default: ->{ if Projet.count == 0 then 1 else Projet.last._id + 1 end }
   field :code, type: String

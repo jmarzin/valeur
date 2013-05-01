@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class EtudesController < ApplicationController
 
   before_filter :charge_projet
@@ -47,7 +48,7 @@ class EtudesController < ApplicationController
 
     respond_to do |format|
       if @etude.save
-        format.html { redirect_to [@projet, @etude], notice: 'Etude was successfully created.' }
+        format.html { redirect_to [@projet, @etude], notice: "L'étude a été créée." }
         format.json { render json: @etude, status: :created, location: @etude }
       else
         format.html { render action: "new" }

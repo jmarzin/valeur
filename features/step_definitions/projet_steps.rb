@@ -54,12 +54,12 @@ end
 
 Quand(/^(?:que je|je) ne saisis rien dans la zone (.+)$/) do |zone|
   fill_in(zone, :with => "")
-  click_button('Save')
+  click_button('Enregistrer')
 end
 
 Quand(/^(?:que je|je) sélectionne "(.*?)" dans la zone (.+)$/) do |valeur,champ|
   select(valeur, :from => champ)
-  click_button('Save')
+  click_button('Enregistrer')
 end
 
 Alors(/^je vois le message (.+)$/) do |message|

@@ -1,39 +1,44 @@
+%h1 Détail de l'étude #{@etude._id} du projet #{@projet.nom}
+
 %p#notice= notice
 
-%p
-  %b Stade:
-  = @etude.stade
 %p
   %b Code:
   = @etude.code
 %p
+  %b Stade:
+  = @etude.stade
+%p
   %b Description:
   = @etude.description
+%p
+  %b Date début:
+  = @etude.date_debut
+%p
+  %b Durée projet:
+  = @etude.duree_projet
 %p
   %b Type produit:
   = @etude.type_produit
 %p
-  %b Date debut:
-  = @etude.date_debut
+  %b Durée vie:
+  = @etude.duree_vie
+%p
+  %b Publié:
+  = if @etude.publie then "Oui" else "Non" end
 %p
   %b Date publication:
   = @etude.date_publication
 %p
-  %b Duree projet:
-  = @etude.duree_projet
-%p
-  %b Duree vie:
-  = @etude.duree_vie
-%p
-  %b Publie:
-  = @etude.publie
-%p
-  %b Cout:
+  %b Coût:
   = @etude.cout
 %p
-  %b Delai retour:
+  %b Délai retour:
   = @etude.delai_retour
+%p
+  %b Note:
+  = @etude.note
 
-= link_to 'Edit', edit_projet_etude_path(@projet, @etude)
+= link_to 'Modif', edit_projet_etude_path(@projet, @etude)
 \|
-= link_to 'Back', projet_etudes_path(@projet)
+= link_to 'Liste des études', projet_etudes_path(@projet)

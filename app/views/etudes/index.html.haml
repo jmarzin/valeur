@@ -1,39 +1,41 @@
 %h1 Liste des études du projet #{@projet.nom}
 
-%table
-- if not @etudes.empty? then
-  %tr
-    %th Id
-    %th Code
-    %th Stade
-    %th Publié
-    %th Le
-    %th Date début
-    %th Durée
-    %th Coût
-    %th Retour
-    %th Note
-    %th
-    %th
-    %th
 
-  - @etudes.each do |etude|
+- if not @etudes.empty? then
+
+  %table
     %tr
-      %td= etude._id
-      %td= etude.code
-      %td= etude.stade
-      %td= "#{if etude.publie then "Oui" else "Non" end}"
-      %td= etude.date_publication
-      %td= etude.date_debut
-      %td= "#{sprintf('%5.1f',etude.duree_projet)}"
-      %td= "#{sprintf('%9.1f',etude.cout) unless etude.cout == nil}"
-      %td= "#{sprintf('%5.1f',etude.delai_retour) unless etude.delai_retour == nil}"
-      %td= "#{sprintf('%5.1f',etude.note) unless etude.note == nil}" 
-      %td= link_to 'Détail', projet_etude_path(@projet, etude) 
-      %td= link_to 'Modif', edit_projet_etude_path(@projet, etude)
-      %td= link_to 'Supp', [@projet, etude], confirm: 'Are you sure?', method: :delete
+      %th Id
+      %th Code
+      %th Stade
+      %th Publié
+      %th Le
+      %th Date début
+      %th Durée
+      %th Coût
+      %th Retour
+      %th Note
+      %th
+      %th
+      %th
+
+    - @etudes.each do |etude|
+      %tr
+        %td= etude._id
+        %td= etude.code
+        %td= etude.stade
+        %td= "#{if etude.publie then "Oui" else "Non" end}"
+        %td= etude.date_publication
+        %td= etude.date_debut
+        %td= "#{sprintf('%5.1f',etude.duree_projet)}"
+        %td= "#{sprintf('%9.1f',etude.cout) unless etude.cout == nil}"
+        %td= "#{sprintf('%5.1f',etude.delai_retour) unless etude.delai_retour == nil}"
+        %td= "#{sprintf('%5.1f',etude.note) unless etude.note == nil}" 
+        %td= link_to 'Détail', projet_etude_path(@projet, etude) 
+        %td= link_to 'Modif', edit_projet_etude_path(@projet, etude)
+        %td= link_to 'Supp', [@projet, etude], confirm: 'Poursuivre la suppression définitive ?', method: :delete
 
 %br
 
-= link_to 'Créer une étude', new_projet_etude_path(@projet)
+= link_to 'Nouvelle étude', new_projet_etude_path(@projet)
 = link_to 'Liste des projets', projets_path

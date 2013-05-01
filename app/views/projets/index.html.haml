@@ -37,8 +37,8 @@
         %td= link_to 'Détail', projet
         %td= link_to 'Etudes', projet_etudes_path(projet)
         %td= link_to 'Modif', edit_projet_path(projet)
-        %td= link_to 'Supp', projet, :method => :delete, :data => { :confirm => 'Are you sure?' }
+        %td= link_to 'Supp', projet, :method => :delete, :data => { :confirm => 'Poursuivre la suppression définitive ?' }
 
 %br
 
-= link_to 'New Projet', new_projet_path
+= link_to 'Nouveau projet', new_projet_path

@@ -25,7 +25,7 @@ class CoherenceProjet < ActiveModel::Validator
           rec.errors[:base] << "La dérive du délai de retour est calculée s'il y a plusieurs études"
         end
       end
-    else
+    else # cas des études
       if rec.publie and not Etude.where(projet_id: rec.projet_id,stade: rec.stade, publie: true).empty?
         rec.errors[:base] << "Doublon de publication"
       end
@@ -34,10 +34,15 @@ class CoherenceProjet < ActiveModel::Validator
            rec.errors[:base] << "Pas de date de publication sans publier"
         end
       elsif rec.date_publication == nil
-          rec.errors[:date_publication] << "Date de publication obligatoire"
+          rec.errors[:base] << "Date de publication obligatoire"
       end
       rec.errors[:base] << rec.stade.to_s+" invalide" \
         unless rec.stade.to_s =~ /^(suivi\d\d|avant_projet|projet|bilan)$/
+      if rec.type_produit == :specifique && (rec.duree_vie == nil || rec.duree_vie == 0)
+        rec.errors[:base] << "Durée de vie obligatoire"
+      else
+        rec.duree_vie = Etude.val_type_produit[rec.type_produit]
+      end
     end      
   end
 end

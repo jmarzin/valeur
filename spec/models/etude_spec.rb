@@ -32,7 +32,6 @@ describe Etude do
   it { should validate_presence_of(:type_produit) }
   it { should validate_inclusion_of(:type_produit) }
   it { should have_field(:duree_vie) }
-  it { should validate_presence_of(:duree_vie) }
   it { should have_field(:publie) }
   it { should have_field(:date_publication) }
   it "a une date si elle est publiée" do 

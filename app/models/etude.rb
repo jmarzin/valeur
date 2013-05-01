@@ -1,7 +1,10 @@
 # encoding: utf-8 
 require 'coherence_projet'
 class Etude
-
+  
+  def self.val_type_produit
+    {:back_office => 10, :front_office => 5}
+  end
   def liste_stades
     etude_base = Etude.where(_id: self._id).count
     if etude_base == 0
@@ -26,6 +29,7 @@ class Etude
   end
 
   include Mongoid::Document
+  include Mongoid::MultiParameterAttributes
   validates_with(CoherenceProjet)
   belongs_to :projet
   field :_id, type: Integer, default: ->{ if Etude.count == 0 then 1 else Etude.last._id + 1 end }
@@ -45,7 +49,6 @@ class Etude
   validates :type_produit, :inclusion => { :in => [:back_office,:front_office,:specifique],
     :message => "%{value} invalide" }
   field :duree_vie, type: Integer
-  validates :duree_vie, :presence => {:message => "obligatoire"}
   field :publie, type: Boolean, default: false
   field :date_publication, type: Date
   field :note, type: Float

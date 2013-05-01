@@ -1,5 +1,10 @@
+%h1 Détail du projet #{@projet.nom}
+
 %p#notice= notice
 
+%p
+  %b Id
+  = @projet._id
 %p
   %b Code:
   = @projet.code
@@ -11,7 +16,7 @@
   = @projet.ministere
 %p
   %b Public:
-  = @projet.public
+  = if @projet.public then "Oui" else "Non" end
 %p
   %b Description:
   = @projet.description
@@ -30,4 +35,4 @@
 
 = link_to 'Modif', edit_projet_path(@projet)
 \|
-= link_to 'Back', projets_path
+= link_to 'Retour à la liste', projets_path

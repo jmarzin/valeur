@@ -11,12 +11,4 @@ FactoryGirl.define do
     type_produit :specifique
     duree_vie 10
   end
-#  factory :projet do
-#    code Lorem.word.upcase
-#    nom Lorem.word.capitalize+" "+Lorem.word
-#    ministere 'Finances'
-#    description Lorem.sentence
-#    entites_concernees Lorem.sentence
-#    quotation_disic {rand(6)}
-#  end
 end

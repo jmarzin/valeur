@@ -1,7 +1,7 @@
-%h1 Editing etude
+%h1 Modification de l'étude #{@etude._id} du projet #{@projet.nom}
 
 = render 'form'
 
-= link_to 'Show', projet_etude_path(@projet, @etude) 
+= link_to 'Détail', projet_etude_path(@projet, @etude) 
 \|
-= link_to 'Back', projet_etudes_path(@projet)
+= link_to 'Retour à la liste', projet_etudes_path(@projet)
