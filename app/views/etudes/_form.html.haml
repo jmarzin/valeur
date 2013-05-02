@@ -11,7 +11,7 @@
     = f.text_field :code
   .field
     = f.label :stade
-    = f.select :stade, @etude.liste_stades
+    = f.select :stade, @etude.liste_stades, :disable => @etude.liste_stades[0]==:bilan
   .field
     = f.label :description
     = f.text_field :description
@@ -27,6 +27,22 @@
   .field
     = f.label :duree_vie, 'Durée de vie'
     = f.number_field :duree_vie
+  - if params["action"] != "new" then
+    .field
+      = f.label :publie, 'Publié'
+      = f.check_box :publie
+    .field
+      = f.label :date_publication, 'Date publication'
+      = f.date_select :date_publication
+    .field
+      = f.label :cout, 'Coût'
+      = f.text_field :cout
+    .field
+      = f.label :delai_retour, 'Délai retour'
+      = f.text_field :delai_retour
+    .field
+      = f.label :note
+      = f.text_field :note
 
   .actions
     = f.submit 'Enregistrer'

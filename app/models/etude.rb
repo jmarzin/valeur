@@ -8,19 +8,22 @@ class Etude
   def liste_stades
     etude_base = Etude.where(_id: self._id).count
     if etude_base == 0
-      return [:avant_projet,:projet,:suivi01,:bilan]
+      if self.projet.resumes.empty?
+        return [:avant_projet,:projet,:suivi01,:bilan]
+      else
+        stade_base = self.projet.resumes[-1].stade
+      end
     else
       stade_base = Etude.find(self._id).stade
-      liste = [stade_base]
-      case stade_base
-      when :avant_projet
-        liste <<= :projet
-      when :projet
-        liste <<= :suivi01
-      when :projet.to_s =~ /suivi\d\d/
-        liste <<= self.stade.to_s.succ.to_sym
-      end
-      return liste << :bilan
+    end
+    if stade_base == :bilan
+      return [:bilan]
+    elsif stade_base == :avant_projet
+      return [:avant_projet,:projet,:bilan]
+    elsif stade_base == :projet
+      return [:projet,:bilan]
+    else
+      return [stade_base.to_s.succ.to_sym,:bilan]
     end
   end
 

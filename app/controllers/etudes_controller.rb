@@ -64,7 +64,7 @@ class EtudesController < ApplicationController
 
     respond_to do |format|
       if @etude.update_attributes(params[:etude])
-        format.html { redirect_to [@projet, @etude], notice: 'Etude was successfully updated.' }
+        format.html { redirect_to [@projet, @etude], notice: "L'étude a bien été mise à jour." }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }

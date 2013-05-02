@@ -6,6 +6,7 @@ class Resume
   field :date, type: Date
   field :cout, type: Float
   field :delai, type: Float
+  field :stade, type: Symbol
   embedded_in :projet
 end
 

@@ -56,7 +56,7 @@ Etantdonné(/^que je saisis les données du formulaire étude$/) do
 end
 
 Alors(/^je vois le stade (.+)$/) do |stade|
-  page.has_select?('Stade', :with_options => [stade])
+  page.has_select?('Stade', :with_options => [stade]).should be true
 end
 
 Alors(/^l'étude est créée$/) do
@@ -66,3 +66,18 @@ end
 Quand(/^je saisis (\d+) dans la zone (.+)$/) do |valeur,zone|
   fill_in(zone, :with => valeur)
 end
+
+Quand(/^le projet a déjà une série d'études dont la dernière est au stade :suivi01$/) do
+  @projet.resumes = [] << FactoryGirl.build(:resume, stade: :projet) << FactoryGirl.build(:resume, stade: :suivi01)
+  visit '/projets/1/etudes/new'
+end
+
+Quand(/^l'étude est au stade bilan$/) do
+  FactoryGirl.create(:etude, projet_id: 1,code: 'Y',stade: :bilan,publie: true,date_publication:'2013.01.01',\
+    date_debut: '2014.01.01',duree_projet: 4.5,cout: 500.10,delai_retour: 5.4,note: 8.2 )
+end
+
+Alors(/^le stade est désactivé$/) do
+  select('bilan', :from => 'Stade').should raise_error
+end
+

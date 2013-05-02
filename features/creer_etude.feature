@@ -14,11 +14,15 @@ Fonctionnalité: Création d'un scénario
     Quand je clique sur Enregistrer
     Alors l'étude est créée
 
+  Scénario: Si le projet à une série d'étude, les stades possibles sont cohérents
+    Quand le projet a déjà une série d'études dont la dernière est au stade :suivi01
+    Alors je vois le stade suivi02
+
   Scénario: La liste des stades permis ne doit pas changer en cas d'erreur après modification
     Etant donné que je ne saisis rien dans la zone etude_code
     Etant donné que je sélectionne "projet" dans la zone Stade
     Quand je clique sur Enregistrer
-    Alors je vois le stade :avant_projet
+    Alors je vois le stade avant_projet
 
   Scénario: Code obligatoire
     Quand je ne saisis rien dans la zone etude_code

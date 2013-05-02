@@ -3,6 +3,7 @@
 include RandomText
 FactoryGirl.define do
   factory :resume do
+    stade :avant_projet
     date '2013-01-01'
     cout 100.00
     delai 2.5
