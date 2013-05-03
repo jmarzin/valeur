@@ -6,15 +6,19 @@ Etantdonné(/^un projet (.+) et un projet (.+)$/) do |nom1,nom2|
 end
 
 Etantdonné(/^le projet (.+) dans la base$/) do |nom|
-  @projet = FactoryGirl.create(:projet, code: '1', nom: nom)
+  @projet = FactoryGirl.create(:projet, code: '1', nom: nom,resumes: [FactoryGirl.build(:resume)])
 end
 
-Etantdonné(/une étude sur.+projet (.+)$/) do |nom|
+Etantdonné(/une étude complète sur.+projet (.+)$/) do |nom|
   projet = Projet.find_by(nom: nom)
   @etude = FactoryGirl.create(:etude, projet_id: projet._id,code: 'X',stade: :projet,publie: true,date_publication:'2013.01.01',\
-    date_debut: '2014.01.01',duree_projet: 4.5,cout: 500.10,delai_retour: 5.4,note: 8.2 )
+    date_debut: '2014.01.01',duree_projet: 4.5,type_produit: :front_office,duree_vie: 5,cout: 500.10,delai_retour: 5.4,note: 8.2 )
 end
 
+Etantdonné(/^une étude complète au stade (.+) non publiée sur le projet Hélios$/) do |bilan|
+  @etude = FactoryGirl.create(:etude, projet_id: @projet._id, code: 'XXXX',stade: bilan.to_sym, publie: false,\
+    date_debut: '2014.01.01',duree_projet: 4.5,type_produit: :front_office,duree_vie: 5,cout: 500.10,delai_retour: 5.4,note: 8.2 )
+end
 Quand(/^je clique le lien Etudes de la ligne Hélios$/) do
   within('tr', :text => 'Hélios') do |ref|
     click_link("Etudes")
@@ -81,3 +85,10 @@ Alors(/^le stade est désactivé$/) do
   select('bilan', :from => 'Stade').should raise_error
 end
 
+Quand(/^je ne saisis rien dans le champ (.+)$/) do |champ|
+  fill_in(champ, :with => "")  
+end
+
+Alors(/^l'étude est ajoutée au résumé du projet$/) do
+  @etude.projet.resumes[-1].etude_id.should be @etude._id
+end

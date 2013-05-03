@@ -3,10 +3,12 @@ require 'coherence_projet'
 
 class Resume
   include Mongoid::Document
+  field :etude_id, type: Integer
   field :date, type: Date
   field :cout, type: Float
-  field :delai, type: Float
+  field :duree, type: Float
   field :stade, type: Symbol
+  field :note, type: Float
   embedded_in :projet
 end
 
@@ -64,7 +66,7 @@ class Projet
   validates :date_debut, :presence => {:message => "obligatoire pour un projet lancé",
 	 :if => "[:en_cours,:arrete,:termine].include?(self.etat)" }
   field :derive_cout, type:Float
-  field :derive_delai, type:Float
+  field :derive_duree, type:Float
   field :quotation_disic, type:Integer
   validates :quotation_disic, :inclusion => { :in => [nil,0,1,2,3,4,5],
     :message => "%{value} invalide" }

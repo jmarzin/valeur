@@ -66,7 +66,7 @@ Quand /^(?:|I )select "([^"]*)" from "([^"]*)"$/ do |value, field|
   select(value, :from => field)
 end
 
-Quand /^(?:|I )check "([^"]*)"$/ do |field|
+Quand /^(?:|je )coche la case (.+)$/ do |field|
   check(field)
 end
 

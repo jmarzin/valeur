@@ -31,6 +31,13 @@ class Etude
     return [:back_office,:front_office,:specifique]
   end
 
+  def gestion_publication
+    if self.projet.resumes.empty? || self.projet.resumes[-1].etude_id != self._id then
+      self.projet.resumes.push\
+        (Resume.new(etude_id: self._id,stade: self.stade,date: self.date_publication,cout: self.cout,duree: self.duree_projet,note: self.note))
+    end
+  end
+
   include Mongoid::Document
   include Mongoid::MultiParameterAttributes
   validates_with(CoherenceProjet)
@@ -54,9 +61,15 @@ class Etude
   field :duree_vie, type: Integer
   field :publie, type: Boolean, default: false
   field :date_publication, type: Date
-  field :note, type: Float
+  field :note, type: Float  
+  validates :note, :presence => {:message => "obligatoire pour une étude publiée",
+	 :if => :publie }
   field :cout, type: Float
+  validates :cout, :presence => {:message => "obligatoire pour une étude publiée",
+	 :if => :publie }
   field :delai_retour, type: Float
+  validates :delai_retour, :presence => {:message => "obligatoire pour une étude publiée",
+	 :if => :publie }
 
   embeds_one :etude_strategie
   embeds_one :etude_rentabilite
