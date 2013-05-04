@@ -69,7 +69,7 @@ class Etude
     etudes.each do |etude|
       if not etude.publie
         tab[etude._id] = {:supp => true,:modif =>true}
-      elsif etude.projet.resumes[-1] == etude.stade
+      elsif etude.projet.resumes[-1].stade == etude.stade
         tab[etude._id] = {:supp => false,:modif => true}
       else
         tab[etude._id] = {:supp => false,:modif => false}

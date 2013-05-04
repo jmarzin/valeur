@@ -9,10 +9,22 @@ Etantdonné(/^le projet (.+) dans la base$/) do |nom|
   @projet = FactoryGirl.create(:projet, code: '1', nom: nom,resumes: [FactoryGirl.build(:resume)])
 end
 
+Etantdonné(/^que le résume est vide$/) do
+  @projet.resumes = []
+  visit ('/projets/1/etudes/new')
+  @projet.save!
+end
+
+Etantdonné(/^le projet (.+) dans la base, résumé vide$/) do |nom|
+  @projet = FactoryGirl.create(:projet, code: '1', nom: nom,resumes: [])
+end
+
 Etantdonné(/une étude complète sur.+projet (.+)$/) do |nom|
   projet = Projet.find_by(nom: nom)
   @etude = FactoryGirl.create(:etude, projet_id: projet._id,code: 'X',stade: :projet,publie: true,date_publication:'2013.01.01',\
     date_debut: '2014.01.01',duree_projet: 3.0,type_produit: :front_office,duree_vie: 5,cout: 150.0,delai_retour: 5.4,note: 8.2 )
+  resume = FactoryGirl.build(:resume, etude_id: @etude._id, stade: :projet, cout: 150, duree: 5.4, note: 8.2)
+  @etude.projet.resumes.push(resume)
 end
 
 Etantdonné(/^une étude complète au stade (.+) non publiée sur le projet Hélios$/) do |stade|
@@ -57,7 +69,7 @@ Alors(/^je vois la ligne Id,Code,Stade,Publié,Le,Date début,Durée,Coût,Retou
 end
 
 Alors(/^je vois ses Id,Code,Stade,Publié,Le,Date début,Durée,Coût,Retour,Note$/) do
-  page.text.should =~ /#{@etude._id}\W+X\W+projet\W+Oui\W+2013-01-01\W+2014-01-01\W+4\.5/ #\W+500\.0\W+5\.4\W+8\.2/
+  page.text.should =~ /#{@etude._id}\W+X\W+projet\W+Oui\W+2013-01-01\W+2014-01-01\W+3\.0/ #\W+150\.0\W+5\.4\W+8\.2/
 end
 
 Etantdonné(/^que je saisis les données du formulaire étude$/) do
@@ -151,3 +163,13 @@ Alors(/^le lien (.+) est absent sur la ligne de la première$/) do |zone|
   reg = Regexp.new(zone)
   page.all('tr',:text => 'projet').first.text.should_not =~ reg
 end
+
+Alors(/^le lien (.+) est présent sur la ligne de la première$/) do |zone|
+  reg = Regexp.new(zone)
+  page.all('tr',:text => 'projet').first.text.should =~ reg
+end
+
+Alors(/^le lien Modif est absent$/) do
+  page.text.should_not =~ /Modif/
+end
+

@@ -21,7 +21,7 @@ describe Projet do
   it { should validate_presence_of(:date_debut) }
   it { should embed_many(:resumes) }
   it { should have_many(:etudes) }
-  before(:each) { @resume1 = FactoryGirl.build(:resume, date: '01.01.2013', cout: 100000, duree: 4.5) }
+  before(:each) { @resume1 = FactoryGirl.build(:resume, stade: :projet, date: '01.01.2013', cout: 100000, duree: 4.5) }
   it "Si le statut est lancé, ou terminé, ou arrêté, il y a ou moins un résumé" do
     FactoryGirl.build(:projet, etat: :en_cours, date_debut: '2013.01.01', resumes: []).should be_invalid
     FactoryGirl.build(:projet, etat: :en_cours, date_debut: '2013.01.01', resumes: [@resume1]).should be_valid
@@ -36,7 +36,7 @@ describe Projet do
     FactoryGirl.build(:projet,etat: :en_cours, resumes: [@resume1], derive_cout: 50, derive_duree: 10).should be_invalid
     FactoryGirl.build(:projet,etat: :en_cours, resumes: [], derive_cout: 50, derive_duree: 10).should be_invalid
   end
-  before(:each) { @resume2 = FactoryGirl.build(:resume, date: '01.01.2013', cout: 100000, duree: 4.5) }
+  before(:each) { @resume2 = FactoryGirl.build(:resume, stade: :suivi01, date: '01.01.2013', cout: 100000, duree: 4.5) }
   it "Chaque résumé doit être complet" do
     FactoryGirl.build(:projet,etat: :en_cours, date_debut: '2013.01.01', resumes: [@resume1,@resume2], derive_cout: 0, derive_duree: 0).should be_valid
     @resume2.cout = nil

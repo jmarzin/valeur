@@ -3,23 +3,23 @@
 Quand(/^il n'y pas de projet$/) do
 end
 
-Alors(/^je ne vois pas Id,Code,Nom,Ministère,Public,Etat,Date début,Montant,Délai,Delta coût,Delta délai,Quotation$/) do
+Alors(/^je ne vois pas Id,Code,Nom,Ministère,Public,Etat,Date début,Montant,Durée,Delta coût,Delta durée,Quotation$/) do
   page.text.should_not =~ /Code/  
 end
 
 
-Alors(/^je vois Id,Code,Nom,Ministère,Public,Etat,Date début,Montant,Délai,Delta coût,Delta délai,Quotation$/) do
-  page.text.should match(/Id\W+Code\W+Nom\W+Ministère\W+Public\W+Etat\W+Date début\W+Montant\W+Délai\W+Delta coût\W+Delta délai\W+Quotation/)
+Alors(/^je vois Id,Code,Nom,Ministère,Public,Etat,Date début,Montant,Durée,Delta coût,Delta durée,Quotation$/) do
+  page.text.should match(/Id\W+Code\W+Nom\W+Ministère\W+Public\W+Etat\W+Date début\W+Montant\W+Durée\W+Delta coût\W+Delta durée\W+Quotation/)
 end
 
 Etantdonné(/^un projet complet dans la base$/) do
-  resume1 = FactoryGirl.build(:resume, date: '01.01.2012', cout: 100.000, delai: 2.5)
-  resume2 = FactoryGirl.build(:resume, date: '01.01.2013', cout: 150.264, delai: 3.0)
+  resume1 = FactoryGirl.build(:resume, date: '01.01.2012', stade: :projet, cout: 100.000, duree: 2.5)
+  resume2 = FactoryGirl.build(:resume, date: '01.01.2013', stade: :suivi01, cout: 150.264, duree: 3.0)
   FactoryGirl.create(:projet, code: "XXXX", nom: "Chorus", ministere: "Finances", etat: :en_cours, date_debut: '01.01.2012',
-	resumes: [resume1,resume2], derive_cout: 50, derive_delai: 20, quotation_disic: 3)
+	resumes: [resume1,resume2], derive_cout: 50, derive_duree: 20, quotation_disic: 3)
 end
 
-Alors(/^je vois ses Id,Code,Nom,Ministère,Public,Etat,Date début,Montant,Délai,Delta coût,Delta délai,Quotation$/) do
+Alors(/^je vois ses Id,Code,Nom,Ministère,Public,Etat,Date début,Montant,Durée,Delta coût,Delta durée,Quotation$/) do
   page.text.should match(/1\W+XXXX\W+Chorus\W+Finances\W+Oui\W+En_cours\W+2012-01-01\W+150\.3\W+3\.0\W+ 50 %\W+\+ 20 %\W+3/)
 end
 
@@ -36,7 +36,7 @@ Etantdonné(/^que je saisis les donnees du formulaire$/) do
 end
 
 Alors(/^le projet est créé$/) do
-  page.should have_content "Le projet a été correctement créé"
+  page.should have_content "Le projet a été créé"
 end
 
 

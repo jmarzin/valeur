@@ -10,6 +10,13 @@ Fonctionnalité: Création d'un scénario
     Quand je vais sur la page /projets/1/etudes/new
     Et que je saisis les données du formulaire étude
 
+  Scénario: Contrôle de la liste des stades autorisés
+    Etant donné que le résume est vide
+    Alors je vois le stade avant_projet
+    Et je vois le stade projet
+    Et je vois le stade suivi01
+    Et je vois le stade bilan
+
   Scénario: Quand tout est saisi il n'y a pas d'erreur
     Quand je clique sur Enregistrer
     Alors l'étude est créée

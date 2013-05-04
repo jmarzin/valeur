@@ -73,16 +73,25 @@ Fonctionnalité: Modification des études
     Quand je suis sur la page /projets/1/etudes/1/edit
     Alors tous les champs sont inaccessibles, sauf publié
 
-  Scénario: contrôle des zones
-
+  Scénario: contrôle des liens
     Etant donné le projet Hélios dans la base
     Etant donné que je publie une étude 1 complète au stade projet sur le projet Hélios
     Quand je suis sur la page /projets/1/etudes
     Alors le lien Supp est absent sur la ligne de la première
+    Et le lien Modif est présent sur la ligne de la première
 
-  Scénario: contrôle des zones
+   Scénario: contrôle des liens
     Etant donné le projet Hélios dans la base
     Etant donné que je publie une étude 1 complète au stade projet sur le projet Hélios
     Etant donné que je publie une étude 2 complète au stade suivi01 sur le projet Hélios
     Quand je suis sur la page /projets/1/etudes
-    Alors le lien Modif est absent sur la ligne de la première
+    Alors le lien Supp est absent sur la ligne de la première
+    Et le lien Modif est absent sur la ligne de la première
+
+  Scénario: contrôle des liens
+    Etant donné le projet Hélios dans la base
+    Etant donné que je publie une étude 1 complète au stade projet sur le projet Hélios
+    Etant donné que je publie une étude 2 complète au stade suivi01 sur le projet Hélios
+    Quand je suis sur la page /projets/1/etudes/1
+    Alors le lien Modif est absent
+

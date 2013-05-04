@@ -19,6 +19,7 @@ class EtudesController < ApplicationController
   # GET /etudes/1.json
   def show
     @etude = @projet.etudes.find(params[:id])
+    @modif_supp = Etude.modif_supp_apparents([@etude])
 
     respond_to do |format|
       format.html # show.html.erb
