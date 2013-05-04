@@ -12,13 +12,23 @@ end
 Etantdonné(/une étude complète sur.+projet (.+)$/) do |nom|
   projet = Projet.find_by(nom: nom)
   @etude = FactoryGirl.create(:etude, projet_id: projet._id,code: 'X',stade: :projet,publie: true,date_publication:'2013.01.01',\
-    date_debut: '2014.01.01',duree_projet: 4.5,type_produit: :front_office,duree_vie: 5,cout: 500.10,delai_retour: 5.4,note: 8.2 )
+    date_debut: '2014.01.01',duree_projet: 3.0,type_produit: :front_office,duree_vie: 5,cout: 150.0,delai_retour: 5.4,note: 8.2 )
 end
 
-Etantdonné(/^une étude complète au stade (.+) non publiée sur le projet Hélios$/) do |bilan|
-  @etude = FactoryGirl.create(:etude, projet_id: @projet._id, code: 'XXXX',stade: bilan.to_sym, publie: false,\
-    date_debut: '2014.01.01',duree_projet: 4.5,type_produit: :front_office,duree_vie: 5,cout: 500.10,delai_retour: 5.4,note: 8.2 )
+Etantdonné(/^une étude complète au stade (.+) non publiée sur le projet Hélios$/) do |stade|
+  @etude = FactoryGirl.create(:etude, projet_id: @projet._id, code: 'XXXX',stade: stade.to_sym, publie: false,\
+    date_debut: '2014.01.01',duree_projet: 3.0,type_produit: :front_office,duree_vie: 5,cout: 150.0,delai_retour: 5.4,note: 8.2 )
 end
+
+Etantdonné(/^que je publie une étude (\d) complète au stade (.+) sur le projet (.+)$/) do |id,stade,projet|
+  @etude = FactoryGirl.create(:etude, _id: id,projet_id: @projet._id, code: Lorem.word,stade: stade.to_sym, publie: false,\
+    date_debut: '2014.01.01',duree_projet: 3.0,type_produit: :front_office,duree_vie: 5,cout: 150.0,delai_retour: 5.4,note: 8.2 )
+  visit "/projets/1/etudes/#{id}/edit"
+  check('Publié')
+  click_button('Enregistrer')
+  page.text.should =~ /L'étude a bien été mise à jour/  
+end
+
 Quand(/^je clique le lien Etudes de la ligne Hélios$/) do
   within('tr', :text => 'Hélios') do |ref|
     click_link("Etudes")
@@ -78,7 +88,7 @@ end
 
 Quand(/^l'étude est au stade bilan$/) do
   FactoryGirl.create(:etude, projet_id: 1,code: 'Y',stade: :bilan,publie: true,date_publication:'2013.01.01',\
-    date_debut: '2014.01.01',duree_projet: 4.5,cout: 500.10,delai_retour: 5.4,note: 8.2 )
+    date_debut: '2014.01.01',duree_projet: 3.0,cout: 150.0,delai_retour: 5.4,note: 8.2 )
 end
 
 Alors(/^le stade est désactivé$/) do
@@ -91,4 +101,14 @@ end
 
 Alors(/^l'étude est ajoutée au résumé du projet$/) do
   @etude.projet.resumes[-1].etude_id.should be @etude._id
+end
+
+Alors(/^les dérives sont bien calculées$/) do
+  visit '/projets'
+  page.text.should =~ /\+ 50 %\W+\+ 20 %/
+end
+
+Alors(/^je ne peux pas dépublier l'étude (\d)$/) do |num|
+  visit "/projets/1/etudes/#{num}/edit"
+  uncheck('Publié').should raise_error  
 end

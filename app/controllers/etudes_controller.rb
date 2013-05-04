@@ -64,7 +64,7 @@ class EtudesController < ApplicationController
 
     respond_to do |format|
       if @etude.update_attributes(params[:etude])
-        if @etude.publie then @etude.gestion_publication end
+        if @etude.publie then @etude.calcule_derives end
         format.html { redirect_to [@projet, @etude], notice: "L'étude a bien été mise à jour." }
         format.json { head :no_content }
       else

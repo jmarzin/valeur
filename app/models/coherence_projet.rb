@@ -29,12 +29,8 @@ class CoherenceProjet < ActiveModel::Validator
       if rec.publie and not Etude.where(projet_id: rec.projet_id,stade: rec.stade, publie: true).empty?
         rec.errors[:base] << "Doublon de publication"
       end
-      if not rec.publie
-        if not rec.date_publication == nil
-           rec.errors[:base] << "Pas de date de publication sans publier"
-        end
-      elsif rec.date_publication == nil
-          rec.errors[:base] << "Date de publication obligatoire"
+      if not rec.publie then
+        rec.date_publication == nil
       end
       rec.errors[:base] << rec.stade.to_s+" invalide" \
         unless rec.stade.to_s =~ /^(suivi\d\d|avant_projet|projet|bilan)$/

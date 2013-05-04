@@ -65,8 +65,8 @@ class Projet
   field :date_debut, type: Date
   validates :date_debut, :presence => {:message => "obligatoire pour un projet lancé",
 	 :if => "[:en_cours,:arrete,:termine].include?(self.etat)" }
-  field :derive_cout, type:Float
-  field :derive_duree, type:Float
+  field :derive_cout, type:Integer
+  field :derive_duree, type:Integer
   field :quotation_disic, type:Integer
   validates :quotation_disic, :inclusion => { :in => [nil,0,1,2,3,4,5],
     :message => "%{value} invalide" }

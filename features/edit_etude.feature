@@ -53,6 +53,21 @@ Fonctionnalité: Modification des études
     Quand je coche la case Publié
     Quand je clique sur Enregistrer
     Alors l'étude est ajoutée au résumé du projet
+    Et les dérives sont bien calculées
+
+@en_cours
+  Scénario: contrôle de la dépublication
+    Etant donné le projet Hélios dans la base
+    Etant donné que je publie une étude 1 complète au stade projet sur le projet Hélios
+    Etant donné une étude complète au stade suivi01 non publiée sur le projet Hélios
+    Etant donné que je publie une étude 3 complète au stade suivi01 sur le projet Hélios
+    Alors je ne peux pas dépublier l'étude 1
+    
+    Quand je suis sur la page /projets/1/etudes/2/edit
+    Quand je décoche la case Publié
+    Quand je clique sur Enregistrer
+    Alors l'étude est retirée du résumé du projet
+    Et les dérives sont bien recalculées
 
   Scénario: contrôle de la publication
     Etant donné le projet Hélios dans la base

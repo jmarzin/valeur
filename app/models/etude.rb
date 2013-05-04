@@ -31,11 +31,21 @@ class Etude
     return [:back_office,:front_office,:specifique]
   end
 
-  def gestion_publication
-    if self.projet.resumes.empty? || self.projet.resumes[-1].etude_id != self._id then
-      self.projet.resumes.push\
-        (Resume.new(etude_id: self._id,stade: self.stade,date: self.date_publication,cout: self.cout,duree: self.duree_projet,note: self.note))
-    end
+  def calcule_derives
+    # calcul des dérives
+    
+#    if self.projet.resumes.empty? || self.projet.resumes[-1].etude_id != self._id then
+#      self.projet.resumes.push\
+#        (Resume.new(etude_id: self._id,stade: self.stade,date: self.date_publication,cout: self.cout,duree: self.duree_projet,note: self.note))
+#    end
+#    projet = Projet.find(self.projet_id)
+#    if projet.resumes.size == 1 then
+#      projet.derive_cout, projet.derive_delai = nil, nil
+#    else
+#      projet.derive_cout = (((projet.resumes[1].cout / projet.resumes[0].cout) - 1) * 100).round
+#      projet.derive_duree = (((projet.resumes[1].duree / projet.resumes[0].duree) - 1) * 100).round
+#    end
+#    projet.save
   end
 
   include Mongoid::Document
