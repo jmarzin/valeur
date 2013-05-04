@@ -39,6 +39,8 @@ class EtudesController < ApplicationController
   # GET /etudes/1/edit
   def edit
     @etude = @projet.etudes.find(params[:id])
+    @inactif = @etude.inactif?
+
   end
 
   # POST /etudes
@@ -64,7 +66,7 @@ class EtudesController < ApplicationController
 
     respond_to do |format|
       if @etude.update_attributes(params[:etude])
-        if @etude.publie then @etude.calcule_derives end
+        @etude.gere_resumes
         format.html { redirect_to [@projet, @etude], notice: "L'étude a bien été mise à jour." }
         format.json { head :no_content }
       else

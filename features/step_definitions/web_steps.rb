@@ -70,7 +70,7 @@ Quand /^(?:|je )coche la case (.+)$/ do |field|
   check(field)
 end
 
-Quand /^(?:|I )uncheck "([^"]*)"$/ do |field|
+Quand /^(?:|je )décoche la case (.+)$/ do |field|
   uncheck(field)
 end
 

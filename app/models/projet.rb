@@ -41,6 +41,17 @@ class Projet
     end
   end
 
+  def calcul_derives
+    if self.resumes.size < 2 || (self.resumes.size == 2 && self.resumes[0].stade == :avant_projet) then
+      self.derive_cout, self.derive_duree = nil, nil
+      return self
+    end
+    base = self.resumes.select{ |resume| resume.stade != :avant_projet }.first
+    self.derive_cout = ((self.resumes[-1].cout / base.cout) - 1 ) * 100.round
+    self.derive_duree = ((self.resumes[-1].duree / base.duree) - 1 ) * 100.round
+    return self
+  end
+
   include Mongoid::Document
   include Mongoid::MultiParameterAttributes
   validates_with(CoherenceProjet)

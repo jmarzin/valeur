@@ -7,41 +7,41 @@
           %li= msg
 
   .field
-    = f.label :code
+    = f.label :code, :disable => ["partiel","total"].include?(@inactif)
     = f.text_field :code
   .field
     = f.label :stade
-    = f.select :stade, @etude.liste_stades, :disable => @etude.liste_stades[0]==:bilan
+    = f.select :stade, @etude.liste_stades, :disable => ["partiel","total"].include?(@inactif)
   .field
-    = f.label :description
+    = f.label :description, :disable => ["partiel","total"].include?(@inactif)
     = f.text_field :description
   .field
-    = f.label :date_debut, 'Date début'
+    = f.label :date_debut, 'Date début', :disable => ["partiel","total"].include?(@inactif)
     = f.date_select :date_debut
   .field
-    = f.label :duree_projet, 'Durée du projet'
+    = f.label :duree_projet, 'Durée du projet', :disable => ["partiel","total"].include?(@inactif)
     = f.text_field :duree_projet
   .field
-    = f.label :type_produit
+    = f.label :type_produit, :disable => ["partiel","total"].include?(@inactif)
     = f.select :type_produit, @etude.liste_types_produit
   .field
-    = f.label :duree_vie, 'Durée de vie'
+    = f.label :duree_vie, 'Durée de vie', :disable => ["partiel","total"].include?(@inactif)
     = f.number_field :duree_vie
   - if params["action"] != "new" then
     .field
-      = f.label :publie, 'Publié'
+      = f.label :publie, 'Publié', :disable => ["total"].include?(@inactif)
       = f.check_box :publie
     .field
-      = f.label :date_publication, 'Date publication'
+      = f.label :date_publication, 'Date publication', :disable => ["partiel","total"].include?(@inactif)
       = f.date_select :date_publication
     .field
-      = f.label :cout, 'Coût'
+      = f.label :cout, 'Coût', :disable => ["partiel","total"].include?(@inactif)
       = f.text_field :cout
     .field
-      = f.label :delai_retour, 'Délai retour'
+      = f.label :delai_retour, 'Délai retour', :disable => ["partiel","total"].include?(@inactif)
       = f.text_field :delai_retour
     .field
-      = f.label :note
+      = f.label :note, :disable => ["partiel","total"].include?(@inactif)
       = f.text_field :note
 
   .actions

@@ -110,5 +110,17 @@ end
 
 Alors(/^je ne peux pas dépublier l'étude (\d)$/) do |num|
   visit "/projets/1/etudes/#{num}/edit"
-  uncheck('Publié').should raise_error  
+  expect(page.all('div.field label',:text => 'Publié')[0][:disable]).to eq("true")
+end
+
+Alors(/^je peux dépublier l'étude (\d)$/) do |num|
+  visit "/projets/1/etudes/#{num}/edit"
+    expect(page.all('div.field label',:text => 'Publié')[0][:disable]).to eq("false")
+    uncheck('Publié')
+    click_button('Enregistrer')
+end
+
+
+Alors(/^l'étude est retirée du résumé du projet$/) do
+  expect(@etude.projet.resumes.empty? || @etude.projet.resumes[-1].etude_id != @etude._id).to eq(true)
 end

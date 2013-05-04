@@ -5,6 +5,7 @@ class Etude
   def self.val_type_produit
     {:back_office => 10, :front_office => 5}
   end
+
   def liste_stades
     etude_base = Etude.where(_id: self._id).count
     if etude_base == 0
@@ -31,21 +32,36 @@ class Etude
     return [:back_office,:front_office,:specifique]
   end
 
-  def calcule_derives
+  def gere_resumes
     # calcul des dérives
-    
-#    if self.projet.resumes.empty? || self.projet.resumes[-1].etude_id != self._id then
-#      self.projet.resumes.push\
-#        (Resume.new(etude_id: self._id,stade: self.stade,date: self.date_publication,cout: self.cout,duree: self.duree_projet,note: self.note))
-#    end
-#    projet = Projet.find(self.projet_id)
-#    if projet.resumes.size == 1 then
-#      projet.derive_cout, projet.derive_delai = nil, nil
-#    else
-#      projet.derive_cout = (((projet.resumes[1].cout / projet.resumes[0].cout) - 1) * 100).round
-#      projet.derive_duree = (((projet.resumes[1].duree / projet.resumes[0].duree) - 1) * 100).round
-#    end
-#    projet.save
+    if self.publie then
+      if self.projet.resumes.empty? || self.projet.resumes[-1].etude_id != self._id
+        self.projet.resumes.push\
+          (Resume.new(etude_id: self._id,stade: self.stade,date: self.date_publication,cout: self.cout,duree: self.duree_projet,note: self.note))
+      else
+        return
+      end
+    else
+      if not self.projet.resumes.empty? && self.projet.resumes[-1].etude_id = self._id
+        self.projet.resumes.pop
+      else
+        return
+      end
+    end
+    Projet.find(self.projet_id).calcul_derives.save
+  end
+
+  def inactif?
+    # accessibilité des champs en modification et création
+    if self.publie
+      if self.projet.resumes[-1].etude_id == self._id
+        "partiel"
+      else
+        "total"
+      end
+    else
+      "rien"
+    end
   end
 
   include Mongoid::Document

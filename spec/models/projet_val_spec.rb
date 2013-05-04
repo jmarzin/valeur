@@ -21,7 +21,7 @@ describe Projet do
   it { should validate_presence_of(:date_debut) }
   it { should embed_many(:resumes) }
   it { should have_many(:etudes) }
-  before(:each) { @resume1 = FactoryGirl.build(:resume, date: '01.01.2013', cout: 100000, delai: 4.5) }
+  before(:each) { @resume1 = FactoryGirl.build(:resume, date: '01.01.2013', cout: 100000, duree: 4.5) }
   it "Si le statut est lancé, ou terminé, ou arrêté, il y a ou moins un résumé" do
     FactoryGirl.build(:projet, etat: :en_cours, date_debut: '2013.01.01', resumes: []).should be_invalid
     FactoryGirl.build(:projet, etat: :en_cours, date_debut: '2013.01.01', resumes: [@resume1]).should be_valid
@@ -31,22 +31,22 @@ describe Projet do
     FactoryGirl.build(:projet,etat: :en_cours, resumes: [@resume1], derive_cout: 50).should be_invalid
     FactoryGirl.build(:projet,etat: :en_cours, resumes: [], derive_cout: 50).should be_invalid
   end
-  it { should have_field(:derive_delai) }
+  it { should have_field(:derive_duree) }
   it "Pas de dérive du délai s'il n'y a qu'une étude" do
-    FactoryGirl.build(:projet,etat: :en_cours, resumes: [@resume1], derive_cout: 50, derive_delai: 10).should be_invalid
-    FactoryGirl.build(:projet,etat: :en_cours, resumes: [], derive_cout: 50, derive_delai: 10).should be_invalid
+    FactoryGirl.build(:projet,etat: :en_cours, resumes: [@resume1], derive_cout: 50, derive_duree: 10).should be_invalid
+    FactoryGirl.build(:projet,etat: :en_cours, resumes: [], derive_cout: 50, derive_duree: 10).should be_invalid
   end
-  before(:each) { @resume2 = FactoryGirl.build(:resume, date: '01.01.2013', cout: 100000, delai: 4.5) }
+  before(:each) { @resume2 = FactoryGirl.build(:resume, date: '01.01.2013', cout: 100000, duree: 4.5) }
   it "Chaque résumé doit être complet" do
-    FactoryGirl.build(:projet,etat: :en_cours, date_debut: '2013.01.01', resumes: [@resume1,@resume2], derive_cout: 0, derive_delai: 0).should be_valid
+    FactoryGirl.build(:projet,etat: :en_cours, date_debut: '2013.01.01', resumes: [@resume1,@resume2], derive_cout: 0, derive_duree: 0).should be_valid
     @resume2.cout = nil
-    FactoryGirl.build(:projet,etat: :en_cours, date_debut: '2013.01.01', resumes: [@resume1,@resume2], derive_cout: 0, derive_delai: 0).should be_invalid
+    FactoryGirl.build(:projet,etat: :en_cours, date_debut: '2013.01.01', resumes: [@resume1,@resume2], derive_cout: 0, derive_duree: 0).should be_invalid
   end
   it "S'il y a plusieurs études, la dérive des coûts est servie" do
-    FactoryGirl.build(:projet,etat: :en_cours, resumes: [@resume1,@resume2], derive_cout: nil, derive_delai: 10).should be_invalid
+    FactoryGirl.build(:projet,etat: :en_cours, resumes: [@resume1,@resume2], derive_cout: nil, derive_duree: 10).should be_invalid
   end
   it "S'il y a plusieurs études, la dérive du délai est servie" do
-    FactoryGirl.build(:projet,etat: :en_cours, resumes: [@resume1,@resume2], derive_cout: 50, derive_delai: nil).should be_invalid
+    FactoryGirl.build(:projet,etat: :en_cours, resumes: [@resume1,@resume2], derive_cout: 50, derive_duree: nil).should be_invalid
   end
   it { should have_field(:quotation_disic) }
   it { should validate_inclusion_of(:quotation_disic).to_allow([0,1,2,3,4,5]) }

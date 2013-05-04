@@ -34,25 +34,20 @@ describe Etude do
   it { should have_field(:duree_vie) }
   it { should have_field(:publie) }
   it { should have_field(:date_publication) }
-  it "a une date si elle est publiée" do 
-    expect{FactoryGirl.create(:etude, publie: true, date_publication: nil)}.to \
-      raise_error(Mongoid::Errors::MongoidError,/Date de publication obligatoire/)
-  end
-  it "n'a pas de date si elle n'est pas publiée" do
-    expect{FactoryGirl.create(:etude, publie: false, date_publication: '2013.01.01')}.to \
-      raise_error(Mongoid::Errors::MongoidError,/Pas de date de publication sans publier/)
-  end
   it "a une date de publication si publiée et n'en a pas sinon" do
-    expect{FactoryGirl.create(:etude, code: '1', publie: true, date_publication: '2013.01.01')}.to_not raise_error
+    expect{FactoryGirl.create(:etude, code: '1', publie: true, date_publication: '2013.01.01',
+      cout: 400, delai_retour: 4, note: 5)}.to_not raise_error
     expect{FactoryGirl.create(:etude, code: '2', publie: false, date_publication: false)}.to_not raise_error
   end
   it "n'a qu'une publication pour chaque stade" do
     projet = FactoryGirl.create(:projet, code: '1')
-    expect{FactoryGirl.create(:etude, code: '1', projet_id: projet._id, stade: "projet", publie: true, date_publication: '2013.01.01')}.to_not raise_error 
-    expect{FactoryGirl.create(:etude, code: '2', projet_id: projet._id, stade: "projet", publie: true, date_publication: '2013.01.01')}.to \
-      raise_error(Mongoid::Errors::MongoidError,/Doublon de publication/)
+    expect{FactoryGirl.create(:etude, code: '1', projet_id: projet._id, stade: "projet", publie: true, date_publication: '2013.01.01', \
+      cout: 400, delai_retour: 4, note: 5)}.to_not raise_error 
+    expect{FactoryGirl.create(:etude, code: '2', projet_id: projet._id, stade: "projet", publie: true, date_publication: '2013.01.01', \
+      cout: 400, delai_retour: 4, note: 5)}.to raise_error(Mongoid::Errors::MongoidError,/Doublon de publication/)
     projet = FactoryGirl.create(:projet, code: '2')
-    expect{FactoryGirl.create(:etude, code: '1', projet_id: projet._id, stade: "projet", publie: true, date_publication: '2013.01.01')}.to_not raise_error
+    expect{FactoryGirl.create(:etude, code: '1', projet_id: projet._id, stade: "projet", publie: true, date_publication: '2013.01.01', \
+      cout: 400, delai_retour: 4, note: 5)}.to_not raise_error
   end
   it { should have_field(:note) }
   it { should have_field(:cout) }

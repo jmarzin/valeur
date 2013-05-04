@@ -30,7 +30,7 @@ class CoherenceProjet < ActiveModel::Validator
         rec.errors[:base] << "Doublon de publication"
       end
       if not rec.publie then
-        rec.date_publication == nil
+        rec.date_publication = nil
       end
       rec.errors[:base] << rec.stade.to_s+" invalide" \
         unless rec.stade.to_s =~ /^(suivi\d\d|avant_projet|projet|bilan)$/

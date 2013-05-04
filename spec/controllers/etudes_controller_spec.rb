@@ -4,18 +4,20 @@ require 'spec_helper'
 
 describe EtudesController do
 
-  before(:each) { @projet = FactoryGirl.create(:projet) }
+  before(:each) { resume = FactoryGirl.build(:resume,etude_id: 1) ; @projet = FactoryGirl.create(:projet,resumes: [resume]) }
   # This should return the minimal set of attributes required to create a valid
   # Etude. As you add validations to Etude, be sure to
   # update the return value of this method accordingly.
   def valid_attributes
-    { "stade" => "projet",
+    { "_id" => 1,
+      "stade" => "projet",
       "code" => '1',
       "description" => 'd',
       "date_debut" => '2013.01.01',
       "duree_projet" => 8,
       "type_produit" => :back_office,
-      "duree_vie" => 10  }
+      "duree_vie" => 10,
+      "publie" => false  }
   end
 
   # This should return the minimal set of values that should be in the session
