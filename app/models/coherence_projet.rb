@@ -10,19 +10,19 @@ class CoherenceProjet < ActiveModel::Validator
       end
       nb = 0
       rec.resumes.each do |e| nb += 1 end 
-      if nb <= 1
+      if nb <= 1 || (nb == 2 && rec.resumes[0].stade == :avant_projet) 
         if rec.derive_cout
-          rec.errors[:base] << "Le calcul de la dérive des coûts nécessite 2 études"
+          rec.errors[:base] << "Le calcul de la dérive des coûts nécessite 2 vraies études"
         end
         if rec.derive_duree
-          rec.errors[:base] << "Le calcul de la dérive du délai de retour nécessite 2 études"
+          rec.errors[:base] << "Le calcul de la dérive du délai de retour nécessite 2 vraies études"
         end
       else 
         if not rec.derive_cout
-          rec.errors[:base] << "La dérive des coûts est calculée s'il y a plusieurs études"
+          rec.errors[:base] << "La dérive des coûts est calculée s'il y a plusieurs vraies études"
         end
         if not rec.derive_duree
-          rec.errors[:base] << "La dérive du délai de retour est calculée s'il y a plusieurs études"
+          rec.errors[:base] << "La dérive du délai de retour est calculée s'il y a plusieurs vraies études"
         end
       end
     else # cas des études

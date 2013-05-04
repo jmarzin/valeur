@@ -7,6 +7,7 @@ class EtudesController < ApplicationController
   # GET /etudes.json
   def index
     @etudes = @projet.etudes.all
+    @modif_supp = Etude.modif_supp_apparents(@etudes)
 
     respond_to do |format|
       format.html # index.html.erb

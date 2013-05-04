@@ -37,8 +37,8 @@ Quand /^(?:|je )suis le lien (.+)$/ do |link|
   click_link(link)
 end
 
-Quand /^(?:|I )fill in "([^"]*)" with "([^"]*)"$/ do |field, value|
-  fill_in(field, :with => value)
+Quand /^(?:|je )saisis la valeur (\d+) dans le champ (.+)$/ do |valeur, champ|
+  fill_in(champ, :with => valeur)
 end
 
 Quand /^(?:|I )fill in "([^"]*)" for "([^"]*)"$/ do |value, field|

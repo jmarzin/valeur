@@ -33,7 +33,7 @@ class Etude
   end
 
   def gere_resumes
-    # calcul des dérives
+    # gestion des résumés
     if self.publie then
       if self.projet.resumes.empty? || self.projet.resumes[-1].etude_id != self._id
         self.projet.resumes.push\
@@ -48,7 +48,7 @@ class Etude
         return
       end
     end
-    Projet.find(self.projet_id).calcul_derives.save
+    Projet.find(self.projet_id).calcul_derives.save!
   end
 
   def inactif?
@@ -63,6 +63,20 @@ class Etude
       "rien"
     end
   end
+
+  def self.modif_supp_apparents(etudes)
+    tab = {}
+    etudes.each do |etude|
+      if not etude.publie
+        tab[etude._id] = {:supp => true,:modif =>true}
+      elsif etude.projet.resumes[-1] == etude.stade
+        tab[etude._id] = {:supp => false,:modif => true}
+      else
+        tab[etude._id] = {:supp => false,:modif => false}
+      end
+    end
+    return tab
+  end 
 
   include Mongoid::Document
   include Mongoid::MultiParameterAttributes

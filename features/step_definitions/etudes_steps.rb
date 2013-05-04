@@ -21,7 +21,7 @@ Etantdonné(/^une étude complète au stade (.+) non publiée sur le projet Hél
 end
 
 Etantdonné(/^que je publie une étude (\d) complète au stade (.+) sur le projet (.+)$/) do |id,stade,projet|
-  @etude = FactoryGirl.create(:etude, _id: id,projet_id: @projet._id, code: Lorem.word,stade: stade.to_sym, publie: false,\
+  @etude = FactoryGirl.create(:etude, _id: id,projet_id: @projet._id, code: Lorem.word+rand(10).to_s,stade: stade.to_sym, publie: false,\
     date_debut: '2014.01.01',duree_projet: 3.0,type_produit: :front_office,duree_vie: 5,cout: 150.0,delai_retour: 5.4,note: 8.2 )
   visit "/projets/1/etudes/#{id}/edit"
   check('Publié')
@@ -92,7 +92,7 @@ Quand(/^l'étude est au stade bilan$/) do
 end
 
 Alors(/^le stade est désactivé$/) do
-  select('bilan', :from => 'Stade').should raise_error
+   expect(page.all('div.field label',:text => 'Stade')[0][:disable]).to eq("true")
 end
 
 Quand(/^je ne saisis rien dans le champ (.+)$/) do |champ|
@@ -105,7 +105,7 @@ end
 
 Alors(/^les dérives sont bien calculées$/) do
   visit '/projets'
-  page.text.should =~ /\+ 50 %\W+\+ 20 %/
+  page.text.should =~ /\+ 33 %\W+\+100 %/
 end
 
 Alors(/^je ne peux pas dépublier l'étude (\d)$/) do |num|
@@ -116,11 +116,38 @@ end
 Alors(/^je peux dépublier l'étude (\d)$/) do |num|
   visit "/projets/1/etudes/#{num}/edit"
     expect(page.all('div.field label',:text => 'Publié')[0][:disable]).to eq("false")
+    @etude.projet.derive_cout.should_not be nil
+    @etude.projet.derive_duree.should_not be nil
     uncheck('Publié')
     click_button('Enregistrer')
 end
 
 
 Alors(/^l'étude est retirée du résumé du projet$/) do
-  expect(@etude.projet.resumes.empty? || @etude.projet.resumes[-1].etude_id != @etude._id).to eq(true)
+  @etude =  Etude.find(@etude._id)
+  (@etude.projet.resumes.empty? || (@etude.projet.resumes[-1].etude_id != @etude._id)).should be true
+end
+
+Alors(/^les dérives sont bien recalculées$/) do
+  @etude.projet.derive_cout.should be nil
+  @etude.projet.derive_duree.should be nil
+end
+
+Alors(/^tous les champs sont inaccessibles, sauf publié$/) do
+  expect(page.all('div.field label',:text => 'Code')[0][:disable]).to eq("true")
+  expect(page.all('div.field label',:text => 'Description')[0][:disable]).to eq("true")
+  expect(page.all('div.field label',:text => 'Date début')[0][:disable]).to eq("true")
+  expect(page.all('div.field label',:text => 'Durée du projet')[0][:disable]).to eq("true")
+  expect(page.all('div.field label',:text => 'Type produit')[0][:disable]).to eq("true")
+  expect(page.all('div.field label',:text => 'Durée de vie')[0][:disable]).to eq("true")
+  expect(page.all('div.field label',:text => 'Publié')[0][:disable]).to eq("false")
+  expect(page.all('div.field label',:text => 'Date publication')[0][:disable]).to eq("true")
+  expect(page.all('div.field label',:text => 'Coût')[0][:disable]).to eq("true")
+  expect(page.all('div.field label',:text => 'Délai retour')[0][:disable]).to eq("true")
+  expect(page.all('div.field label',:text => 'Note')[0][:disable]).to eq("true")
+end
+
+Alors(/^le lien (.+) est absent sur la ligne de la première$/) do |zone|
+  reg = Regexp.new(zone)
+  page.all('tr',:text => 'projet').first.text.should_not =~ reg
 end
