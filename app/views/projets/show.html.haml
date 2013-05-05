@@ -21,7 +21,7 @@
   %b Description:
   = @projet.description
 %p
-  %b Entites concernees:
+  %b Entites concernees: 
   = @projet.entites_concernees
 %p
   %b Date début:
@@ -33,6 +33,30 @@
   %b Quotation DISIC
   = @projet.quotation_disic
 
+- if not @projet.resumes.empty? then
+
+  %h2 Historique des études Mareva publiées
+
+  %table
+    %tr
+      %th Id
+      %th Date
+      %th Stade
+      %th Coût
+      %th Durée
+      %th Note
+
+    - @projet.resumes.each do |resume|
+      %tr
+        %td= resume.etude_id
+        %td= resume.date
+        %td= resume.stade
+        %td= resume.cout
+        %td= resume.duree
+        %td= resume.note
+%br
+= link_to 'Toutes les études', projet_etudes_path(@projet)
+\|
 = link_to 'Modif', edit_projet_path(@projet)
 \|
 = link_to 'Retour à la liste', projets_path

@@ -36,8 +36,8 @@
         %td= projet.quotation_disic
         %td= link_to 'Détail', projet
         %td= link_to 'Etudes', projet_etudes_path(projet)
-        %td= link_to 'Modif', edit_projet_path(projet)
-        %td= link_to 'Supp', projet, :method => :delete, :data => { :confirm => 'Poursuivre la suppression définitive ?' }
+        %td= if Projet._modif.include?(projet.etat) then link_to 'Modif', edit_projet_path(projet) end
+        %td= if Projet._supp.include?(projet.etat) then link_to 'Supp', projet, confirm: 'Poursuivre la suppression définitive ?', method: :delete end
 
 %br
 

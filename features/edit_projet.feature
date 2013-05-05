@@ -65,3 +65,7 @@ Fonctionnalité: Modification des projets
     Etant donné que je sélectionne "soumis" dans la zone Etat
     Quand je clique sur Enregistrer
     Alors je vois l'option a_l_etude
+
+  Scénario: La date début ne peut pas être changée après le lancement du projet
+    Etant donnés des projets des différents états dans la base
+    Alors la date début ne peut pas être modifiée pour les projets en_cours, arrêtés, terminés 

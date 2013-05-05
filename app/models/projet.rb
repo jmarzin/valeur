@@ -17,6 +17,18 @@ class Projet
   @@wf_etats = {:a_l_etude => [:soumis, :abandonne], :soumis => [:accepte, :refuse], :accepte => [:en_cours, :abandonne], \
     :en_cours => [:arrete, :termine], :arrete => [], :termine => [], :abandonne => [], :refuse => [:a_l_etude, :abandonne]}
 
+  def self._supp
+    [:abandonne]
+  end
+
+  def self._modif
+    [:a_l_etude,:soumis,:accepte,:en_cours,:refuse]
+  end
+
+  def self._modif_date
+    [:a_l_etude,:soumis,:accepte,:refuse]
+  end
+
   def self.liste_ministeres
     ['Intermin','Aff.Etrangères','Agriculture','Culture','Défense','Ecologie','Finances','Intérieur','Sociaux','Serv. PM']
   end
