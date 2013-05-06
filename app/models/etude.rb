@@ -13,6 +13,9 @@ class Etude
     end
     base = derniere_etude.stade
     if derniere_etude.publie
+      if derniere_etude._id == self._id
+        return [base]
+      end
       if base =~ /suivi\d\d/
         liste = [base.succ]
       elsif base == :bilan
@@ -59,7 +62,7 @@ class Etude
     Projet.find(self.projet_id).calcul_derives.save!
   end
 
-  def inactif?
+  def inactif
     # accessibilité des champs en modification et création
     if self.publie
       if self.projet.resumes[-1].etude_id == self._id
@@ -75,7 +78,7 @@ class Etude
   def self.modif_supp_apparents(etudes)
     tab = {}
     etudes.each do |etude|
-      if not etude.publie || etude.projet.resumes.empty?
+      if (not etude.publie) || etude.projet.resumes.empty?
         tab[etude._id] = {:supp => true,:modif =>true}
       elsif etude.projet.resumes[-1].stade == etude.stade
         tab[etude._id] = {:supp => false,:modif => true}

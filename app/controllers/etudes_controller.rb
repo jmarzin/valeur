@@ -41,7 +41,7 @@ class EtudesController < ApplicationController
   # GET /etudes/1/edit
   def edit
     @etude = @projet.etudes.find(params[:id])
-    @inactif = @etude.inactif?
+    @inactif = @etude.inactif
 
   end
 

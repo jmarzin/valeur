@@ -7,42 +7,42 @@
           %li= msg
 
   .field
-    = f.label :code, :disable => ["partiel","total"].include?(@inactif)
-    = f.text_field :code
+    = f.label :code
+    = f.text_field :code, :disabled => ["partiel","total"].include?(@inactif)
   .field
     = f.label :stade
-    = f.select :stade, @etude.liste_stades, :disable => ["partiel","total"].include?(@inactif)
+    = f.select :stade, @etude.liste_stades, :disabled => ["partiel","total"].include?(@inactif)
   .field
-    = f.label :description, :disable => ["partiel","total"].include?(@inactif)
-    = f.text_field :description
+    = f.label :description
+    = f.text_field :description, :disabled => ["partiel","total"].include?(@inactif)
   .field
-    = f.label :date_debut, 'Date début', :disable => ["partiel","total"].include?(@inactif)
-    = f.date_select :date_debut
+    = f.label :date_debut, 'Date début'
+    = f.date_select :date_debut, :disabled => ["partiel","total"].include?(@inactif)
   .field
-    = f.label :duree_projet, 'Durée du projet', :disable => ["partiel","total"].include?(@inactif)
-    = f.text_field :duree_projet
+    = f.label :duree_projet, 'Durée du projet'
+    = f.text_field :duree_projet, :disabled => ["partiel","total"].include?(@inactif)
   .field
-    = f.label :type_produit, :disable => ["partiel","total"].include?(@inactif)
-    = f.select :type_produit, @etude.liste_types_produit
+    = f.label :type_produit
+    = f.select :type_produit, @etude.liste_types_produit, :disabled => if ["partiel","total"].include?(@inactif) then @etude.liste_types_produit else [] end
   .field
-    = f.label :duree_vie, 'Durée de vie', :disable => ["partiel","total"].include?(@inactif)
-    = f.number_field :duree_vie
+    = f.label :duree_vie, 'Durée de vie'
+    = f.number_field :duree_vie, :disabled => ["partiel","total"].include?(@inactif)
   - if params["action"] != "new" then
     .field
-      = f.label :publie, 'Publié', :disable => ["total"].include?(@inactif)
-      = f.check_box :publie
+      = f.label :publie, 'Publié'
+      = f.check_box :publie, :disabled => ["total"].include?(@inactif)
     .field
-      = f.label :date_publication, 'Date publication', :disable => ["partiel","total"].include?(@inactif)
-      = f.date_select :date_publication
+      = f.label :date_publication, 'Date publication'
+      = f.date_select :date_publication, :disabled => ["partiel","total"].include?(@inactif)
     .field
-      = f.label :cout, 'Coût', :disable => ["partiel","total"].include?(@inactif)
-      = f.text_field :cout
+      = f.label :cout, 'Coût'
+      = f.text_field :cout, :disabled => ["partiel","total"].include?(@inactif)
     .field
-      = f.label :delai_retour, 'Délai retour', :disable => ["partiel","total"].include?(@inactif)
-      = f.text_field :delai_retour
+      = f.label :delai_retour, 'Délai retour'
+      = f.text_field :delai_retour, :disabled => ["partiel","total"].include?(@inactif)
     .field
-      = f.label :note, :disable => ["partiel","total"].include?(@inactif)
-      = f.text_field :note
+      = f.label :note
+      = f.text_field :note, :disabled => ["partiel","total"].include?(@inactif)
 
   .actions
     = f.submit 'Enregistrer'

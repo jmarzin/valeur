@@ -6,33 +6,33 @@
         - @projet.errors.full_messages.each do |msg|
           %li= msg
   .field
-    = f.label :code, 'Code',:disable => !Projet._modif.include?(@projet.etat)
-    = f.text_field :code
+    = f.label :code, 'Code'
+    = f.text_field :code,:disabled => !(Projet._modif.include?(@projet.etat))
   .field
-    = f.label :nom, 'Nom',:disable => !Projet._modif.include?(@projet.etat)
-    = f.text_field :nom
+    = f.label :nom, 'Nom'
+    = f.text_field :nom,:disabled => !(Projet._modif.include?(@projet.etat))
   .field
-    = f.label :ministere, 'Ministères',:disable => !Projet._modif.include?(@projet.etat)
-    = f.select :ministere, Projet.liste_ministeres
+    = f.label :ministere, 'Ministères'
+    = f.select :ministere, Projet.liste_ministeres,:disabled => if Projet._modif.include?(@projet.etat) then [] else Projet.liste_ministeres end
   .field
-    = f.label :public, 'Public',:disable => !Projet._modif.include?(@projet.etat)
-    = f.check_box :public
+    = f.label :public, 'Public'
+    = f.check_box :public,:disabled => !(Projet._modif.include?(@projet.etat))
   .field
-    = f.label :description, 'Description',:disable => !Projet._modif.include?(@projet.etat)
-    = f.text_field :description
+    = f.label :description, 'Description'
+    = f.text_field :description,:disabled => !(Projet._modif.include?(@projet.etat))
   .field
-    = f.label :entites_concernees, 'Entités concernées',:disable => !Projet._modif.include?(@projet.etat)
-    = f.text_field :entites_concernees
+    = f.label :entites_concernees, 'Entités concernées'
+    = f.text_field :entites_concernees,:disabled => !(Projet._modif.include?(@projet.etat))
   .field
-    = f.label :date_debut, 'Date début',:disable => !Projet._modif_date.include?(@projet.etat)
-    = f.date_select :date_debut, :use_month_numbers => true, :order => [:year, :month, :day]
+    = f.label :date_debut, 'Date début'
+    = f.date_select :date_debut, :use_month_numbers => true, :order => [:year, :month, :day],:disabled => !(Projet._modif_date.include?(@projet.etat))
   - if params["action"] != "new" then
     .field
-      = f.label :etat, 'Etat',:disable => !Projet._modif.include?(@projet.etat)
-      = f.select :etat, @projet.liste_etats
+      = f.label :etat, 'Etat'
+      = f.select :etat, @projet.liste_etats,:disabled => if Projet._modif.include?(@projet.etat) then [] else @projet.liste_etats end
     .field
-      = f.label :quotation_disic, 'Quotation',:disable => !Projet._modif.include?(@projet.etat)
-      = f.select :quotation_disic, Projet.liste_quotations
+      = f.label :quotation_disic, 'Quotation'
+      = f.select :quotation_disic, Projet.liste_quotations,:disabled => !(Projet._modif.include?(@projet.etat))
  
   .actions
     = f.submit 'Enregistrer'

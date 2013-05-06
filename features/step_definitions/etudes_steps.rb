@@ -122,12 +122,12 @@ end
 
 Alors(/^je ne peux pas dépublier l'étude (\d)$/) do |num|
   visit "/projets/1/etudes/#{num}/edit"
-  expect(page.all('div.field label',:text => 'Publié')[0][:disable]).to eq("true")
+  expect(find_by_id("etude_publie").disabled?).to eq('disabled')
 end
 
 Alors(/^je peux dépublier l'étude (\d)$/) do |num|
   visit "/projets/1/etudes/#{num}/edit"
-    expect(page.all('div.field label',:text => 'Publié')[0][:disable]).to eq("false")
+  expect(find_by_id("etude_publie").disabled?).to_not eq('disabled')    
     @etude.projet.derive_cout.should_not be nil
     @etude.projet.derive_duree.should_not be nil
     uncheck('Publié')
@@ -146,17 +146,17 @@ Alors(/^les dérives sont bien recalculées$/) do
 end
 
 Alors(/^tous les champs sont inaccessibles, sauf publié$/) do
-  expect(page.all('div.field label',:text => 'Code')[0][:disable]).to eq("true")
-  expect(page.all('div.field label',:text => 'Description')[0][:disable]).to eq("true")
-  expect(page.all('div.field label',:text => 'Date début')[0][:disable]).to eq("true")
-  expect(page.all('div.field label',:text => 'Durée du projet')[0][:disable]).to eq("true")
-  expect(page.all('div.field label',:text => 'Type produit')[0][:disable]).to eq("true")
-  expect(page.all('div.field label',:text => 'Durée de vie')[0][:disable]).to eq("true")
-  expect(page.all('div.field label',:text => 'Publié')[0][:disable]).to eq("false")
-  expect(page.all('div.field label',:text => 'Date publication')[0][:disable]).to eq("true")
-  expect(page.all('div.field label',:text => 'Coût')[0][:disable]).to eq("true")
-  expect(page.all('div.field label',:text => 'Délai retour')[0][:disable]).to eq("true")
-  expect(page.all('div.field label',:text => 'Note')[0][:disable]).to eq("true")
+  expect(find_by_id("etude_code").disabled?).to eq("disabled")
+  expect(find_by_id("etude_description").disabled?).to eq("disabled")
+  expect(find_by_id("etude_date_debut_1i").disabled?).to eq("disabled")
+  expect(find_by_id("etude_duree_projet").disabled?).to eq("disabled")
+#  expect(find_by_id("etude_type_produit").disabled?).to eq("disabled")
+  expect(find_by_id("etude_duree_vie").disabled?).to eq("disabled")
+  expect(find_by_id("etude_publie").disabled?).to_not eq("disabled")
+  expect(find_by_id("etude_date_publication_1i").disabled?).to eq("disabled")
+  expect(find_by_id("etude_cout").disabled?).to eq("disabled")
+  expect(find_by_id("etude_delai_retour").disabled?).to eq("disabled")
+  expect(find_by_id("etude_note").disabled?).to eq("disabled")
 end
 
 Alors(/^le lien (.+) est absent sur la ligne de la première$/) do |zone|

@@ -218,9 +218,9 @@ end
 
 Alors(/^la date début ne peut pas être modifiée pour les projets en_cours, arrêtés, terminés$/) do
   visit('/projets/5/edit')
-  expect(page.all('div.field label',:text => 'Date début')[0][:disable]).to eq("true")
+  expect(find_by_id("projet_date_debut_1i").disabled?).to eq("disabled")
   visit('/projets/6/edit')
-  expect(page.all('div.field label',:text => 'Date début')[0][:disable]).to eq("true")
+  expect(find_by_id("projet_date_debut_1i").disabled?).to eq("disabled")
   visit('/projets/7/edit')
-  expect(page.all('div.field label',:text => 'Date début')[0][:disable]).to eq("true")
+  expect(find_by_id("projet_date_debut_1i").disabled?).to eq("disabled")
 end
