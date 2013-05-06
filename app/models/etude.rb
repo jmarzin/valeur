@@ -7,25 +7,52 @@ class Etude
   end
 
   def liste_stades
-    etude_base = Etude.where(_id: self._id).count
-    if etude_base == 0
-      if self.projet.resumes.empty?
-        return [:avant_projet,:projet,:suivi01,:bilan]
+    derniere_etude = Etude.where(projet_id: self.projet_id).last
+    if not derniere_etude
+      return [:avant_projet,:projet,:suivi01,:bilan]
+    end
+    base = derniere_etude.stade
+    if derniere_etude.publie
+      if base =~ /suivi\d\d/
+        liste = [base.succ]
+      elsif base == :bilan
+        liste = [:bilan]
       else
-        stade_base = self.projet.resumes[-1].stade
+        liste = []
       end
     else
-      stade_base = Etude.find(self._id).stade
+      liste = [base]
     end
-    if stade_base == :bilan
-      return [:bilan]
-    elsif stade_base == :avant_projet
-      return [:avant_projet,:projet,:bilan]
-    elsif stade_base == :projet
-      return [:projet,:bilan]
+    if base == :avant_projet
+      liste_aj = [:projet,:suivi01,:bilan]
+    elsif base == :projet
+      liste_aj = [:suivi01,:bilan]
+    elsif base =~ /suivi\d\d/
+      liste_aj = [:bilan]
     else
-      return [stade_base.to_s.succ.to_sym,:bilan]
+      liste_aj = []
     end
+    liste_aj.each do |st| liste <<= st end
+    return liste
+#    etude_base = Etude.where(_id: self._id).count
+#    if etude_base == 0
+#      if self.projet.resumes.empty?
+#        return [:avant_projet,:projet,:suivi01,:bilan]
+#      else
+#        stade_base = self.projet.resumes[-1].stade
+#      end
+#    else
+#      stade_base = Etude.find(self._id).stade
+#    end
+#    if stade_base == :bilan
+#      return [:bilan]
+#    elsif stade_base == :avant_projet
+#      return [:avant_projet,:projet,:bilan]
+#    elsif stade_base == :projet
+#      return [:projet,:bilan]
+#    else
+#      return [stade_base.to_s.succ.to_sym,:bilan]
+#    end
   end
 
   def liste_types_produit
@@ -67,7 +94,7 @@ class Etude
   def self.modif_supp_apparents(etudes)
     tab = {}
     etudes.each do |etude|
-      if not etude.publie
+      if not etude.publie || etude.projet.resumes.empty?
         tab[etude._id] = {:supp => true,:modif =>true}
       elsif etude.projet.resumes[-1].stade == etude.stade
         tab[etude._id] = {:supp => false,:modif => true}
