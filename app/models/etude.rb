@@ -34,25 +34,6 @@ class Etude
     end
     liste_aj.each do |st| liste <<= st end
     return liste
-#    etude_base = Etude.where(_id: self._id).count
-#    if etude_base == 0
-#      if self.projet.resumes.empty?
-#        return [:avant_projet,:projet,:suivi01,:bilan]
-#      else
-#        stade_base = self.projet.resumes[-1].stade
-#      end
-#    else
-#      stade_base = Etude.find(self._id).stade
-#    end
-#    if stade_base == :bilan
-#      return [:bilan]
-#    elsif stade_base == :avant_projet
-#      return [:avant_projet,:projet,:bilan]
-#    elsif stade_base == :projet
-#      return [:projet,:bilan]
-#    else
-#      return [stade_base.to_s.succ.to_sym,:bilan]
-#    end
   end
 
   def liste_types_produit
@@ -69,7 +50,7 @@ class Etude
         return
       end
     else
-      if not self.projet.resumes.empty? && self.projet.resumes[-1].etude_id = self._id
+      if (not self.projet.resumes.empty?) && self.projet.resumes[-1].etude_id = self._id
         self.projet.resumes.pop
       else
         return
