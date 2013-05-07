@@ -81,4 +81,5 @@ test:
 production: 
   sessions: 
     default: 
+      database: heroku_app15525565
       uri: <%= ENV['MONGOLAB_URI'] %>
