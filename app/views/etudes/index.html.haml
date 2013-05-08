@@ -1,9 +1,9 @@
-%h1 Liste des études du projet #{@projet.nom}
+%h2 Liste des études du projet #{@projet.nom}
 
 
 - if not @etudes.empty? then
 
-  %table
+  %table#etudes
     %tr
       %th Id
       %th Code
@@ -15,25 +15,25 @@
       %th Coût
       %th Retour
       %th Note
-      %th
-      %th
-      %th
+      %th.rien
+      %th.rien
+      %th.rien
 
     - @etudes.each do |etude|
       %tr
-        %td= etude._id
+        %td.droit= etude._id
         %td= etude.code
         %td= etude.stade
-        %td= "#{if etude.publie then "Oui" else "Non" end}"
-        %td= etude.date_publication
-        %td= etude.date_debut
-        %td= "#{sprintf('%5.1f',etude.duree_projet)}"
-        %td= "#{sprintf('%9.1f',etude.cout) unless etude.cout == nil}"
-        %td= "#{sprintf('%5.1f',etude.delai_retour) unless etude.delai_retour == nil}"
-        %td= "#{sprintf('%5.1f',etude.note) unless etude.note == nil}" 
-        %td= link_to 'Détail', projet_etude_path(@projet, etude) 
-        %td= if @modif_supp[etude._id][:modif] then link_to 'Modif', edit_projet_etude_path(@projet, etude) end
-        %td= if @modif_supp[etude._id][:supp] then link_to 'Supp', [@projet, etude], confirm: 'Poursuivre la suppression définitive ?', method: :delete end
+        %td.centre= "#{if etude.publie then "Oui" else "Non" end}"
+        %td.centre= etude.date_publication
+        %td.centre= etude.date_debut
+        %td.droit= "#{sprintf('%5.1f',etude.duree_projet)}"
+        %td.droit= "#{sprintf('%9.1f',etude.cout) unless etude.cout == nil}"
+        %td.droit= "#{sprintf('%5.1f',etude.delai_retour) unless etude.delai_retour == nil}"
+        %td.droit= "#{sprintf('%5.1f',etude.note) unless etude.note == nil}" 
+        %td.centre= link_to 'Détail', projet_etude_path(@projet, etude) 
+        %td.centre= if @modif_supp[etude._id][:modif] then link_to 'Modif', edit_projet_etude_path(@projet, etude) end
+        %td.centre= if @modif_supp[etude._id][:supp] then link_to 'Supp', [@projet, etude], confirm: 'Poursuivre la suppression définitive ?', method: :delete end
 
 %br
 

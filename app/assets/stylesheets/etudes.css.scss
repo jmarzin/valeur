@@ -1,3 +1,34 @@
 // Place all the styles related to the etudes controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+table#etudes {
+  margin: 10px;
+  border-collapse: collapse;
+  width: 100%;
+  border-bottom: 2px solid black;
+}
+table#etudes th {
+  border: 2px solid white;
+  font-weight: bold;
+  background-color: wheat;
+}
+table#etudes th.rien {
+  border: 2px solid white;
+  font-weight: bold;
+  background-color: white;
+}
+table#etudes table#etudes td {
+  padding: 4px;
+  text-align: left;
+}
+table#etudes td.droit {
+  padding: 4px;
+  text-align: right;
+}
+table#etudes th, td.centre {
+  padding: 4px;
+  text-align: center;
+}
+table#etudes th.hilite {
+  background-color: yellow;
+}

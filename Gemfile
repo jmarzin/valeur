@@ -6,7 +6,7 @@ source 'http://gemcutter.org'
 
 gem 'rails', '3.2.13'
 gem "mongoid", "~> 3.1.2"
-gem 'workflow_on_mongoid'
+gem 'kaminari'
 gem 'haml'
 gem 'haml-rails'
 

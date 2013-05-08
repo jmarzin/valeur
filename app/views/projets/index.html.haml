@@ -1,8 +1,8 @@
-%h1 Liste des projets de l'Etat
+%h2 Liste des projets de l'Etat
 
 - if not @projets.empty? then
 
-  %table
+  %table#projets
     %tr
       %th Id
       %th Code
@@ -16,24 +16,25 @@
       %th Delta coût
       %th Delta durée
       %th Quotation
-      %th
-      %th
-      %th
+      %th.rien
+      %th.rien
+      %th.rien
 
     - @projets.each do |projet|
       %tr
-        %td= projet._id
+        %td.droit= projet._id
         %td= projet.code
         %td= projet.nom
         %td= projet.ministere
-        %td= "#{if projet.public then "Oui" else "Non" end}"
+        %td.centre= "#{if projet.public then "Oui" else "Non" end}"
         %td= projet.etat.capitalize
-        %td= projet.date_debut
-        %td= "#{sprintf('%9.1f',projet.resumes[-1].cout) if projet.resumes[-1]}"
-        %td= "#{sprintf('%5.1f',projet.resumes[-1].duree) if projet.resumes[-1]}"
-        %td= "#{sprintf('+%3d %',projet.derive_cout) if projet.derive_cout}"
-        %td= "#{sprintf('+%3d %',projet.derive_duree) if projet.derive_duree}"
-        %td= projet.quotation_disic
+        %td.centre= projet.date_debut
+        %td.droit= number_to_currency(projet.resumes[-1].cout, options = {separator: "", delimiter: ".", precision: 0, |
+          unit: "k€", format:"%n %u"}) if projet.resumes[-1]
+        %td.droit= number_with_precision(projet.resumes[-1].duree, options = {separator: ",", precision: 1}) if projet.resumes[-1]
+        %td.droit= number_to_percentage(projet.derive_cout, options = {separator: "", precision: 0}) if projet.resumes[-1]
+        %td.droit= number_to_percentage(projet.derive_duree, options = {separator: "", precision: 0}) if projet.resumes[-1]
+        %td.droit= projet.quotation_disic
         %td= link_to 'Détail', projet
         %td= link_to 'Etudes', projet_etudes_path(projet)
         %td= if Projet._modif.include?(projet.etat) then link_to 'Modif', edit_projet_path(projet) end
@@ -42,3 +43,4 @@
 %br
 
 = link_to 'Nouveau projet', new_projet_path
+
