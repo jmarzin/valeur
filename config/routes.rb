@@ -7,5 +7,6 @@ Valeur::Application.routes.draw do
   # map '/' to be a redirect to '/projets'
 
 match "/" => redirect("/projets")
+match '/aide_projets', :to => redirect('/aide_projets.html')
 
 end

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+  <title>Aide Ã  la gestion des projets</title>
+  <style type="text/css">
+    body { background-color: #fff; color: #666; text-align: center; font-family: arial, sans-serif; }
+    div.dialog {
+      width: 50em;
+      padding: 0 4em;
+      margin: 4em auto 0 auto;
+      border: 1px solid #ccc;
+      border-right-color: #999;
+      border-bottom-color: #999;
+    }
+    h1 { font-size: 100%; color: #f00; line-height: 1.5em; }
+  </style>
+</head>
+
+<body>
+<!-- This file lives in public/aide_projets.html -->
+
+<div class="dialog">
+<h1><span style="color:#000000">Aide à  la gestion des projets</span></h1>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;">Chaque projet a un
+code unique. Il peut ainsi y avoir homonymie entre deux ou plusieurs projets.
+Le système attribue un numéro en séquence à chaque projet.</p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;">Un projet est
+affecté à un ministère. S'il concerne plusieurs ministères, il est
+interministériel, sans plus de précision.</p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;">Les données de
+synthèse d'un projet public peuvent être publiées sur internet.</p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;">Chaque projet suit
+un flux de travail :</p>
+<ul>
+  <li style="text-align:left;margin-left:0;margin-right:auto;">il est créé au
+    statut à l'étude</li>
+  <li style="text-align:left;margin-left:0;margin-right:auto;">puis il est
+    soumis à l'approbation du ministère</li>
+  <li style="text-align:left;margin-left:0;margin-right:auto;">il peut alors
+    être accepté ou refusé</li>
+  <li style="text-align:left;margin-left:0;margin-right:auto;">s'il est refusé,
+    il peut être remis à l'étude</li>
+  <li style="text-align:left;margin-left:0;margin-right:auto;">s'il est
+    accepté, il peut passer à l'état "en cours"</li>
+  <li style="text-align:left;margin-left:0;margin-right:auto;">un projet à
+    l'étude, soumis, accepté ou refusé peut être abandonné</li>
+  <li style="text-align:left;margin-left:0;margin-right:auto;">un projet en
+    cours peut être terminé ou arrêté.</li>
+</ul>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;">Seul un projet
+abandonné peut être supprimé.</p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;">Le montant et la
+durée ne s'affichent que s'il y a une étude Maréva publiée.</p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;">La dérive du coût
+et de la durée ne s'affichent que si le projet est en cours et s'il y a deux
+études Maréva publiées.</p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;"></p>
+
+<h1><span style="color:#000000">Aide à  la gestion des études</span></h1>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;">Un projet peut
+donner lieu à une ou plusieurs études. Chaque étude est identifiée par un
+numéro attribué en séquence par le système.</p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;">Chaque étude est
+identifiée par un code libre, unique pour chaque projet.</p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;">Une étude peut être
+réalisée à plusieurs stades :</p>
+<ul>
+  <li style="text-align:left;margin-left:0;margin-right:auto;">au stade
+    avant-projet</li>
+  <li style="text-align:left;margin-left:0;margin-right:auto;">au stade projet
+    avant lancement</li>
+  <li style="text-align:left;margin-left:0;margin-right:auto;">au stade de
+    suivi du projet lancé</li>
+  <li style="text-align:left;margin-left:0;margin-right:auto;">au stade du
+    bilan.</li>
+</ul>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;">Le premier suivi a
+le stade suivi01, le suivant suivi02... Le système se charge de la numérotation
+des suivis.</p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;">Plusieurs études
+peuvent être faites pour un stade donné, chacune avec un code différent bien
+entendu, jusqu'à ce que l'une d'entre elles soit publiée. Dès lors, seule une
+étude du stade suivant peut être créée.</p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;">Seule une étude non
+publiée peut être supprimée. La dernière étude publiée peut être dépubliée.</p>
+
+<p></p>
+
+<p></p>
+</div>
+</body>
+</html>
