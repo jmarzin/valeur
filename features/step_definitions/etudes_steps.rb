@@ -89,7 +89,7 @@ Alors(/^l'étude est créée$/) do
   page.text.should =~ /L'étude a été créée/
 end
 
-Quand(/^je saisis (\d+) dans la zone (.+)$/) do |valeur,zone|
+Quand(/^je saisis (.+) dans la zone (.+)$/) do |valeur,zone|
   fill_in(zone, :with => valeur)
 end
 
@@ -117,7 +117,7 @@ end
 
 Alors(/^les dérives sont bien calculées$/) do
   visit '/projets'
-  page.text.should =~ /\+ 33 %\W+\+100 %/
+  page.text.should =~ /33%\W+100%/
 end
 
 Alors(/^je ne peux pas dépublier l'étude (\d)$/) do |num|

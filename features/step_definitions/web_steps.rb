@@ -37,7 +37,7 @@ Quand /^(?:|je )suis le lien (.+)$/ do |link|
   click_link(link)
 end
 
-Quand /^(?:|je )saisis la valeur (\d+) dans le champ (.+)$/ do |valeur, champ|
+Quand /^(?:|je )saisis la valeur (.+) dans le champ (.+)$/ do |valeur, champ|
   fill_in(champ, :with => valeur)
 end
 

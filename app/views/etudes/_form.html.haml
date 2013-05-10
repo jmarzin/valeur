@@ -37,6 +37,7 @@
     .field
       = f.label :cout, 'Coût'
       = f.text_field :cout, :disabled => ["partiel","total"].include?(@inactif)
+        
     .field
       = f.label :delai_retour, 'Délai retour'
       = f.text_field :delai_retour, :disabled => ["partiel","total"].include?(@inactif)

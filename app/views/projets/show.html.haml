@@ -51,9 +51,9 @@
         %td= resume.etude_id
         %td= resume.date
         %td= resume.stade
-        %td= resume.cout
-        %td= resume.duree
-        %td= resume.note
+        %td= number_with_precision(resume.cout, options = {delimiter: " ", precision: 0})
+        %td= number_with_precision(resume.duree, options = {precision: 1})
+        %td= number_with_precision(resume.note, options = {precision: 1})
 %br
 = link_to 'Toutes les études', projet_etudes_path(@projet)
 \|

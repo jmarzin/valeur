@@ -29,11 +29,10 @@
         %td.centre= "#{if projet.public then "Oui" else "Non" end}"
         %td= projet.etat.capitalize
         %td.centre= projet.date_debut
-        %td.droit= number_to_currency(projet.resumes[-1].cout, options = {separator: "", delimiter: ".", precision: 0, |
-          unit: "k€", format:"%n %u"}) if projet.resumes[-1]
-        %td.droit= number_with_precision(projet.resumes[-1].duree, options = {separator: ",", precision: 1}) if projet.resumes[-1]
-        %td.droit= number_to_percentage(projet.derive_cout, options = {separator: "", precision: 0}) if projet.resumes[-1]
-        %td.droit= number_to_percentage(projet.derive_duree, options = {separator: "", precision: 0}) if projet.resumes[-1]
+        %td.droit= number_with_precision(projet.resumes[-1].cout, options = {delimiter: " ", precision: 0}) if projet.resumes[-1]
+        %td.droit= number_with_precision(projet.resumes[-1].duree, options = {precision: 1}) if projet.resumes[-1]
+        %td.droit= number_to_percentage(projet.derive_cout, options = {precision: 0}) if projet.resumes[-1]
+        %td.droit= number_to_percentage(projet.derive_duree, options = {precision: 0}) if projet.resumes[-1]
         %td.droit= projet.quotation_disic
         %td= link_to 'Détail', projet
         %td= link_to 'Etudes', projet_etudes_path(projet)

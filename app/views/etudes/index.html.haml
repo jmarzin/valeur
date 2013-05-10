@@ -27,10 +27,10 @@
         %td.centre= "#{if etude.publie then "Oui" else "Non" end}"
         %td.centre= etude.date_publication
         %td.centre= etude.date_debut
-        %td.droit= "#{sprintf('%5.1f',etude.duree_projet)}"
-        %td.droit= "#{sprintf('%9.1f',etude.cout) unless etude.cout == nil}"
-        %td.droit= "#{sprintf('%5.1f',etude.delai_retour) unless etude.delai_retour == nil}"
-        %td.droit= "#{sprintf('%5.1f',etude.note) unless etude.note == nil}" 
+        %td.droit= number_with_precision(etude.duree_projet, options = {precision: 1}) 
+        %td.droit= number_with_precision(etude.cout, options = {delimiter: " ", precision: 0}) unless etude.cout == nil
+        %td.droit= number_with_precision(etude.delai_retour, options = {precision: 1}) unless etude.delai_retour == nil
+        %td.droit= number_with_precision(etude.note, options = {precision: 1}) unless etude.note == nil
         %td.centre= link_to 'Détail', projet_etude_path(@projet, etude) 
         %td.centre= if @modif_supp[etude._id][:modif] then link_to 'Modif', edit_projet_etude_path(@projet, etude) end
         %td.centre= if @modif_supp[etude._id][:supp] then link_to 'Supp', [@projet, etude], confirm: 'Poursuivre la suppression définitive ?', method: :delete end

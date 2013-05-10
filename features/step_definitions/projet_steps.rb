@@ -20,7 +20,7 @@ Etantdonné(/^un projet complet dans la base$/) do
 end
 
 Alors(/^je vois ses Id,Code,Nom,Ministère,Public,Etat,Date début,Montant,Durée,Delta coût,Delta durée,Quotation$/) do
-  page.text.should match(/1\W+XXXX\W+Chorus\W+Finances\W+Oui\W+En_cours\W+2012-01-01\W+150\.3\W+3\.0\W+ 50 %\W+\+ 20 %\W+3/)
+  page.text.should match(/1\W+XXXX\W+Chorus\W+Finances\W+Oui\W+En_cours\W+2012-01-01\W+150\W+3\.0\W+50%\W+20%\W+3/)
 end
 
 Etantdonné(/^que je suis sur la page de création d'un projet$/) do
