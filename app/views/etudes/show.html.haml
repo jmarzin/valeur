@@ -2,42 +2,43 @@
 
 %p#notice= notice
 
-%p
-  %b Code:
-  = @etude.code
-%p
-  %b Stade:
-  = @etude.stade
-%p
-  %b Description:
-  = @etude.description
-%p
-  %b Date début:
-  = @etude.date_debut
-%p
-  %b Durée projet:
-  = number_with_precision(@etude.duree_projet, options = {precision: 1})
-%p
-  %b Type produit:
-  = @etude.type_produit
-%p
-  %b Durée vie:
-  = @etude.duree_vie
-%p
-  %b Publié:
-  = if @etude.publie then "Oui" else "Non" end
-%p
-  %b Date publication:
-  = @etude.date_publication
-%p
-  %b Coût:
-  = number_with_precision(@etude.cout, options = {delimiter: " ", precision: 0}) unless @etude.cout == nil
-%p
-  %b Délai retour:
-  = number_with_precision(@etude.delai_retour, options = {precision: 1}) unless @etude.delai_retour == nil
-%p
-  %b Note:
-  = number_with_precision(@etude.note, options = {precision: 1}) unless @etude.note == nil
+%table
+  %tr
+    %td.bold Code
+    %td= @etude.code
+  %tr
+    %td.bold Stade
+    %td= @etude.stade
+  %tr
+    %td.bold Description
+    %td= @etude.description
+  %tr
+    %td.bold Date début
+    %td= @etude.date_debut
+  %tr
+    %td.bold Durée projet
+    %td= number_with_precision(@etude.duree_projet, options = {precision: 1})
+  %tr
+    %td.bold Type de produit
+    %td= @etude.type_produit
+  %tr
+    %td.bold Durée de vie
+    %td= @etude.duree_vie
+  %tr
+    %td.bold Publié
+    %td= if @etude.publie then "Oui" else "Non" end
+  %tr
+    %td.bold Date de publication
+    %td= @etude.date_publication
+  %tr
+    %td.bold Coût en k€
+    %td= number_with_precision(@etude.cout, options = {delimiter: " ", precision: 0}) unless @etude.cout == nil
+  %tr
+    %td.bold Délai de retour
+    %td= number_with_precision(@etude.delai_retour, options = {precision: 1}) unless @etude.delai_retour == nil
+  %tr
+    %td.bold Note
+    %td= number_with_precision(@etude.note, options = {precision: 1}) unless @etude.note == nil
 
 = if @modif_supp[@etude._id][:modif] then link_to 'Modif', edit_projet_etude_path(@projet, @etude) end
 \|

@@ -2,36 +2,52 @@
 
 %p#notice= notice
 
-%p
-  %b Id
-  = @projet._id
-%p
-  %b Code:
-  = @projet.code
-%p
-  %b Nom:
-  = @projet.nom
-%p
-  %b Ministère:
-  = @projet.ministere
-%p
-  %b Public:
-  = if @projet.public then "Oui" else "Non" end
-%p
-  %b Description:
-  = @projet.description
-%p
-  %b Entites concernees: 
-  = @projet.entites_concernees
-%p
-  %b Date début:
-  = @projet.date_debut
-%p
-  %b Etat:
-  = @projet.etat
-%p
-  %b Quotation DISIC
-  = @projet.quotation_disic
+%table
+  %tr
+    %th
+    %th
+  %tr
+    %td.bold Id
+    %td= @projet._id
+  %tr
+    %td.bold Code
+    %td= @projet.code
+  %tr
+    %td.bold Nom
+    %td= @projet.nom
+  %tr
+    %td.bold Ministère
+    %td= @projet.ministere
+  %tr
+    %td.bold Public
+    %td= if @projet.public then "Oui" else "Non" end
+  %tr
+    %td.bold Description
+    %td= @projet.description
+  %tr
+    %td.bold Entités concernées
+    %td= @projet.entites_concernees
+  %tr
+    %td.bold Date début
+    %td= @projet.date_debut
+  %tr
+    %td.bold Etat
+    %td= @projet.etat
+  %tr
+    %td.bold Quotation DISIC
+    %td= @projet.quotation_disic
+  %tr
+    %td.bold Coût en k€
+    %td= number_with_precision(@projet.resumes[-1].cout, options = {delimiter: ' ', presicion: 0}) if not @projet.resumes.empty?
+  %tr
+    %td.bold Dérive coût
+    %td= number_to_percentage(@projet.derive_cout,options = {precision: 0}) if @projet.derive_cout
+  %tr
+    %td.bold Durée en années
+    %td= number_with_precision(@projet.resumes[-1].duree, options = {precision: 1}) if not @projet.resumes.empty?
+  %tr
+    %td.bold Dérive durée
+    %td= number_to_percentage(@projet.derive_duree,options = {precision: 0}) if @projet.derive_duree
 
 - if not @projet.resumes.empty? then
 
