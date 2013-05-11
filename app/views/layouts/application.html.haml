@@ -7,8 +7,9 @@
     = csrf_meta_tags
 
   %body
-    %h1.title Tableau de bord TIC !
-    = button_to('Aide', '/aide_projets', :method => :get)
+    %table#bandeau
+      %td.title Tableau de bord TIC !
+      %td.bouton= button_to('Aide', '/aide_projets', :method => :get)
     #main
       = yield
 

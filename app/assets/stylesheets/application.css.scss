@@ -45,8 +45,27 @@ h1.title {
   border-bottom: 4px solid gold;
   font-size: 2em;
   font-style: normal;
+  font-weight: bold
 }
-
+table#bandeau {
+  background-color: orange;
+  border-bottom: 4px solid gold;
+}
+table#bandeau td.title {
+  margin: 0 0 1em;
+  padding: 10px;
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+  width: 95%;
+}
+table#bandeau td.bouton {
+  margin: 0 0 1em;
+  padding: 10px;
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+}
 #notice #warning {
   background: rosybrown;
   margin: 1em 0;
