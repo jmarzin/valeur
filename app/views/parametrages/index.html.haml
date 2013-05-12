@@ -1,0 +1,25 @@
+%h1 Listing parametrages
+
+%table
+  %tr
+    %th Ministere
+    %th Code
+    %th Publie
+    %th Date publication
+    %th
+    %th
+    %th
+
+  - @parametrages.each do |parametrage|
+    %tr
+      %td= parametrage.ministere
+      %td= parametrage.code
+      %td= parametrage.publie
+      %td= parametrage.date_publication
+      %td= link_to 'Show', parametrage
+      %td= link_to 'Edit', edit_parametrage_path(parametrage)
+      %td= link_to 'Destroy', parametrage, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Parametrage', new_parametrage_path

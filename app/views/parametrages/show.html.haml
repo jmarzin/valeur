@@ -1,0 +1,18 @@
+%p#notice= notice
+
+%p
+  %b Ministere:
+  = @parametrage.ministere
+%p
+  %b Code:
+  = @parametrage.code
+%p
+  %b Publie:
+  = @parametrage.publie
+%p
+  %b Date publication:
+  = @parametrage.date_publication
+
+= link_to 'Edit', edit_parametrage_path(@parametrage)
+\|
+= link_to 'Back', parametrages_path

@@ -14,6 +14,10 @@ RSpec.configure do |config|
 
   config.before :each do
     Mongoid.purge!
+    #connection = Mongo::Connection.new("localhost")
+    #db = connection.db('valeur_test')
+    #db.collection('parametrages').remove
+    binding.pry
   end
 end
 

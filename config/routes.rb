@@ -1,5 +1,8 @@
 Valeur::Application.routes.draw do
   
+  resources :parametrages
+
+
   resources :projets do
     resources :etudes
   end

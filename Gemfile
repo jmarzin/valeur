@@ -9,6 +9,7 @@ gem "mongoid", "~> 3.1.2"
 gem 'kaminari'
 gem 'haml'
 gem 'haml-rails'
+gem 'xml-simple'
 
 
 # Bundle edge Rails instead:
@@ -37,8 +38,12 @@ end
 group :test do
   gem "factory_girl_rails", ">= 1.6.0"
   gem 'mongoid-rspec'
+  gem 'mongo'
+  gem 'bson_ext'
   gem "cucumber-rails", ">= 1.2.1", :require => false
   gem 'cucumber-rails-training-wheels' # some pre-fabbed step definitions  
+  gem 'pry'
+  gem 'pry-rails'
   gem "capybara", ">= 1.1.2"
   gem "database_cleaner"
   gem "ZenTest"
