@@ -13,11 +13,11 @@ RSpec.configure do |config|
   config.include Mongoid::Matchers
 
   config.before :each do
-    Mongoid.purge!
-    #connection = Mongo::Connection.new("localhost")
-    #db = connection.db('valeur_test')
-    #db.collection('parametrages').remove
-    binding.pry
+#    Mongoid.purge!
+    connection = Mongo::Connection.new("localhost")
+    db = connection.db('valeur_test')
+    db.collection('etudes').remove
+    db.collection('projets').remove
   end
 end
 

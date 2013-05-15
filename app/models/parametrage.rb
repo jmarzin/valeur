@@ -4,9 +4,10 @@ require 'xmlsimple'
 class PReponse
   include Mongoid::Document
   embedded_in :p_axis
+  embedded_in :PCategory
   field :texte, type: String
   field :justification, type: String
-  field :cle_sectionnee, type: String
+  field :choix, type: String
   field :note, type: Float 
   field :appreciation, type: Hash
 end
@@ -27,12 +28,14 @@ class PCategory
   field :note, type: Float
   field :appreciation, type: Hash
   embeds_many :p_axes
+  embeds_many :p_reponses
 end
 
 class PDomaine
   include Mongoid::Document
   embedded_in :p_strategie
   field :nom, type: String
+  field :note, type:Float
   field :note_ponderee, type: Float
   field :cle_selectionnee, type: String
   field :ponderation, type: Hash
@@ -47,6 +50,13 @@ end
 
 class Parametrage
 
+#
+# Les trois méthodes suivantes servent à charger dans la base test un paramétrage standard
+# présenté dans un fichier xml produit à partir d'excel
+#
+# Cette méthode lit chaque feuille présentée sous la forme d'un dictionnaire dont la clé
+# est le nom de l'onglet et la valeur la matrice ligne/col
+#
   def self.lit_feuille(tableau,domaine)
     dans_parametre = false
     dans_categorie = false
@@ -92,11 +102,10 @@ class Parametrage
     end
     domaine
   end
-
-  def self.lit_ponderation(tableau,parametrage)
-    parametrage
-  end
-
+#
+# Cette méthode transforme la structure xml lue en une structure plus facilement
+# exploitable. Méthode appelée par rspec
+#
   def self.transforme(reduit)
     @parametrage = Parametrage.create(ministere: 'Intermin',code: 'Standard',description: 'Original',publie: true,date_publication: '2013.05.11')
     @parametrage.create_p_strategie
@@ -109,13 +118,13 @@ class Parametrage
         @metier = Parametrage.lit_feuille(tableau,@metier)
       elsif onglet == 'Admin valeur SI'
         @dsi = Parametrage.lit_feuille(tableau,@dsi)
-      else
-        @parametrage = Parametrage.lit_ponderation(tableau,@parametrage)
       end
     end
-    binding.pry       
   end
-
+#
+# Cette méthode lit le fichier xml founit en argument
+# Méthode appelée par rspec
+#
   def self.charge_xml(fichier)
     x_lu = XmlSimple.xml_in(fichier)
     @reduit={}
