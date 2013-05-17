@@ -1,5 +1,8 @@
 Valeur::Application.routes.draw do
   
+  resources :strategies, only: [:show, :edit, :update]
+
+
   resources :parametrages
 
 

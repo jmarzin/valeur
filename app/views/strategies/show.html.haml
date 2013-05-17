@@ -1,0 +1,40 @@
+%p#notice= notice
+
+%h2 Détail du volet Stratégie de l'étude #{@strategy.etude._id} du projet #{@strategy.etude.projet.nom}
+
+- @strategy.domaines.each do |domaine|
+  = domaine.nom + ' Note : '  
+  \
+  = domaine.note
+  %br
+  - domaine.categories.each do |categorie|
+    = categorie.nom+ ' Note : '
+    \
+    = categorie.note
+    %br
+    - if categorie.reponses == []
+      - categorie.axes.each do |axe|
+        = axe.nom+ ' Note : '
+        \
+        = axe.note
+        %br
+        - if axe.reponses != []
+          - axe.reponses.each do |reponse|
+            = reponse.texte+' Choix : '
+            \
+            = reponse.choix+' Note : '
+            \
+            = reponse.note
+            %br
+    - else
+      - categorie.reponses.each do |reponse|
+        = reponse.texte+' Choix : '
+        \
+        = reponse.choix+' Note : '
+        \
+        = reponse.note
+        %br
+
+= link_to 'Modif', edit_strategy_path(@strategy)
+\|
+= link_to 'Etude', projet_etude_path(@strategy.etude.projet, @strategy.etude)

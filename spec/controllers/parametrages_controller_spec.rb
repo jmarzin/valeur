@@ -36,7 +36,7 @@ describe ParametragesController do
 
   describe "GET index" do
     it "assigns all parametrages as @parametrages" do
-      parametrage = Parametrage.create! valid_attributes
+      parametrage = Parametrage.all.first
       get :index, {}, valid_session
       assigns(:parametrages).should eq([parametrage])
     end

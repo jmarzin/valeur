@@ -13,11 +13,11 @@ RSpec.configure do |config|
   config.include Mongoid::Matchers
 
   config.before :each do
-#    Mongoid.purge!
-    connection = Mongo::Connection.new("localhost")
-    db = connection.db('valeur_test')
-    db.collection('etudes').remove
-    db.collection('projets').remove
+    Mongoid.purge!
+    str1 = File.open('test/fixtures/strategie.mrs', 'rb') { |file| file.read }
+    param = Parametrage.new
+    param = Marshal.load(str1).clone
+    param.save!
   end
 end
 

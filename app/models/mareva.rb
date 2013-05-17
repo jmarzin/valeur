@@ -5,41 +5,45 @@ class Reponse
   embedded_in :axe
   field :texte, type: String
   field :justification, type: String
-  field :cle_sectionnee, type: String
+  field :choix, type: String
   field :note, type: Float 
   field :option, type: Hash
 end
 
-class Axe
+class Axis
   include Mongoid::Document
   embedded_in :categorie
-  field :titre, type: String
+  field :nom, type: String
   field :note, type: Float
   field :appreciation, type: Hash
   embeds_many :reponses
 end
 
-class Categorie
+class Category
   include Mongoid::Document
-  embedded_in :analyse
+  embedded_in :domaine
   field :nom, type: String
-  field :cle_selectionnee, type: String
-  field :note_ponderee, type: Float
-  field :ponderation, type: Hash
+  field :note, type: Float
+  field :appreciation, type: Hash
   embeds_many :axes
+  embeds_many :reponses
 end
 
-class Analyse
+class Domaine
   include Mongoid::Document
   embedded_in :etude_strategie
   field :nom, type: String
+  field :note, type:Float
+  field :note_ponderee, type: Float
+  field :cle_selectionnee, type: String
+  field :ponderation, type: Hash
   embeds_many :categories
 end
 
-class Etude_strategie
+class EtudeStrategie
   include Mongoid::Document
   embedded_in :etude
-  embeds_many :analyses
+  embeds_many :domaines
 end
 
 
