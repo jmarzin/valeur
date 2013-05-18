@@ -3,38 +3,33 @@
 %h2 Détail du volet Stratégie de l'étude #{@strategy.etude._id} du projet #{@strategy.etude.projet.nom}
 
 - @strategy.domaines.each do |domaine|
-  = domaine.nom + ' Note : '  
-  \
-  = domaine.note
-  %br
+  %table.domaines
+    %td= domaine.nom
+    %td= "#{domaine.note_ponderee}/20"  
   - domaine.categories.each do |categorie|
-    = categorie.nom+ ' Note : '
-    \
-    = categorie.note
-    %br
+    %table.categories
+      %td.titre= categorie.nom
+      %td= "#{categorie.note}/20"
+      %td= categorie.appreciation
     - if categorie.reponses == []
       - categorie.axes.each do |axe|
-        = axe.nom+ ' Note : '
-        \
-        = axe.note
-        %br
+        %table.axes
+          %td.titre= axe.nom
+          %td= "#{axe.note}/20"
+          %td= axe.appreciation
         - if axe.reponses != []
           - axe.reponses.each do |reponse|
-            = reponse.texte+' Choix : '
-            \
-            = reponse.choix+' Note : '
-            \
-            = reponse.note
-            %br
+            %table.reponses
+              %td.titre= simple_format(reponse.texte)
+              %td.reponse= "#{reponse.choix}"
+              %td= "#{reponse.note} point#{if reponse.note && reponse.note>1 then 's'end}"
     - else
       - categorie.reponses.each do |reponse|
-        = reponse.texte+' Choix : '
-        \
-        = reponse.choix+' Note : '
-        \
-        = reponse.note
-        %br
+        %table.reponses
+          %td.titre= simple_format(reponse.texte)
+          %td.reponse= "#{reponse.choix}"
+          %td= "#{reponse.note} point#{if reponse.note && reponse.note>1 then 's'end}"
 
-= link_to 'Modif', edit_strategy_path(@strategy)
+= link_to 'Modif', edit_strategy_path(@strategy.etude)
 \|
 = link_to 'Etude', projet_etude_path(@strategy.etude.projet, @strategy.etude)

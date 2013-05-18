@@ -9,7 +9,7 @@ class PReponse
   field :justification, type: String
   field :choix, type: String
   field :note, type: Float 
-  field :appreciation, type: Hash
+  field :options, type: Hash
 end
 
 class PAxis
@@ -17,7 +17,8 @@ class PAxis
   embedded_in :p_category
   field :nom, type: String
   field :note, type: Float
-  field :appreciation, type: Hash
+  field :appreciation, type: String
+  field :seuils, type: Hash
   embeds_many :p_reponses
 end
 
@@ -26,7 +27,10 @@ class PCategory
   embedded_in :p_domaine
   field :nom, type: String
   field :note, type: Float
-  field :appreciation, type: Hash
+  field :appreciation, type: String
+  field :seuils, type: Hash
+  field :coef_selectionne, type: String
+  field :ponderations, type: Hash
   embeds_many :p_axes
   embeds_many :p_reponses
 end
@@ -35,10 +39,8 @@ class PDomaine
   include Mongoid::Document
   embedded_in :p_strategie
   field :nom, type: String
-  field :note, type:Float
   field :note_ponderee, type: Float
-  field :cle_selectionnee, type: String
-  field :ponderation, type: Hash
+
   embeds_many :p_categories
 end
 

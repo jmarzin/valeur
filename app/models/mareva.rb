@@ -7,7 +7,7 @@ class Reponse
   field :justification, type: String
   field :choix, type: String
   field :note, type: Float 
-  field :option, type: Hash
+  field :options, type: Hash
 end
 
 class Axis
@@ -15,7 +15,8 @@ class Axis
   embedded_in :categorie
   field :nom, type: String
   field :note, type: Float
-  field :appreciation, type: Hash
+  field :appreciation, type: String
+  field :seuils, type: Hash
   embeds_many :reponses
 end
 
@@ -24,7 +25,10 @@ class Category
   embedded_in :domaine
   field :nom, type: String
   field :note, type: Float
-  field :appreciation, type: Hash
+  field :appreciation, type: String
+  field :seuils, type: Hash
+  field :coef_selectionne, type: String
+  field :ponderations, type: Hash
   embeds_many :axes
   embeds_many :reponses
 end
@@ -33,14 +37,12 @@ class Domaine
   include Mongoid::Document
   embedded_in :etude_strategie
   field :nom, type: String
-  field :note, type:Float
   field :note_ponderee, type: Float
-  field :cle_selectionnee, type: String
-  field :ponderation, type: Hash
   embeds_many :categories
 end
 
 class EtudeStrategie
+
   include Mongoid::Document
   embedded_in :etude
   embeds_many :domaines

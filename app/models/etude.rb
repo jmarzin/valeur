@@ -18,26 +18,25 @@ class Etude
       param = Parametrage.where(code: 'Standard').first
       self.etude_strategie = EtudeStrategie.new
       param.p_strategie.p_domaines.each do |domaine|
-        self.etude_strategie.domaines << Domaine.new(nom: domaine.nom,note: domaine.note,note_ponderee: domaine.note_ponderee,\
-          cle_selectionnee: domaine.cle_selectionnee,ponderation: domaine.ponderation)
+        self.etude_strategie.domaines << Domaine.new(nom: domaine.nom,note_ponderee: domaine.note_ponderee)
         domaine.p_categories.each do |categorie|
           self.etude_strategie.domaines[-1].categories << Category.new(nom: categorie.nom,note: categorie.note,\
-             appreciation: categorie.appreciation)
+             seuils: categorie.seuils,coef_selectionne: categorie.coef_selectionne,ponderations: categorie.ponderations)
           if categorie.p_reponses == []
             categorie.p_axes.each do |axe|
-              self.etude_strategie.domaines[-1].categories[-1].axes << Axis.new(nom: axe.nom,note: axe.note,appreciation: axe.appreciation)
+              self.etude_strategie.domaines[-1].categories[-1].axes << Axis.new(nom: axe.nom,note: axe.note,seuils: axe.seuils)
               if axe.p_reponses == []
               else
                 axe.p_reponses.each do |reponse|
                   self.etude_strategie.domaines[-1].categories[-1].axes[-1].reponses << Reponse.new(texte: reponse.texte,\
-                    justification: reponse.justification,choix: reponse.choix,note: reponse.note,appreciation: reponse.appreciation)
+                    justification: reponse.justification,choix: reponse.choix,note: reponse.note,options: reponse.options)
                 end
               end
             end
           else
             categorie.p_reponses.each do |reponse|
               self.etude_strategie.domaines[-1].categories[-1].reponses << Reponse.new(texte: reponse.texte, justification: reponse.justification,\
-                choix: reponse.choix,note: reponse.note,appreciation: reponse.appreciation)
+                choix: reponse.choix,note: reponse.note,options: reponse.options)
             end
           end
         end
