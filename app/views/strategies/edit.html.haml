@@ -3,6 +3,11 @@
 %h2 Modification du volet Stratégie de l'étude #{@strategy.etude._id} du projet #{@strategy.etude.projet.nom}
 
 = form_tag strategy_path(@etude), :method => :put do
+  = submit_tag 'Enregistrer'
+  \|
+  = link_to "Retour à l'étude", projet_etude_path(@etude.projet,@etude)
+  %br
+  %br
   - i = 0
   - @strategy.groupes.each do |groupe1|
     =render(partial: "groupe", object: groupe1, locals: {niveau: 1})
@@ -25,4 +30,5 @@
 
   = submit_tag 'Enregistrer'
   \|
-  = link_to "Retour à l'étude", strategy_path(@etude)
+  = link_to "Retour à l'étude", projet_etude_path(@etude.projet,@etude)
+

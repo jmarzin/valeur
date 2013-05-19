@@ -48,6 +48,11 @@ class Etude
     end
     self.etude_strategie
   end    
+
+  def calcul_strategie
+    self.etude_strategie
+  end
+
 =begin
 #ancienne version avant changement de structure
   def lit_strategie

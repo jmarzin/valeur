@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+require 'mareva'
+
 class StrategiesController < ApplicationController
   # GET /strategies/1
   # GET /strategies/1.json
@@ -20,17 +23,17 @@ class StrategiesController < ApplicationController
   # PUT /strategies/1
   # PUT /strategies/1.json
   def update
-    binding.pry
     @etude = Etude.find(params[:id])
-    @strategy = @etude.lit_strategie
-
+    @strategy = @etude.calcul_strategie
     respond_to do |format|
-      if @strategy.update_attributes(params[:strategy])
-        format.html { redirect_to @strategy, notice: 'Strategie was successfully updated.' }
+      if @etude.save
+        flash[:notice] = "La stratégie a bien été mise à jour."
+        format.html { render action: "edit"}
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
-        format.json { render json: @strategy.errors, status: :unprocessable_entity }
+        flash[:notice] = "Problème de mise à jour de la stratégie."
+        format.html { render action: "edit", notice: '' }
+        format.json { render json: @projet.errors }
       end
     end
   end

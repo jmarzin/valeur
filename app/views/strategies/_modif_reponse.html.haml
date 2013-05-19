@@ -1,10 +1,11 @@
 %table.reponse
   %tr
     %td.titre= simple_format(modif_reponse.texte)
-    %td.reponse= select_tag 'reponse '+index.to_s, options_for_select(modif_reponse.options.each_key {|k| [k,k]},modif_reponse.choix)
+    /%td.reponse= select_tag 'reponse '+index.to_s, options_for_select(modif_reponse.options.each_key {|k| [k,k]},modif_reponse.choix)
+    %td.reponse= select :choix, index,options_for_select(modif_reponse.options.each_key {|k| [k,k]},modif_reponse.choix)
     %td= "#{modif_reponse.note} point#{if modif_reponse.note && modif_reponse.note>1 then 's'end}"
   %tr
     -if modif_reponse.justification && modif_reponse.justification != ""
-      %td.justification= text_field_tag 'justification '+index.to_s, simple_format(modif_reponse.justification),size: 80
+      %td.justification= text_field :justification, index, value: simple_format(modif_reponse.justification),size: 80
     -else
-      %td.justification= text_field_tag 'justification '+index.to_s, nil, placeholder: 'Justifiez votre choix',size: 80
+      %td.justification= text_field :justification, index, placeholder: 'Justifiez votre choix',size: 80
