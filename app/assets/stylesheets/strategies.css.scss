@@ -1,17 +1,22 @@
 // Place all the styles related to the strategies controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com
-table.domaines {
+table.groupe1 {
   width: 100%;
   td {
     margin: 0;
     padding: 0;
     font-size: 1.6rem;
-    font-weight: bold;
+    font-weight: bold;;
+  }
+  td.titre {
+    margin: 0px;
+    padding-left: 1%;
+    font-size: 1.6rem;
     width: 60%;
   }
 }
-table.categories {
+table.groupe2 {
   width: 100%;
   td {
     margin: 0;
@@ -24,23 +29,51 @@ table.categories {
     margin: 0px;
     padding-left: 2%;
     font-size: 1.4rem;
-    width: 70%;
+    width: 65%;
   }
 }
-table.axes {
+table.groupe3 {
   width: 100%;
   td {
     margin: 0px;
     padding: 0px;
-    font-size: 1.2em;
+    font-size: 1.2rem;
+  }
+  td.titre {
+    margin: 0px;
+    padding-left: 3%;
+    width: 70%;
+  }
+}
+table.groupe4 {
+  width: 100%;
+  td {
+    margin: 0px;
+    padding: 0px;
+    font-size: 1rem;
+    font-weight: bold;
   }
   td.titre {
     margin: 0px;
     padding-left: 4%;
+    width: 75%;
+  }
+}
+table.groupe5 {
+  width: 100%;
+  td {
+    margin: 0px;
+    padding: 0px;
+    font-size: 1rem;
+    font-style: italic;
+  }
+  td.titre {
+    margin: 0px;
+    padding-left: 5%;
     width: 80%;
   }
 }
-table.reponses {
+table.reponse {
     width: 100%;
   td {
     margin: 0px;
@@ -59,5 +92,11 @@ table.reponses {
   }
   td.reponse {
     width: 20%;
+  }
+  td.justification {
+    margin: 0px;
+    padding-left: 6%;
+    width: 70%;
+    font-style: italic;
   }
 }

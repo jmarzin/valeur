@@ -2,7 +2,7 @@
 
 Before do |scenario|
   Mongoid.purge!
-  import = `mongoimport -d valeur_test -c parametrages --file test/fixtures/export`
+  import = `mongoimport -d valeur_test -c parametrages --file test/fixtures/new_export`
 end
 
 

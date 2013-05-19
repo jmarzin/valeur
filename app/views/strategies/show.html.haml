@@ -2,33 +2,22 @@
 
 %h2 Détail du volet Stratégie de l'étude #{@strategy.etude._id} du projet #{@strategy.etude.projet.nom}
 
-- @strategy.domaines.each do |domaine|
-  %table.domaines
-    %td= domaine.nom
-    %td= "#{domaine.note_ponderee}/20"  
-  - domaine.categories.each do |categorie|
-    %table.categories
-      %td.titre= categorie.nom
-      %td= "#{categorie.note}/20"
-      %td= categorie.appreciation
-    - if categorie.reponses == []
-      - categorie.axes.each do |axe|
-        %table.axes
-          %td.titre= axe.nom
-          %td= "#{axe.note}/20"
-          %td= axe.appreciation
-        - if axe.reponses != []
-          - axe.reponses.each do |reponse|
-            %table.reponses
-              %td.titre= simple_format(reponse.texte)
-              %td.reponse= "#{reponse.choix}"
-              %td= "#{reponse.note} point#{if reponse.note && reponse.note>1 then 's'end}"
-    - else
-      - categorie.reponses.each do |reponse|
-        %table.reponses
-          %td.titre= simple_format(reponse.texte)
-          %td.reponse= "#{reponse.choix}"
-          %td= "#{reponse.note} point#{if reponse.note && reponse.note>1 then 's'end}"
+- @strategy.groupes.each do |groupe1|
+  =render(partial: "groupe", object: groupe1, locals: {niveau: 1})
+  - groupe1.groupes.each do |groupe2|
+    =render(partial: "groupe", object: groupe2, locals: {niveau: 2})
+    - if groupe2.groupes && groupe2.groupes != []
+      - groupe2.groupes.each do |groupe3|
+        =render(partial: "groupe", object: groupe3, locals: {niveau: 3})
+        - if groupe3.groupes && groupe3.groupes != []
+          - groupe3.groupes.each do |groupe4|
+            =render(partial: "groupe", object: groupe4, locals: {niveau: 4})
+            - if groupe4.reponses && groupe4.reponses != []
+              - groupe4.reponses.each do |reponse|
+                =render(partial: "reponse", object: reponse)
+        - elsif groupe3.reponses && groupe3.reponses != []
+          - groupe3.reponses.each do |reponse|
+            =render(partial: "reponse", object: reponse)
 
 = link_to 'Modif', edit_strategy_path(@strategy.etude)
 \|

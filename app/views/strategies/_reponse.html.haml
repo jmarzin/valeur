@@ -1,0 +1,8 @@
+%table.reponse
+  %tr
+    %td.titre= simple_format(reponse.texte)
+    %td.reponse= "#{reponse.choix}"
+    %td= "#{reponse.note} point#{if reponse.note && reponse.note>1 then 's'end}"
+    - if reponse.justification
+      %tr
+        %td.justification= simple_format(reponse.justification)

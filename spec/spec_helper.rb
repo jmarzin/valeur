@@ -14,10 +14,7 @@ RSpec.configure do |config|
 
   config.before :each do
     Mongoid.purge!
-    str1 = File.open('test/fixtures/strategie.mrs', 'rb') { |file| file.read }
-    param = Parametrage.new
-    param = Marshal.load(str1).clone
-    param.save!
+    import = `mongoimport -d valeur_test -c parametrages --file test/fixtures/new_export`
   end
 end
 

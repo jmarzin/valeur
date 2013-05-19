@@ -13,6 +13,43 @@ require 'mareva'
 
 class Etude
 
+  def self.lit_niveau(objet_param,objet_etude)
+    @objet_etude = objet_etude
+    objet_param.param_groupes.each do |groupe|
+      etude_groupe = Groupe.new
+      groupe.fields.keys.each do |champ|
+        if champ != '_id' then
+          etude_groupe[champ]=groupe[champ]
+        end
+      end
+      objet_etude.groupes << etude_groupe
+      if groupe.param_groupes && groupe.param_groupes != []
+        objet_etude.groupes[-1] = Etude.lit_niveau(groupe,objet_etude.groupes[-1])
+      elsif groupe.param_reponses && groupe.param_reponses != []
+        groupe.param_reponses.each do |reponse|
+          etude_reponse = Reponse.new
+          reponse.fields.keys.each do |champ|
+            if champ != '_id' then
+              etude_reponse[champ]=reponse[champ]
+            end
+          end
+          objet_etude.groupes[-1].reponses << etude_reponse
+        end
+      end
+    end
+    objet_etude      
+  end
+
+  def lit_strategie
+    if self.etude_strategie == nil || self.etude_strategie.groupes == []
+      param = Parametrage.where(code: 'Standard').first
+      self.etude_strategie = EtudeStrategie.new
+      self.etude_strategie = Etude.lit_niveau(param.param_strategie,self.etude_strategie)
+    end
+    self.etude_strategie
+  end    
+=begin
+#ancienne version avant changement de structure
   def lit_strategie
     if self.etude_strategie == nil || self.etude_strategie.domaines == []
       param = Parametrage.where(code: 'Standard').first
@@ -44,7 +81,7 @@ class Etude
     end
     self.etude_strategie
   end
-  
+=end  
   def self.val_type_produit
     {:back_office => 10, :front_office => 5}
   end
