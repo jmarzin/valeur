@@ -20,6 +20,7 @@ class StrategiesController < ApplicationController
   # PUT /strategies/1
   # PUT /strategies/1.json
   def update
+    binding.pry
     @etude = Etude.find(params[:id])
     @strategy = @etude.lit_strategie
 

@@ -1,41 +1,27 @@
-p#notice= notice
+%p#notice= notice
 
 %h2 Modification du volet Stratégie de l'étude #{@strategy.etude._id} du projet #{@strategy.etude.projet.nom}
 
 = form_tag strategy_path(@etude), :method => :put do
   - i = 0
-  - @strategy.domaines.each do |domaine|
-    %table.domaines
-      %td= domaine.nom
-      %td= "#{domaine.note_ponderee}/20"  
-    - domaine.categories.each do |categorie|
-      %table.categories
-        %td.titre= categorie.nom
-        %td= "#{categorie.note}/20"
-        %td= categorie.appreciation
-      - if categorie.reponses == []
-        - categorie.axes.each do |axe|
-          %table.axes
-            %td.titre= axe.nom
-            %td= "#{axe.note}/20"
-            %td= axe.appreciation
-          - if axe.reponses != []
-            - axe.reponses.each do |reponse|
+  - @strategy.groupes.each do |groupe1|
+    =render(partial: "groupe", object: groupe1, locals: {niveau: 1})
+    - groupe1.groupes.each do |groupe2|
+      =render(partial: "groupe", object: groupe2, locals: {niveau: 2})
+      - if groupe2.groupes && groupe2.groupes != []
+        - groupe2.groupes.each do |groupe3|
+          =render(partial: "groupe", object: groupe3, locals: {niveau: 3})
+          - if groupe3.groupes && groupe3.groupes != []
+            - groupe3.groupes.each do |groupe4|
+              =render(partial: "groupe", object: groupe4, locals: {niveau: 4})
+              - if groupe4.reponses && groupe4.reponses != []
+                - groupe4.reponses.each do |reponse|
+                  - i += 1
+                  =render(partial: "modif_reponse", object: reponse, locals: {index: i})
+          - elsif groupe3.reponses && groupe3.reponses != []
+            - groupe3.reponses.each do |reponse|
               - i += 1
-              %table.reponses
-                %tr
-                  %td.titre= simple_format(reponse.texte)
-                  %td.reponse= select_tag 'reponses '+i.to_s, options_for_select(reponse.options.each_key {|k| [k,k]},reponse.choix)
-                  %td= "#{reponse.note} point#{if reponse.note && reponse.note>1 then 's'end}"
-      - else
-        - categorie.reponses.each do |reponse|
-          - i += 1
-          %table.reponses
-            %tr
-              %td.titre= simple_format(reponse.texte)
-              %td.reponse= select_tag 'reponses '+i.to_s, options_for_select(reponse.options.each_key {|k| [k,k]},reponse.choix)
-              %td= "#{reponse.note} point#{if reponse.note && reponse.note>1 then 's'end}"
-
+              =render(partial: "modif_reponse", object: reponse, locals: {index: i})
 
   = submit_tag 'Enregistrer'
   \|
