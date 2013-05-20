@@ -78,6 +78,27 @@ class Etude
           else
             g.appreciation = nil
           end
+        else
+          if g.groupes && g.groupes != []
+            g.note,somme_poids = 0,0
+            g.groupes.each do |g2|
+              if g.note
+                poids = g2.ponderations[g2.prise_en_compte]
+                if g2.note && poids != 0
+                  g.note += g2.note*poids
+                  somme_poids += poids 
+                else
+                  g.note = nil
+                end
+              end
+            end
+            if g.note
+              g.note = (g.note / somme_poids).round(1)
+              g.seuils.each { |apprec,seuil| if g.note >= seuil then g.appreciation=apprec end }
+            else
+              g.appreciation = nil
+            end
+          end
         end
       end
       [groupe,i,params]
@@ -100,8 +121,8 @@ class Etude
   end
 
   def calcul_strategie(params)
-    tableau = Etude.calcul_niveau([self.etude_strategie.groupes[0],0,params])
-    self.etude_strategie.groupes[0]=tableau[0]
+    tableau = Etude.calcul_niveau([self.etude_strategie,0,params])
+    self.etude_strategie=tableau[0]
     self.etude_strategie
   end
 

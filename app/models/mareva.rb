@@ -1,8 +1,9 @@
 # encoding: utf-8 
 
 class Reponse
+
   include Mongoid::Document
-  embedded_in :axe
+  embedded_in :groupe
   field :texte, type: String
   field :justification, type: String
   field :choix, type: String
@@ -11,6 +12,7 @@ class Reponse
 end
 
 class Groupe
+
   include Mongoid::Document
   embedded_in :etude_strategie
   embedded_in :groupe

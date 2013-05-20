@@ -15,6 +15,12 @@ table.groupe1 {
     font-size: 1.6rem;
     width: 60%;
   }
+  td.note {
+    margin: 0px;
+    padding: 0px;
+    font-size: 1.6rem;
+    width: 10%;
+  }
 }
 table.groupe2 {
   width: 100%;
@@ -31,6 +37,12 @@ table.groupe2 {
     font-size: 1.4rem;
     width: 65%;
   }
+  td.note {
+    margin: 0px;
+    padding: 0px;
+    font-size: 1.4rem;
+    width: 10%;
+  }
 }
 table.groupe3 {
   width: 100%;
@@ -43,6 +55,11 @@ table.groupe3 {
     margin: 0px;
     padding-left: 3%;
     width: 70%;
+  }
+  td.note {
+    margin: 0px;
+    padding: 0px;
+    width: 10%;
   }
 }
 table.groupe4 {
@@ -58,6 +75,11 @@ table.groupe4 {
     padding-left: 4%;
     width: 75%;
   }
+  td.note {
+    margin: 0px;
+    padding: 0px;
+    width: 10;
+  }
 }
 table.groupe5 {
   width: 100%;
@@ -71,6 +93,11 @@ table.groupe5 {
     margin: 0px;
     padding-left: 5%;
     width: 80%;
+  }
+  td.note {
+    margin: 0px;
+    padding: 0px;
+    width: 10%;
   }
 }
 table.reponse {
