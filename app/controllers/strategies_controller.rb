@@ -24,7 +24,7 @@ class StrategiesController < ApplicationController
   # PUT /strategies/1.json
   def update
     @etude = Etude.find(params[:id])
-    @strategy = @etude.calcul_strategie
+    @strategy = @etude.calcul_strategie(params)
     respond_to do |format|
       if @etude.save
         flash[:notice] = "La stratégie a bien été mise à jour."

@@ -49,7 +49,38 @@ class Etude
     self.etude_strategie
   end    
 
-  def calcul_strategie
+  def self.calcul_niveau(tableau)
+    groupe = tableau[0]
+    i = tableau[1]
+    params = tableau[2]
+    if groupe.groupes && groupe.groupes != []
+      groupe.groupes.each do |g|
+        t=Etude.calcul_niveau([g,i,params])
+        g = t[0]
+        i = t[1]
+      end
+      [groupe,i,params]
+    else
+      if groupe.reponses && groupe.reponses != []
+        groupe.reponses.each do |r|
+          i += 1
+          if params[:note][i.to_s] == ""
+            r.note = nil
+            r.choix = r.options.key(nil)
+          else
+            r.note = params[:note][i.to_s].to_f
+            r.choix = r.options.key(r.note)
+          end
+          r.justification = params[:justification][i.to_s]
+        end
+        [groupe,i,params]
+      end
+    end
+  end
+
+  def calcul_strategie(params)
+    tableau = Etude.calcul_niveau([self.etude_strategie.groupes[0],0,params])
+    self.etude_strategie.groupes[0]=tableau[0]
     self.etude_strategie
   end
 
