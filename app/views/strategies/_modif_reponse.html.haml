@@ -3,8 +3,8 @@
   -if note_num == nil then note_s="" elsif note_num.to_i == note_num then note_s=note_num.to_i.to_s else note_s=note_num.to_s end
   %tr
     %td.titre= simple_format(modif_reponse.texte)
-    %td.reponse= select :note, index,options_for_select(modif_reponse.options.each_key {|k| [k,k]},note_s)
-    %td= "#{modif_reponse.note} point#{if note_num && note_num.abs>1 then 's'end}"
+    %td.note= "#{modif_reponse.note} point#{if note_num && note_num.abs>1 then 's'end}"
+    %td= select :note, index,options_for_select(modif_reponse.options.each_key {|k| [k,k]},note_s)
   %tr
     -if modif_reponse.justification && modif_reponse.justification != ""
       %td.justification= text_field :justification, index, value: simple_format(modif_reponse.justification),size: 80

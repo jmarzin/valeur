@@ -62,7 +62,11 @@ class EtudeStrategie
 
   include Mongoid::Document
   embedded_in :etude
-  embeds_many :groupes
+  embeds_many :groupes do
+    def ca_marche
+      'ok'
+    end
+  end
 end
 
 

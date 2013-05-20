@@ -14,25 +14,22 @@ require 'mareva'
 class Etude
 
   def self.lit_niveau(objet_param,objet_etude)
+#
+# lecture récursive des niveaux de paramétrage de la stratégie jusqu'aux questions terminales
+# cette méthode est une méthode de classe de la classe étude parce que les méthodes des
+# classes de document contenues dans la classe Etude ne peuvent pas être appelées
+#
     @objet_etude = objet_etude
     objet_param.param_groupes.each do |groupe|
       etude_groupe = Groupe.new
-      groupe.fields.keys.each do |champ|
-        if champ != '_id' then
-          etude_groupe[champ]=groupe[champ]
-        end
-      end
+      groupe.fields.keys.each { |champ| if champ != '_id' then etude_groupe[champ]=groupe[champ] end }
       objet_etude.groupes << etude_groupe
       if groupe.param_groupes && groupe.param_groupes != []
         objet_etude.groupes[-1] = Etude.lit_niveau(groupe,objet_etude.groupes[-1])
       elsif groupe.param_reponses && groupe.param_reponses != []
         groupe.param_reponses.each do |reponse|
           etude_reponse = Reponse.new
-          reponse.fields.keys.each do |champ|
-            if champ != '_id' then
-              etude_reponse[champ]=reponse[champ]
-            end
-          end
+          reponse.fields.keys.each { |champ| if champ != '_id' then etude_reponse[champ]=reponse[champ] end }
           objet_etude.groupes[-1].reponses << etude_reponse
         end
       end
@@ -41,6 +38,9 @@ class Etude
   end
 
   def lit_strategie
+#
+# au cas où il n'y a pas de stratégie définit, lecture de la stratégie standard dans la table de paramétrage
+#
     if self.etude_strategie == nil || self.etude_strategie.groupes == []
       param = Parametrage.where(code: 'Standard').first
       self.etude_strategie = EtudeStrategie.new
@@ -50,14 +50,22 @@ class Etude
   end    
 
   def self.calcul_niveau(tableau)
-    groupe = tableau[0]
-    i = tableau[1]
-    params = tableau[2]
+#
+# méthode de calcul récursif d'un niveau de l'arborescence de groupes de questions
+# cette méthode est une méthode de classe de la classe Etude car les méthodes
+# d'instance des classes embarquées dans l'étude ne peuvent pas être appelées
+#
+    groupe , i , params = tableau[0] , tableau[1] , tableau[2]
     if groupe.groupes && groupe.groupes != []
+#
+#  traitement des sous-groupes
+#
       groupe.groupes.each do |g|
-        t=Etude.calcul_niveau([g,i,params])
-        g = t[0]
-        i = t[1]
+        t = Etude.calcul_niveau([g,i,params])
+        g , i = t[0] , t[1]
+#
+#  calcul de la note et de l'appreciation d'un groupe de réponses
+#
         if g.reponses && g.reponses != []
           g.note,max = 0,0
           g.reponses.each do |r|
@@ -78,31 +86,35 @@ class Etude
           else
             g.appreciation = nil
           end
-        else
-          if g.groupes && g.groupes != []
-            g.note,somme_poids = 0,0
-            g.groupes.each do |g2|
-              if g.note
-                poids = g2.ponderations[g2.prise_en_compte]
-                if g2.note && poids != 0
-                  g.note += g2.note*poids
-                  somme_poids += poids 
-                else
-                  g.note = nil
-                end
+        elsif g.groupes && g.groupes != []
+#
+#  calcul de la note et de l'appreciation d'un groupe de groupes
+#
+          g.note,somme_poids = 0,0
+          g.groupes.each do |g2|
+            if g.note
+              poids = g2.ponderations[g2.prise_en_compte]
+              if g2.note && poids != 0
+                g.note += g2.note*poids
+                somme_poids += poids 
+              else
+                g.note = nil
               end
             end
-            if g.note
-              g.note = (g.note / somme_poids).round(1)
-              g.seuils.each { |apprec,seuil| if g.note >= seuil then g.appreciation=apprec end }
-            else
-              g.appreciation = nil
-            end
+          end
+          if g.note
+            g.note = (g.note / somme_poids).round(1)
+            g.seuils.each { |apprec,seuil| if g.note >= seuil then g.appreciation=apprec end }
+          else
+            g.appreciation = nil
           end
         end
       end
       [groupe,i,params]
     else
+#
+# mise à jour de la note, du choix et de la justification de chaque réponse
+#
       if groupe.reponses && groupe.reponses != []
         groupe.reponses.each do |r|
           i += 1
@@ -121,59 +133,22 @@ class Etude
   end
 
   def calcul_strategie(params)
+#
+# calcul de l'arborescence de stratégie après une modification
+#
     tableau = Etude.calcul_niveau([self.etude_strategie,0,params])
     self.etude_strategie=tableau[0]
-    self.etude_strategie
-  end
-
-=begin
-#ancienne version avant changement de structure
-  def lit_strategie
-    if self.etude_strategie == nil || self.etude_strategie.domaines == []
-      param = Parametrage.where(code: 'Standard').first
-      self.etude_strategie = EtudeStrategie.new
-      param.p_strategie.p_domaines.each do |domaine|
-        self.etude_strategie.domaines << Domaine.new(nom: domaine.nom,note_ponderee: domaine.note_ponderee)
-        domaine.p_categories.each do |categorie|
-          self.etude_strategie.domaines[-1].categories << Category.new(nom: categorie.nom,note: categorie.note,\
-             seuils: categorie.seuils,coef_selectionne: categorie.coef_selectionne,ponderations: categorie.ponderations)
-          if categorie.p_reponses == []
-            categorie.p_axes.each do |axe|
-              self.etude_strategie.domaines[-1].categories[-1].axes << Axis.new(nom: axe.nom,note: axe.note,seuils: axe.seuils)
-              if axe.p_reponses == []
-              else
-                axe.p_reponses.each do |reponse|
-                  self.etude_strategie.domaines[-1].categories[-1].axes[-1].reponses << Reponse.new(texte: reponse.texte,\
-                    justification: reponse.justification,choix: reponse.choix,note: reponse.note,options: reponse.options)
-                end
-              end
-            end
-          else
-            categorie.p_reponses.each do |reponse|
-              self.etude_strategie.domaines[-1].categories[-1].reponses << Reponse.new(texte: reponse.texte, justification: reponse.justification,\
-                choix: reponse.choix,note: reponse.note,options: reponse.options)
-            end
-          end
-        end
-      end             
-    end
-    self.etude_strategie
-  end
-=end  
-  def self.val_type_produit
-    {:back_office => 10, :front_office => 5}
   end
 
   def liste_stades
+#
+# calcule la liste des stades possibles
+# 
     derniere_etude = Etude.where(projet_id: self.projet_id).last
-    if not derniere_etude
-      return [:avant_projet,:projet,:suivi01,:bilan]
-    end
+    return [:avant_projet,:projet,:suivi01,:bilan] if not derniere_etude
     base = derniere_etude.stade
     if derniere_etude.publie
-      if derniere_etude._id == self._id
-        return [base]
-      end
+      return [base] if derniere_etude._id == self._id
       if base =~ /suivi\d\d/
         liste = [base.succ]
       elsif base == :bilan
@@ -193,12 +168,22 @@ class Etude
     else
       liste_aj = []
     end
-    liste_aj.each do |st| liste <<= st end
+    liste_aj.each { |st| liste <<= st }
     return liste
   end
 
   def liste_types_produit
+#
+# renvoie le tableau des types de produit permis
+#
     return [:back_office,:front_office,:specifique]
+  end
+
+  def self.val_type_produit
+#
+# renvoie la durée de vie correspondant aux différents types de produit permis
+# 
+   {:back_office => 10, :front_office => 5}
   end
 
   def gere_resumes
@@ -234,6 +219,7 @@ class Etude
   end
 
   def self.modif_supp_apparents(etudes)
+    # accessibilité des études en modification et suppression
     tab = {}
     etudes.each do |etude|
       if (not etude.publie) || etude.projet.resumes.empty?
