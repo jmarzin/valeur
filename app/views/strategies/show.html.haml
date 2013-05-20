@@ -1,7 +1,11 @@
 %p#notice= notice
 
 %h2 Détail du volet Stratégie de l'étude #{@strategy.etude._id} du projet #{@strategy.etude.projet.nom}
-
+= link_to 'Modif', edit_strategy_path(@strategy.etude)
+\|
+= link_to 'Etude', projet_etude_path(@strategy.etude.projet, @strategy.etude)
+%br
+%br
 - @strategy.groupes.each do |groupe1|
   =render(partial: "groupe", object: groupe1, locals: {niveau: 1})
   - groupe1.groupes.each do |groupe2|

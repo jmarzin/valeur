@@ -58,6 +58,27 @@ class Etude
         t=Etude.calcul_niveau([g,i,params])
         g = t[0]
         i = t[1]
+        if g.reponses && g.reponses != []
+          g.note,max = 0,0
+          g.reponses.each do |r|
+            if g.note
+              if r.note
+                g.note += r.note
+                r_max=0
+                r.options.each { |option,note| if note && note > r_max then r_max=note end }
+                max += r_max
+              else
+                g.note=nil
+              end
+            end
+          end
+          if g.note
+            g.note = (g.note/max*20).round(1)
+            g.seuils.each { |apprec,seuil| if g.note >= seuil then g.appreciation=apprec end }
+          else
+            g.appreciation = nil
+          end
+        end
       end
       [groupe,i,params]
     else
