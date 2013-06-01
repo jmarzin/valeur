@@ -14,29 +14,30 @@ require 'mareva'
 class Etude
 
   def simplifie_direct
-    binding.pry
     totaux_nature = Hash.new(0)
     Etude.liste_natures.each { |nat| totaux_nature[nat] = 0 if nat != '' }
     totaux_annee = Hash.new(0)
     self.liste_annees.each { |an| totaux_annee[an] = 0 } 
-    self.etude_rentabilite.direct.details.where(description: '').delete_all
-    self.etude_rentabilite.direct.details.where(nature: '').delete_all
+    self.etude_rentabilite.direct.details.where(description: "").destroy_all
+    self.etude_rentabilite.direct.details.where(nature: "").destroy_all
+    self.etude_rentabilite.direct.total = 0
     self.etude_rentabilite.direct.details.each do |detail|
       detail.total = 0
-      detail.montants.where(montant: nil).delete_all
-      detail.montants.where(montant: 0).delete_all
+      detail.montants.where(montant: 0).destroy_all
+      detail.montants.where(montant: nil).destroy_all
       detail.montants.each do |mt|
         detail.total += mt.montant
         totaux_annee[mt.annee] += mt.montant
       end
       totaux_nature[detail.nature] += detail.total
+      self.etude_rentabilite.direct.total += detail.total
     end
     self.etude_rentabilite.direct.sommes.each do |somme|
       somme.montant = totaux_nature[somme.nature]
     end
     self.etude_rentabilite.direct.calculees[0].montants.each { |mt| mt.montant = totaux_annee[mt.annee] }
-    self.etude_rentabilite.direct.calculees[0].montants.where(montant: 0).delete_all
-    binding.pry
+    self.etude_rentabilite.direct.calculees[0].montants.where(montant: 0).destroy_all
+    self.etude_rentabilite.direct.calculees[0].montants.where(montant: nil).destroy_all
     self.save!
   end
 
@@ -91,7 +92,7 @@ class Etude
         self.etude_rentabilite.direct.calculees[0].montants << Montant.new(annee: annee,montant: mts[0].montant)
         mts.delete_at(0)
       else
-        self.etude_rentabilite.direct.calculees[0].montants << Montant.new(annee: annee)
+        self.etude_rentabilite.direct.calculees[0].montants << Montant.new(annee: annee,montant: 0)
       end
     end
     self.etude_rentabilite.direct

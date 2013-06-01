@@ -2,6 +2,8 @@ Valeur::Application.routes.draw do
   
   resources :strategies, only: [:show, :edit, :update]
 
+  resources :rentabilites, only: [:show]
+
   resources :directs, only: [:show, :edit, :update]
 
   resources :detail, only: [:show]

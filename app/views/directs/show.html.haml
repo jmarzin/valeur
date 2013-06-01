@@ -1,0 +1,54 @@
+%p#notice= notice
+
+%h2 Coûts directs d'investissement de l'étude  #{@etude._id} du projet #{@etude.projet.nom}
+= link_to 'Modif', edit_direct_path(@etude)
+\|
+= link_to 'Etude', projet_etude_path(@etude.projet, @etude)
+%br
+%br
+%article.direct_detail
+  %table.direct_detail
+    %th.description Description du coût
+    %th.nature Nature
+    %th.totaux --Totaux-- 
+    -@etude.etude_rentabilite.direct.calculees[0].montants.each do |mt|
+      %th=mt.annee
+    -@etude.etude_rentabilite.direct.details.each do |det|
+      %tr
+        %td.description= det.description
+        %td.nature=det.nature
+        %td.totaux.montant=number_with_precision(det.total,options =  {delimiter: " ", precision: 0})
+        -i = 0
+        -@etude.etude_rentabilite.direct.calculees[0].montants.each do |calc|
+          -if det.montants[i] && det.montants[i].annee == calc.annee then
+            %td.montant=number_with_precision(det.montants[i].montant, options = {delimiter: " ", precision: 0})
+            -i += 1
+          -else
+            %td
+    %tr.totaux
+      %td.description= @etude.etude_rentabilite.direct.calculees[0].description
+      %td
+      %td.montant=number_with_precision(@etude.etude_rentabilite.direct.total, options =  {delimiter: " ", precision: 0})
+      -@etude.etude_rentabilite.direct.calculees[0].montants.each do |mt|
+        %td.montant= number_with_precision(mt.montant, options =  {delimiter: " ", precision: 0})
+%br
+%br
+%article.direct_somme
+  %table.direct_somme
+    %tr
+      %th.nature Coûts directs pluriannuels 
+      %th (k€)
+      %th.commentaire Commentaires
+    - @etude.etude_rentabilite.direct.sommes.each do |somme|
+      %tr
+        %td.nature= somme.nature
+        %td.montant= number_with_precision(somme.montant, options = {delimiter: " ", precision: 0}) unless somme.montant == 0
+        %td.commentaire= somme.commentaire
+%br
+%br
+
+= link_to 'Modif', edit_direct_path(@etude)
+\|
+= link_to 'Rentabilité', rentabilite_path(@etude)
+\|
+= link_to 'Etude', projet_etude_path(@etude.projet, @etude)

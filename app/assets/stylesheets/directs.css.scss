@@ -2,16 +2,18 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com
 article.direct_detail {
-  overflow: scroll;
+  overflow: auto;
 }
 table.direct_detail {
+  width: auto;
   .description {
-    width: 20rem;
-  }
-  .nature {
     width: 10rem;
   }
+  .nature {
+    width: 5rem;
+  }
   .montant {
+    width: 5rem;
     text-align: right;
   }
   .totaux {
@@ -26,7 +28,13 @@ table.direct_detail {
   }
 }
 table.direct_somme {
-  width: 80%;
+  width: 50%;
+  .nature {
+    width: 15rem;
+  }
+  th.commentaire{
+    text-align: left;
+  }
   .montant {
     width: 10rem;
     text-align: right;

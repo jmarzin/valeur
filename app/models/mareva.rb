@@ -77,6 +77,7 @@ end
 class Direct
   include Mongoid::Document
   embedded_in :etude_rentabilite
+  field :total, type: Float
   embeds_many :sommes
   embeds_many :details
   embeds_many :calculees
