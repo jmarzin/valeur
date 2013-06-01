@@ -13,6 +13,91 @@ require 'mareva'
 
 class Etude
 
+  def simplifie_direct
+    binding.pry
+    totaux_nature = Hash.new(0)
+    Etude.liste_natures.each { |nat| totaux_nature[nat] = 0 if nat != '' }
+    totaux_annee = Hash.new(0)
+    self.liste_annees.each { |an| totaux_annee[an] = 0 } 
+    self.etude_rentabilite.direct.details.where(description: '').delete_all
+    self.etude_rentabilite.direct.details.where(nature: '').delete_all
+    self.etude_rentabilite.direct.details.each do |detail|
+      detail.total = 0
+      detail.montants.where(montant: nil).delete_all
+      detail.montants.where(montant: 0).delete_all
+      detail.montants.each do |mt|
+        detail.total += mt.montant
+        totaux_annee[mt.annee] += mt.montant
+      end
+      totaux_nature[detail.nature] += detail.total
+    end
+    self.etude_rentabilite.direct.sommes.each do |somme|
+      somme.montant = totaux_nature[somme.nature]
+    end
+    self.etude_rentabilite.direct.calculees[0].montants.each { |mt| mt.montant = totaux_annee[mt.annee] }
+    self.etude_rentabilite.direct.calculees[0].montants.where(montant: 0).delete_all
+    binding.pry
+    self.save!
+  end
+
+  def self.liste_natures
+    ['','Logiciel','Matériel','Prestation MOE','Prestation MOA','Formation','Autre']
+  end
+
+  def liste_annees
+    annee_1 = self.projet.date_debut.year
+    liste = ["< #{annee_1}"]
+    (annee_1..(annee_1+19)).each {|annee| liste << annee.to_s}
+    liste
+  end
+
+  def lit_direct
+    if not self.etude_rentabilite
+      self.etude_rentabilite = EtudeRentabilite.new
+    end
+    if not self.etude_rentabilite.direct
+      self.etude_rentabilite.direct = Direct.new
+      Etude.liste_natures.each {|nature| self.etude_rentabilite.direct.sommes << Somme.new(nature: nature,unite: 'k€',montant: 0) if nature != ''}
+    end
+    if not self.etude_rentabilite.direct.calculees[0] then self.etude_rentabilite.direct.calculees << Calculee.new(description: 'Totaux (k€)') end
+      
+#
+# préparation du tableau des montants par annee
+#
+    self.etude_rentabilite.direct.details.each do |detail|
+      mts = detail.montants.clone
+      detail.montants = nil
+      self.liste_annees.each do |annee|
+        if mts[0] && mts[0].annee == annee
+          detail.montants << Montant.new(annee: annee,montant: mts[0].montant)
+          mts.delete_at(0)
+        else
+          detail.montants << Montant.new(annee: annee)
+        end
+      end
+    end
+    ((self.etude_rentabilite.direct.details.count)..14).each do |i|
+      detail = Detail.new
+      self.liste_annees.each {|annee| detail.montants << Montant.new(annee: annee)}
+      self.etude_rentabilite.direct.details << detail
+    end
+#
+# préparation de la ligne des totaux par année
+#
+    if self.etude_rentabilite.direct.calculees[0].montants then mts = self.etude_rentabilite.direct.calculees[0].montants.clone else mts =[] end
+    self.etude_rentabilite.direct.calculees[0].montants = nil
+    self.liste_annees.each do |annee|
+      if mts[0] && mts[0].annee == annee
+        self.etude_rentabilite.direct.calculees[0].montants << Montant.new(annee: annee,montant: mts[0].montant)
+        mts.delete_at(0)
+      else
+        self.etude_rentabilite.direct.calculees[0].montants << Montant.new(annee: annee)
+      end
+    end
+    self.etude_rentabilite.direct
+  end
+        
+        
   def self.lit_niveau(objet_param,objet_etude)
 #
 # lecture récursive des niveaux de paramétrage de la stratégie jusqu'aux questions terminales

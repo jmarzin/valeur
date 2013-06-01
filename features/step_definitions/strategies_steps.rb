@@ -23,3 +23,9 @@ Alors(/^je vois les bons résultats calculés$/) do
                          13\.3\/20.+13\.3\/20.+moyen.+13\.3\/20.+moyen.+15\.6\/20.+fort.+6\.7\/20.+faible.+16\.7\/20.+fort.+
                          15\.0\/20.+B.+20\.0\/20.+fort.+7\.3\/20.+faible.+17\.6\/20.+fort}x
 end
+
+Alors(/^je vois qu'il manque des résultats$/) do
+  page.text.should =~ %r{\s \/20.+12\.9\/20.+12\.1\/20.+13\.3\/20.+moyen.+20\.0\/20.+forts.+6\.7\/20.+faible.+8\.3\/20.+nulle.+
+                         13\.3\/20.+13\.3\/20.+moyen.+13\.3\/20.+moyen.+15\.6\/20.+fort.+6\.7\/20.+faible.+16\.7\/20.+fort.+
+                         \s\/20.+20\.0\/20.+fort.+7\.3\/20.+faible.+\s\/20.}x
+end

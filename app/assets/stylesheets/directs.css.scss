@@ -1,0 +1,34 @@
+// Place all the styles related to the strategies controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com
+article.direct_detail {
+  overflow: scroll;
+}
+table.direct_detail {
+  .description {
+    width: 20rem;
+  }
+  .nature {
+    width: 10rem;
+  }
+  .montant {
+    text-align: right;
+  }
+  .totaux {
+    font-weight: bold;
+    background: yellow;
+  }
+  td.totaux {
+    width: 10em;
+  }
+  th.totaux {
+    width: 10em;
+  }
+}
+table.direct_somme {
+  width: 80%;
+  .montant {
+    width: 10rem;
+    text-align: right;
+  }
+}

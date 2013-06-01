@@ -30,6 +30,87 @@ class EtudeStrategie
   embeds_many :groupes
 end
 
+class Montant
+  include Mongoid::Document
+  embedded_in :detail
+  embedded_in :calculee
+  field :annee, type: String
+  field :montant, type: Float
+end
 
-class Etude_rentabilite
+class Detail
+  include Mongoid::Document
+  embedded_in :direct
+  embedded_in :indirect
+  embedded_in :fonctionnement
+  field :description, type: String
+  field :nature, type: String
+  field :unite, type: Symbol
+  field :total, type: Float
+  embeds_many :montants
+  accepts_nested_attributes_for :montants
+end
+
+class Calculee
+  include Mongoid::Document
+  embedded_in :direct
+  embedded_in :indirect
+  embedded_in :fonctionnement
+  field :description, type: String
+  field :nature, type: String
+  field :unite, type: Symbol
+  embeds_many :montants
+  accepts_nested_attributes_for :montants
+end
+
+class Somme
+  include Mongoid::Document
+  embedded_in :direct
+  embedded_in :indirect
+  embedded_in :fonctionnement
+  field :nature, type: String
+  field :unite, type: Symbol
+  field :valeur, type: Float
+  field :commentaire, type: String
+end
+
+class Direct
+  include Mongoid::Document
+  embedded_in :etude_rentabilite
+  embeds_many :sommes
+  embeds_many :details
+  embeds_many :calculees
+  accepts_nested_attributes_for :sommes,:details,:calculees
+end
+
+class Indirect
+  include Mongoid::Document
+  embedded_in :etude_rentabilite
+  embeds_many :details
+  embeds_many :calculees
+  field :part_cadre, type: Hash # :categorie, pourcentage en valeur, total = 100
+end
+
+
+class Fonctionnement
+  include Mongoid::Document
+  embedded_in :impact_fonctionnement
+  embeds_many :details
+  embeds_many :calculees
+  field :reference, type: Symbol  # :actuel ou :cible
+  field :part_cadre, type: Hash # :categorie, pourcentage en valeur, total = 100
+end
+
+class ImpactFonctionnement
+  include Mongoid::Document
+  embedded_in :etude_rentabilite
+  embeds_many :fonctionnements
+end
+
+class EtudeRentabilite
+  include Mongoid::Document
+  embedded_in :etude
+  embeds_one :direct
+  embeds_one :indirect
+  embeds_one :impact_fonctionnement
 end
