@@ -2,8 +2,16 @@
 
 %h2 Détail du volet rentabilité de l'étude  #{@etude._id} du projet #{@etude.projet.nom}
 
-%h3 Montant des coûts d'investissements directs : #{number_with_precision(@etude.etude_rentabilite.direct.total, options = {delimiter: " ", precision: 0})} k€
-= link_to 'Détail', direct_path(@etude)
+%table.rentabilite
+  %tr
+    %th.titre{:colspan => 2} Dépenses d'investissements
+    %th.titre{:rowspan => 2} Impacts sur le SI
+    %th.titre{:rowspan => 2} Impact métier
+  %tr
+    %th.titre Coûts directs
+    %th.titre Coûts indirects
+  %tr
+    %td= link_to number_with_precision(@etude.etude_rentabilite.direct.total, options = {delimiter: " ", precision: 0}), direct_path(@etude)
 %br
 %br
 = link_to 'Retour étude', projet_etude_path(@etude.projet, @etude)

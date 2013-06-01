@@ -1,0 +1,21 @@
+// Place all the styles related to the strategies controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com
+table.rentabilite {
+  width: 50%;
+  border: 2px solid blue;
+  .titre_invest {
+  }
+  .titre_impact_si {
+  }
+  .titre_impact_metier {
+  }
+  th {
+  width: 20%;
+  border: 2px solid blue;
+  }
+  td {
+  border: 2px solid blue;
+  text-align: center;
+  }
+}
