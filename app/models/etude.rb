@@ -52,16 +52,20 @@ class Etude
     liste
   end
 
-  def lit_direct
+  def lit_rentabilite
     if not self.etude_rentabilite
       self.etude_rentabilite = EtudeRentabilite.new
     end
     if not self.etude_rentabilite.direct
-      self.etude_rentabilite.direct = Direct.new
+      self.etude_rentabilite.direct = Direct.new(total: 0)
       Etude.liste_natures.each {|nature| self.etude_rentabilite.direct.sommes << Somme.new(nature: nature,unite: 'k€',montant: 0) if nature != ''}
     end
     if not self.etude_rentabilite.direct.calculees[0] then self.etude_rentabilite.direct.calculees << Calculee.new(description: 'Totaux (k€)') end
-      
+    self.etude_rentabilite
+  end
+
+  def lit_direct
+    @rentabilite = self.lit_rentabilite
 #
 # préparation du tableau des montants par annee
 #
