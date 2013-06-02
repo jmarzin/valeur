@@ -76,7 +76,7 @@ class Etude
     self.etude_rentabilite.direct.calculees[0].montants.each { |mt| mt.montant = totaux_annee[mt.annee] }
     self.etude_rentabilite.direct.calculees[0].montants.where(montant: 0).destroy_all
     self.etude_rentabilite.direct.calculees[0].montants.where(montant: nil).destroy_all
-    self.save!
+    self.etude_rentabilite.direct.save!
   end
 
   def self.liste_natures
@@ -107,6 +107,7 @@ class Etude
 #
 # préparation du tableau des montants par annee
 #
+    if self.etude_rentabilite.direct.details.count == 0 then self.etude_rentabilite.direct.details << Detail.new end
     self.etude_rentabilite.direct.details.each do |detail|
       mts = detail.montants.clone
       detail.montants = nil
@@ -118,11 +119,6 @@ class Etude
           detail.montants << Montant.new(annee: annee)
         end
       end
-    end
-    ((self.etude_rentabilite.direct.details.count)..1).each do |i|
-      detail = Detail.new
-      self.liste_annees.each {|annee| detail.montants << Montant.new(annee: annee)}
-      self.etude_rentabilite.direct.details << detail
     end
 #
 # préparation de la ligne des totaux par année
