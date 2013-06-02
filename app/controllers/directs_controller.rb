@@ -25,14 +25,20 @@ class DirectsController < ApplicationController
     @etude = Etude.find(params[:id])
     respond_to do |format|
       if @etude.etude_rentabilite.direct.update_attributes(params[:direct])
-        @etude.simplifie_direct
-        flash[:notice] = "Les coûts directs ont bien été mis à jour."
-        if params[:commit] == 'Actualiser' then
-          @direct = @etude.lit_direct
-          format.html { render action: "edit"}
-          format.json { head :no_content }
+        if params[:commit] then
+          @etude.simplifie_direct
+          flash[:notice] = "Les coûts directs ont bien été mis à jour."
+          if params[:commit] == 'Actualiser' then
+            @direct = @etude.lit_direct
+            format.html { render action: "edit"}
+            format.json { head :no_content }
+          else
+            format.html { render action: "show"}
+            format.json { head :no_content }
+          end
         else
-          format.html { render action: "show"}
+          @direct = @etude.traite_touche(params)
+          format.html { render action: "edit" }
           format.json { head :no_content }
         end
       else

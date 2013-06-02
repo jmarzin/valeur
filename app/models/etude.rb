@@ -13,6 +13,44 @@ require 'mareva'
 
 class Etude
 
+  def insere_detail(ins)
+    if ins[0] == 'h' then dec = 1 else dec = 0 end
+    i = ins.delete(ins[0]).to_i - dec
+    j = self.etude_rentabilite.direct.details.count
+    self.etude_rentabilite.direct.details << Detail.new
+    self.liste_annees.each { |annee| self.etude_rentabilite.direct.details[-1].montants << Montant.new(annee: annee) }
+    while j != i
+      self.etude_rentabilite.direct.details[j].description,self.etude_rentabilite.direct.details[j-1].description = \
+        self.etude_rentabilite.direct.details[j-1].description,self.etude_rentabilite.direct.details[j].description
+      self.etude_rentabilite.direct.details[j].nature,self.etude_rentabilite.direct.details[j-1].nature = \
+        self.etude_rentabilite.direct.details[j-1].nature,self.etude_rentabilite.direct.details[j].nature
+      self.etude_rentabilite.direct.details[j].total,self.etude_rentabilite.direct.details[j-1].total = \
+        self.etude_rentabilite.direct.details[j-1].total,self.etude_rentabilite.direct.details[j].total
+      self.liste_annees.each_index do |ind|
+        self.etude_rentabilite.direct.details[j].montants[ind].montant,self.etude_rentabilite.direct.details[j-1].montants[ind].montant = \
+          self.etude_rentabilite.direct.details[j-1].montants[ind].montant,self.etude_rentabilite.direct.details[j].montants[ind].montant
+      end
+      j -= 1
+    end
+    self.save
+    self.etude_rentabilite.direct
+  end
+
+  def supprime_detail(del)
+    i = del.delete(del[0]).to_i - 1
+    self.etude_rentabilite.direct.details.delete(self.etude_rentabilite.direct.details[i])
+    self.etude_rentabilite.direct
+  end
+
+  def traite_touche(params)
+    ins = params.key('Ins^')
+    return self.insere_detail(ins) if ins
+    ins = params.key('Insv')
+    return self.insere_detail(ins) if ins
+    del = params.key('Del')
+    return self.supprime_detail(params.key('Del'))
+  end
+
   def simplifie_direct
     totaux_nature = Hash.new(0)
     Etude.liste_natures.each { |nat| totaux_nature[nat] = 0 if nat != '' }
@@ -81,7 +119,7 @@ class Etude
         end
       end
     end
-    ((self.etude_rentabilite.direct.details.count)..14).each do |i|
+    ((self.etude_rentabilite.direct.details.count)..1).each do |i|
       detail = Detail.new
       self.liste_annees.each {|annee| detail.montants << Montant.new(annee: annee)}
       self.etude_rentabilite.direct.details << detail
