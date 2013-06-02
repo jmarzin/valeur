@@ -46,7 +46,7 @@ class Etude
   end
 
   def liste_annees
-    annee_1 = self.projet.date_debut.year
+    annee_1 = self.date_debut.year
     liste = ["< #{annee_1}"]
     (annee_1..(annee_1+19)).each {|annee| liste << annee.to_s}
     liste

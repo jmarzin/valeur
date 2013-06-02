@@ -6,6 +6,7 @@ class DirectsController < ApplicationController
   # GET /directs/1.json
   def show
     @etude = Etude.find(params[:id])
+    @etude.lit_rentabilite
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @strategy }

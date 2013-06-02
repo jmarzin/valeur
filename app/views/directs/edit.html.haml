@@ -2,9 +2,10 @@
 
 %h2 Saisie/modification des coûts directs d'investissement de l'étude  #{@etude._id} du projet #{@etude.projet.nom}
 = form_for @direct, :url => direct_path(@etude) do |dir_form|
-  = dir_form.submit 'Actualiser'
-  \|
-  = dir_form.submit 'Enregistrer'
+  %header
+    = dir_form.submit 'Actualiser'
+    \|
+    = dir_form.submit 'Enregistrer'
   %article.direct_detail
     %table.direct_detail
       %tr
@@ -13,15 +14,17 @@
         %th.totaux --Totaux--
         - @etude.liste_annees.each do |annee|
           %th=annee
+      -i=1
       -@direct.details.each do |detail|
         = dir_form.fields_for :details,detail do |detail_form|
-          %tr
+          %tr{:id => [i]}
             %td.description= detail_form.text_field :description,:size => 20
             %td.nature= detail_form.select :nature,Etude.liste_natures,:size => 10
             %td.totaux.montant= number_with_precision(detail.total, options =  {delimiter: " ", precision: 0}) unless detail.total == 0
             -detail.montants.each do |montant|
               = detail_form.fields_for :montants,montant do |montant_form|
                 %td.montant= montant_form.number_field :montant,:value => number_with_precision(montant.montant,options={precision: 0}), :size => 1
+          -i+=1
       %tr.totaux
         %td.description= @direct.calculees[0].description
         %td
@@ -41,8 +44,8 @@
             %td.nature= somme.nature
             %td.montant= number_with_precision(somme.montant, options = {delimiter: " ", precision: 0}) unless somme.montant == 0
             %td.commentaire= somme_form.text_field :commentaire,:size => 40
-
-  = dir_form.submit 'Actualiser'
-  \|
-  = dir_form.submit 'Enregistrer'
+  %footer
+    = dir_form.submit 'Actualiser'
+    \|
+    = dir_form.submit 'Enregistrer'
 
