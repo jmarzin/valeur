@@ -6,6 +6,8 @@ Valeur::Application.routes.draw do
 
   resources :directs, only: [:show, :edit, :update]
 
+  resources :indirects, only: [:show, :edit, :update]
+
   resources :detail, only: [:show]
 
   resources :parametrages

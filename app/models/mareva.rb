@@ -59,6 +59,7 @@ class Calculee
   field :description, type: String
   field :nature, type: String
   field :unite, type: Symbol
+  field :total, type: Float
   embeds_many :montants
   accepts_nested_attributes_for :montants
 end
@@ -87,9 +88,14 @@ end
 class Indirect
   include Mongoid::Document
   embedded_in :etude_rentabilite
+  field :cat_aplus, type: Integer
+  field :cat_a, type: Integer
+  field :cat_b, type: Integer
+  field :cat_c, type: Integer
+  field :total, type: Float
   embeds_many :details
   embeds_many :calculees
-  field :part_cadre, type: Hash # :categorie, pourcentage en valeur, total = 100
+  embeds_many :sommes
 end
 
 

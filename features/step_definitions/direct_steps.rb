@@ -35,18 +35,23 @@ Quand(/^je remplis le tableau des coûts détaillés$/) do
     fill_in 'direct_details_attributes_0_montants_attributes_0_montant', :with => '1000'
     fill_in 'direct_details_attributes_0_montants_attributes_1_montant', :with => '2000'
     fill_in 'direct_details_attributes_0_montants_attributes_3_montant', :with => '1000000'
+    click_button('Insv')
   end
   within('tr#2') do
     fill_in 'direct_details_attributes_1_description', :with => 'Ligne 2'
     select('Logiciel', :from => 'direct_details_attributes_1_nature')
     fill_in 'direct_details_attributes_1_montants_attributes_1_montant', :with => '3000'
     fill_in 'direct_details_attributes_1_montants_attributes_2_montant', :with => '4000'
+    click_button('Insv')
   end  
   within('tr#3') do
     fill_in 'direct_details_attributes_2_description', :with => 'Ligne 3'
+    click_button('Insv')
   end
   within('tr#4') do
     select('Logiciel', :from => 'direct_details_attributes_3_nature')
+    click_button('Insv')
+    click_button('Insv')
   end
   within('tr#6') do
     fill_in 'direct_details_attributes_5_description', :with => 'Ligne 6'
@@ -54,6 +59,7 @@ Quand(/^je remplis le tableau des coûts détaillés$/) do
     fill_in 'direct_details_attributes_5_montants_attributes_0_montant', :with => '100'
     fill_in 'direct_details_attributes_5_montants_attributes_1_montant', :with => '200'
     fill_in 'direct_details_attributes_5_montants_attributes_2_montant', :with => '300'
+    click_button('Insv')
   end
   within('tr#7') do
     fill_in 'direct_details_attributes_6_description', :with => 'Ligne 7'

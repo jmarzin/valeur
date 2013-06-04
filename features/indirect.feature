@@ -1,6 +1,6 @@
 # language: fr
 
-Fonctionnalité: saisie et modification des coûts d'investissement directs
+Fonctionnalité: saisie et modification des coûts d'investissement indirects
 
   Scénario: Atteinte de l'écran d'étude de rentabilité
     Etant donné le projet Hélios dans la base
@@ -8,14 +8,14 @@ Fonctionnalité: saisie et modification des coûts d'investissement directs
     Etant donné que je suis sur la page /projets/1/etudes/1
     Quand je suis le lien Rentabilité
     Alors je me retrouve sur la page /rentabilites/1
-    Et je vois le lien 0 dans la zone td#direct
-
+    Et je vois le lien 0 dans la zone td#indirect
+@en_cours
   Scénario: Atteinte de l'écran de consultation des coûts d'investissements directs
     Etant donné le projet Hélios dans la base
     Etant donné une étude complète au stade bilan non publiée sur le projet Hélios
     Etant donné que je suis sur la page /rentabilites/1
-    Quand dans la zone td#direct je suis le lien 0
-    Alors je me retrouve sur la page /directs/1
+    Quand dans la zone td#indirect je suis le lien 0
+    Alors je me retrouve sur la page /indirects/1
     Et je vois le texte Commentaires
     Et je vois le lien Modif dans la zone header
 

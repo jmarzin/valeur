@@ -11,7 +11,8 @@
     %th.titre Coûts directs
     %th.titre Coûts indirects
   %tr
-    %td= link_to number_with_precision(@etude.etude_rentabilite.direct.total, options = {delimiter: " ", precision: 0}), direct_path(@etude)
+    %td#direct= link_to number_with_precision(@etude.etude_rentabilite.direct.total, options = {delimiter: " ", precision: 0}), direct_path(@etude)
+    %td#indirect= link_to number_with_precision(@etude.etude_rentabilite.indirect.total, options = {delimiter: " ",precision: 0}), indirect_path(@etude)
 %br
 %br
 = link_to 'Retour étude', projet_etude_path(@etude.projet, @etude)

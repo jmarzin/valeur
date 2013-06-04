@@ -90,6 +90,11 @@ class Etude
     liste
   end
 
+  def self.liste_natures_indirects
+    {'' => '', 'Coûts MOA' => 'ETP', 'Coûts MOE' => 'ETP', 'Formation:temps formateur' => 'ETP', 'Formation:temps stagiaire' => 'ETP',\
+      'Autre' => 'ETP', 'Autre' => 'k€'}
+  end
+
   def lit_rentabilite
     if not self.etude_rentabilite
       self.etude_rentabilite = EtudeRentabilite.new
@@ -99,6 +104,19 @@ class Etude
       Etude.liste_natures.each {|nature| self.etude_rentabilite.direct.sommes << Somme.new(nature: nature,unite: 'k€',montant: 0) if nature != ''}
     end
     if not self.etude_rentabilite.direct.calculees[0] then self.etude_rentabilite.direct.calculees << Calculee.new(description: 'Totaux (k€)') end
+    if not self.etude_rentabilite.indirect then
+      self.etude_rentabilite.indirect = Indirect.new(total: 0, cat_a: 80, cat_b: 20)
+      Etude.liste_natures_indirects.each do |nature,unite|
+        self.etude_rentabilite.indirect.sommes << Somme.new(nature: nature,unite: unite, montant: 0) if nature != ''
+      end
+    end
+    if not self.etude_rentabilite.indirect.calculees[0] then
+      self.etude_rentabilite.indirect.calculees << Calculee.new(description: 'Coûts indirects en ETP',unite: 'ETP')\
+                                                << Calculee.new(description: 'Coût complet moyen du personnel', unite: 'k€/ETP')\
+                                                << Calculee.new(description: 'Coûts indirects existant exprimés en ETP valorisés', unite: 'k€')\
+                                                << Calculee.new(description: 'Coûts indirects', unite: 'k€')\
+                                                << Calculee.new(description: 'Total des coûts indirects', unite: 'k€')
+    end
     self.etude_rentabilite
   end
 
