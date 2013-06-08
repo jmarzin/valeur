@@ -191,7 +191,7 @@ class Etude
     end
     if not self.etude_rentabilite.direct.calculees[0] then self.etude_rentabilite.direct.calculees << Calculee.new(description: 'Totaux (k€)') end
     if not self.etude_rentabilite.indirect then
-      self.etude_rentabilite.indirect = Indirect.new(total: 0)
+      self.etude_rentabilite.indirect = Indirect.new(total: 0,somme_pourcent: 100)
       Etude.liste_natures_indirects.each do |nature,unite|
         self.etude_rentabilite.indirect.sommes << Somme.new(nature: nature,unite: unite, montant: 0) if nature != ''
       end
