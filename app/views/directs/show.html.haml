@@ -9,8 +9,8 @@
   = link_to 'Etude', projet_etude_path(@etude.projet, @etude)
 %br
 %br
-%article.direct_detail
-  %table.direct_detail
+%article#detail
+  %table#detail
     %th.description Description du coût
     %th.nature Nature
     %th.totaux --Totaux-- 
@@ -36,8 +36,8 @@
         %td.montant= number_with_precision(mt.montant, options =  {delimiter: " ", precision: 0})
 %br
 %br
-%article.direct_somme
-  %table.direct_somme
+%article#somme
+  %table#somme
     %tr
       %th.nature Coûts directs pluriannuels 
       %th (k€)

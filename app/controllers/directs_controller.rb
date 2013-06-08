@@ -9,14 +9,14 @@ class DirectsController < ApplicationController
     @etude.lit_rentabilite
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render json: @strategy }
+      format.json { render json: @etude }
     end
   end
 
   # GET /directs/1/edit
   def edit
     @etude = Etude.find(params[:id])
-    @direct = @etude.lit_direct
+    @direct = @etude.lit_direct_indirect('direct')
   end
 
   # PUT /directs/1
@@ -24,12 +24,13 @@ class DirectsController < ApplicationController
   def update
     @etude = Etude.find(params[:id])
     respond_to do |format|
+      binding.pry
       if @etude.etude_rentabilite.direct.update_attributes(params[:direct])
         if params[:commit] then
           @etude.simplifie_direct
           flash[:notice] = "Les coûts directs ont bien été mis à jour."
           if params[:commit] == 'Actualiser' then
-            @direct = @etude.lit_direct
+            @direct = @etude.lit_direct_indirect('direct')
             format.html { render action: "edit"}
             format.json { head :no_content }
           else

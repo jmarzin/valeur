@@ -13,47 +13,122 @@ require 'mareva'
 
 class Etude
 
-  def insere_detail(ins)
+  def insere_detail(ins,objet)
     if ins[0] == 'h' then dec = 1 else dec = 0 end
     i = ins.delete(ins[0]).to_i - dec
-    j = self.etude_rentabilite.direct.details.count
-    self.etude_rentabilite.direct.details << Detail.new
-    self.liste_annees.each { |annee| self.etude_rentabilite.direct.details[-1].montants << Montant.new(annee: annee) }
+    j = objet.details.count
+    objet.details << Detail.new
+    self.liste_annees.each { |annee| objet.details[-1].montants << Montant.new(annee: annee) }
     while j != i
-      self.etude_rentabilite.direct.details[j].description,self.etude_rentabilite.direct.details[j-1].description = \
-        self.etude_rentabilite.direct.details[j-1].description,self.etude_rentabilite.direct.details[j].description
-      self.etude_rentabilite.direct.details[j].nature,self.etude_rentabilite.direct.details[j-1].nature = \
-        self.etude_rentabilite.direct.details[j-1].nature,self.etude_rentabilite.direct.details[j].nature
-      self.etude_rentabilite.direct.details[j].total,self.etude_rentabilite.direct.details[j-1].total = \
-        self.etude_rentabilite.direct.details[j-1].total,self.etude_rentabilite.direct.details[j].total
+      objet.details[j].description,objet.details[j-1].description = objet.details[j-1].description,objet.details[j].description
+      objet.details[j].nature,objet.details[j-1].nature = objet.details[j-1].nature,objet.details[j].nature
+      objet.details[j].total,objet.details[j-1].total = objet.details[j-1].total,objet.details[j].total
       self.liste_annees.each_index do |ind|
-        self.etude_rentabilite.direct.details[j].montants[ind].montant,self.etude_rentabilite.direct.details[j-1].montants[ind].montant = \
-          self.etude_rentabilite.direct.details[j-1].montants[ind].montant,self.etude_rentabilite.direct.details[j].montants[ind].montant
+        objet.details[j].montants[ind].montant,objet.details[j-1].montants[ind].montant = \
+          objet.details[j-1].montants[ind].montant,objet.details[j].montants[ind].montant
       end
       j -= 1
     end
-    self.save
-    self.etude_rentabilite.direct
+    objet.save
+    objet
   end
 
-  def supprime_detail(del)
+  def supprime_detail(del,objet)
     i = del.delete(del[0]).to_i - 1
-    self.etude_rentabilite.direct.details.delete(self.etude_rentabilite.direct.details[i])
-    self.etude_rentabilite.direct
+    objet.details.delete(objet.details[i])
+    objet
   end
 
   def traite_touche(params)
+    if params[:indirect] then objet = self.etude_rentabilite.indirect else objet = self.etude_rentabilite.direct end
     ins = params.key('Ins^')
-    return self.insere_detail(ins) if ins
+    return self.insere_detail(ins,objet) if ins
     ins = params.key('Insv')
-    return self.insere_detail(ins) if ins
+    return self.insere_detail(ins,objet) if ins
     del = params.key('Del')
-    return self.supprime_detail(params.key('Del'))
+    return self.supprime_detail(params.key('Del'),objet)
+  end
+
+  def somme_pourcent(params)
+    total = 0
+    params[:repartitions_attributes].each do |repart|
+      total += repart[1][:pourcent].to_i
+    end
+    params[:somme_pourcent] = total.to_s
+    params
+  end
+
+  def simplifie_indirect
+    totaux_nature = Hash.new(0)
+    totaux_annee = Hash.new
+    totaux_annee[:ETP] = Hash.new(0)
+    totaux_annee[:k€] = Hash.new(0)
+    self.etude_rentabilite.indirect.details.where(description: "").destroy_all
+    self.etude_rentabilite.indirect.details.where(nature: "").destroy_all
+    self.etude_rentabilite.indirect.total = 0
+    self.etude_rentabilite.indirect.details.each do |detail|
+      detail.unite = Etude.liste_natures_indirects[detail.nature]
+      detail.total = 0
+      detail.montants.where(montant: 0).destroy_all
+      detail.montants.where(montant: nil).destroy_all
+      detail.montants.each do |mt|
+        detail.total += mt.montant
+        totaux_annee[detail.unite][mt.annee] += mt.montant
+      end
+      totaux_nature[detail.nature] += detail.total
+      self.etude_rentabilite.indirect.total += detail.total
+    end
+    self.etude_rentabilite.indirect.sommes.each do |somme|
+      somme.montant = totaux_nature[somme.nature]
+    end
+    self.etude_rentabilite.indirect.calculees[0].montants.each { |mt| mt.montant = totaux_annee[:ETP][mt.annee] }
+    self.etude_rentabilite.indirect.calculees[0].total = 0
+    self.etude_rentabilite.indirect.calculees[0].montants.each { |mt| self.etude_rentabilite.indirect.calculees[0].total += mt.montant if mt.montant }
+    self.etude_rentabilite.indirect.calculees[0].montants.each_index do |i|
+      mt = self.etude_rentabilite.indirect.calculees[0].montants[i]
+      if mt.montant && mt.montant == 0
+        self.etude_rentabilite.indirect.calculees[1].montants[i].montant = 0
+      else
+        cout_moyen = 0
+        self.etude_rentabilite.indirect.repartitions.each do |repart|
+          if repart.pourcent && repart.pourcent != 0
+            cadre = self.etude_rentabilite.cadres.where(cadre: repart.cadre).first
+            cout_moyen += repart.pourcent * cadre.cout_annuels.where(:annee => mt.annee).first.montant
+          end
+        end
+        self.etude_rentabilite.indirect.calculees[1].montants[i].montant = cout_moyen/100
+      end
+    end
+    self.etude_rentabilite.indirect.calculees[0].montants.each_index do |i|
+      if self.etude_rentabilite.indirect.calculees[0].montants[i].montant != 0
+        self.etude_rentabilite.indirect.calculees[2].montants[i].montant = self.etude_rentabilite.indirect.calculees[0].montants[i].montant * \
+                                                                           self.etude_rentabilite.indirect.calculees[1].montants[i].montant
+      else
+        self.etude_rentabilite.indirect.calculees[2].montants[i].montant = 0
+      end
+    end
+    self.etude_rentabilite.indirect.calculees[2].total = 0
+    self.etude_rentabilite.indirect.calculees[2].montants.each { |mt| self.etude_rentabilite.indirect.calculees[2].total += mt.montant if mt.montant }
+    self.etude_rentabilite.indirect.calculees[3].montants.each { |mt| mt.montant = totaux_annee[:k€][mt.annee] }
+    self.etude_rentabilite.indirect.calculees[3].total = 0
+    self.etude_rentabilite.indirect.calculees[3].montants.each { |mt| self.etude_rentabilite.indirect.calculees[3].total += mt.montant if mt.montant }
+    self.etude_rentabilite.indirect.calculees[4].total = 0
+    self.etude_rentabilite.indirect.calculees[2].montants.each_index do |i|
+      self.etude_rentabilite.indirect.calculees[4].montants[i].montant = self.etude_rentabilite.indirect.calculees[2].montants[i].montant
+      self.etude_rentabilite.indirect.calculees[4].total += self.etude_rentabilite.indirect.calculees[2].montants[i].montant
+      self.etude_rentabilite.indirect.calculees[4].montants[i].montant += self.etude_rentabilite.indirect.calculees[3].montants[i].montant
+      self.etude_rentabilite.indirect.calculees[4].total += self.etude_rentabilite.indirect.calculees[3].montants[i].montant
+    end
+    self.etude_rentabilite.indirect.calculees.each do  |calc|
+      calc.montants.where(montant: 0).destroy_all
+      calc.montants.where(montant: nil).destroy_all
+    end
+    self.etude_rentabilite.indirect.save
   end
 
   def simplifie_direct
     totaux_nature = Hash.new(0)
-    Etude.liste_natures.each { |nat| totaux_nature[nat] = 0 if nat != '' }
+    Etude.liste_natures_directs.each { |nat| totaux_nature[nat] = 0 if nat != '' }
     totaux_annee = Hash.new(0)
     self.liste_annees.each { |an| totaux_annee[an] = 0 } 
     self.etude_rentabilite.direct.details.where(description: "").destroy_all
@@ -79,7 +154,7 @@ class Etude
     self.etude_rentabilite.direct.save!
   end
 
-  def self.liste_natures
+  def self.liste_natures_directs
     ['','Logiciel','Matériel','Prestation MOE','Prestation MOA','Formation','Autre']
   end
 
@@ -97,20 +172,34 @@ class Etude
 
   def lit_rentabilite
     if not self.etude_rentabilite
+      param = Parametrage.where(code: 'Standard').first
       self.etude_rentabilite = EtudeRentabilite.new
+      param.param_rentabilite.param_cadres.each do |p_cad|
+        cadre = Cadre.new
+        cadre.fields.keys.each { |champ| if champ != '_id' then cadre[champ]=p_cad[champ] end }
+        p_cad.param_cout_annuels.each do |p_cout|
+          cout_annuel = CoutAnnuel.new
+          cout_annuel.fields.keys.each { |champ| if champ != '_id' then cout_annuel[champ]=p_cout[champ] end }
+          cadre.cout_annuels << cout_annuel
+        end
+        self.etude_rentabilite.cadres << cadre
+      end
     end
     if not self.etude_rentabilite.direct
       self.etude_rentabilite.direct = Direct.new(total: 0)
-      Etude.liste_natures.each {|nature| self.etude_rentabilite.direct.sommes << Somme.new(nature: nature,unite: 'k€',montant: 0) if nature != ''}
+      Etude.liste_natures_directs.each {|nature| self.etude_rentabilite.direct.sommes << Somme.new(nature: nature,unite: 'k€',montant: 0) if nature != ''}
     end
     if not self.etude_rentabilite.direct.calculees[0] then self.etude_rentabilite.direct.calculees << Calculee.new(description: 'Totaux (k€)') end
     if not self.etude_rentabilite.indirect then
-      self.etude_rentabilite.indirect = Indirect.new(total: 0, cat_a: 80, cat_b: 20)
+      self.etude_rentabilite.indirect = Indirect.new(total: 0)
       Etude.liste_natures_indirects.each do |nature,unite|
         self.etude_rentabilite.indirect.sommes << Somme.new(nature: nature,unite: unite, montant: 0) if nature != ''
       end
+      self.etude_rentabilite.cadres.each do |cadre|
+        self.etude_rentabilite.indirect.repartitions << Repartition.new(cadre: cadre.cadre,pourcent: cadre.defaut)
+      end
     end
-    if not self.etude_rentabilite.indirect.calculees[0] then
+    if self.etude_rentabilite.indirect.calculees.count == 0 then
       self.etude_rentabilite.indirect.calculees << Calculee.new(description: 'Coûts indirects en ETP',unite: 'ETP')\
                                                 << Calculee.new(description: 'Coût complet moyen du personnel', unite: 'k€/ETP')\
                                                 << Calculee.new(description: 'Coûts indirects existant exprimés en ETP valorisés', unite: 'k€')\
@@ -120,13 +209,14 @@ class Etude
     self.etude_rentabilite
   end
 
-  def lit_direct
+  def lit_direct_indirect(cas)
     @rentabilite = self.lit_rentabilite
+    if cas == 'indirect' then base = self.etude_rentabilite.indirect else base = self.etude_rentabilite.direct end
 #
 # préparation du tableau des montants par annee
 #
-    if self.etude_rentabilite.direct.details.count == 0 then self.etude_rentabilite.direct.details << Detail.new end
-    self.etude_rentabilite.direct.details.each do |detail|
+    if base.details.count == 0 then base.details << Detail.new end
+    base.details.each do |detail|
       mts = detail.montants.clone
       detail.montants = nil
       self.liste_annees.each do |annee|
@@ -141,19 +231,20 @@ class Etude
 #
 # préparation de la ligne des totaux par année
 #
-    if self.etude_rentabilite.direct.calculees[0].montants then mts = self.etude_rentabilite.direct.calculees[0].montants.clone else mts =[] end
-    self.etude_rentabilite.direct.calculees[0].montants = nil
-    self.liste_annees.each do |annee|
-      if mts[0] && mts[0].annee == annee
-        self.etude_rentabilite.direct.calculees[0].montants << Montant.new(annee: annee,montant: mts[0].montant)
-        mts.delete_at(0)
-      else
-        self.etude_rentabilite.direct.calculees[0].montants << Montant.new(annee: annee,montant: 0)
+    base.calculees.each do |calc|
+      if calc.montants then mts = calc.montants.clone else mts =[] end
+      calc.montants = nil
+      self.liste_annees.each do |annee|
+        if mts[0] && mts[0].annee == annee
+          calc.montants << Montant.new(annee: annee,montant: mts[0].montant)
+          mts.delete_at(0)
+        else
+          calc.montants << Montant.new(annee: annee,montant: 0)
+        end
       end
     end
-    self.etude_rentabilite.direct
+    base
   end
-        
         
   def self.lit_niveau(objet_param,objet_etude)
 #

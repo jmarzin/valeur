@@ -1,0 +1,86 @@
+%p#notice= notice
+
+%h2 Saisie/modification des coûts indirects d'investissement de l'étude  #{@etude._id} du projet #{@etude.projet.nom}
+= form_for @indirect, :url => indirect_path(@etude) do |indir_form|
+  - if @indirect.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@indirect.errors.count, "error")} : cette étude n'a pas pu être enregistrée"
+      %ul
+        - @indirect.errors.full_messages.each do |msg|
+          %li= msg
+  %header
+    = indir_form.submit 'Actualiser'
+    \
+    = indir_form.submit 'Enregistrer'
+  %br
+  %br
+  =indir_form.hidden_field :somme_pourcent
+  %article#cadre
+    %table#cadre
+      %tr
+        %th.categorie Catégorie de personnel
+        %th.repart Répartition (%)
+      -@indirect.repartitions.each do |repart|
+        = indir_form.fields_for :repartitions,repart do |repart_form|
+          %tr
+          %td.categorie=repart.cadre
+          %td.repart= repart_form.number_field :pourcent, :size => 1
+  %br
+  %br
+  %article#detail
+    %table#detail
+      %tr
+        %th{:colspan => 3} Actions
+        %th.description Description du coût
+        %th.nature Nature
+        %th.unite Exprimé en
+        %th.totaux --Totaux--
+        - @etude.liste_annees.each do |annee|
+          %th=annee
+      -i=1
+      -@indirect.details.each do |detail|
+        = indir_form.fields_for :details,detail do |detail_form|
+          %tr{:id => [i]}
+            %td= indir_form.submit 'Del', :class => 'action', :name => "d#{i}"
+            %td= indir_form.submit 'Ins^', :class => 'action', :name => "h#{i}"
+            %td= indir_form.submit 'Insv', :class => 'action', :name => "b#{i}"
+            %td.description= detail_form.text_field :description,:size => 20
+            %td.nature= detail_form.select :nature,Etude.liste_natures_indirects.keys,:size => 10
+            %td.unite=detail.unite
+            %td.totaux.montant= number_with_precision(detail.total, options =  {delimiter: " ", precision: 0}) unless detail.total == 0
+            -detail.montants.each do |montant|
+              = detail_form.fields_for :montants,montant do |montant_form|
+                %td.montant= montant_form.number_field :montant,:value => number_with_precision(montant.montant,options={precision: 0}), :size => 1
+          -i+=1
+      -@indirect.calculees.each do |calc|
+        %tr.totaux
+          %td
+          %td
+          %td
+          %td.description{:colspan => 2}= calc.description
+          -if calc.description =~ /personnel/ then prec = 1 else prec = 0 end
+          %td.unite= calc.unite
+          %td.montant=number_with_precision(calc.total, options =  {delimiter: " ", precision: 0}) unless @indirect.total == nil || calc.total == 0
+          -calc.montants.each do |montant|
+            %td.montant= number_with_precision(montant.montant, options =  {delimiter: " ", precision: prec}) unless montant.montant == 0
+  %br
+  %br
+  %article#somme
+    %table#somme
+      %tr
+        %th.nature Coûts directs pluriannuels 
+        %th.montant (k€)
+        %th.commentaire Commentaires
+      - @indirect.sommes.each do |somme|
+        = indir_form.fields_for :sommes,somme do |somme_form|
+          %tr
+            %td.nature= somme.nature
+            %td.unite= somme.unite
+            %td.montant= number_with_precision(somme.montant, options = {delimiter: " ", precision: 0}) unless somme.montant == 0
+            %td.commentaire= somme_form.text_field :commentaire,:size => 40
+
+  %footer
+    = indir_form.submit 'Actualiser'
+    \
+    = indir_form.submit 'Enregistrer'
+

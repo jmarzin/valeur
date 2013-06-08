@@ -25,7 +25,7 @@ class CoherenceProjet < ActiveModel::Validator
           rec.errors[:base] << "La dérive de la durée est calculée s'il y a plusieurs vraies études"
         end
       end
-    else # cas des études
+    elsif rec.class == Etude 
       if rec.publie and not Etude.where(projet_id: rec.projet_id,stade: rec.stade, publie: true).empty?
         rec.errors[:base] << "Doublon de publication"
       end
@@ -39,6 +39,10 @@ class CoherenceProjet < ActiveModel::Validator
       else
         rec.duree_vie = Etude.val_type_produit[rec.type_produit]
       end
-    end      
+    elsif rec.class == Indirect
+      if rec.somme_pourcent != 100
+        rec.errors[:base] << "La somme des contributions des catégories n'est pas égale à 100"
+      end
+    end
   end
 end

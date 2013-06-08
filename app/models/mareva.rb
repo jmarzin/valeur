@@ -85,17 +85,25 @@ class Direct
   accepts_nested_attributes_for :sommes,:details,:calculees
 end
 
+class Repartition
+  include Mongoid::Document
+  embedded_in :Indirect
+  field :cadre, type: String
+  field :pourcent, type: Integer
+end
+  
 class Indirect
   include Mongoid::Document
+  include Mongoid::MultiParameterAttributes
+  validates_with(CoherenceProjet)
   embedded_in :etude_rentabilite
-  field :cat_aplus, type: Integer
-  field :cat_a, type: Integer
-  field :cat_b, type: Integer
-  field :cat_c, type: Integer
   field :total, type: Float
+  field :somme_pourcent, type: Integer
   embeds_many :details
   embeds_many :calculees
   embeds_many :sommes
+  embeds_many :repartitions
+  accepts_nested_attributes_for :sommes,:details,:calculees,:repartitions
 end
 
 
@@ -114,10 +122,26 @@ class ImpactFonctionnement
   embeds_many :fonctionnements
 end
 
+class CoutAnnuel
+  include Mongoid::Document
+  embedded_in :cadre
+  field :annee, type: Integer
+  field :montant, type:Float
+end
+
+class Cadre
+  include Mongoid::Document
+  embedded_in :etude_rentabilite
+  field :cadre, type: String
+  field :defaut, type: Integer
+  embeds_many :cout_annuels
+end
+
 class EtudeRentabilite
   include Mongoid::Document
   embedded_in :etude
   embeds_one :direct
   embeds_one :indirect
   embeds_one :impact_fonctionnement
+  embeds_many :cadres
 end

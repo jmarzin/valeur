@@ -70,5 +70,47 @@ describe Parametrage do
   #    end
   #  end
   end
+  describe "Chargement du parametrage des coûts salariaux" do
+#    it 'lecture du parametrage' do
+#      @param = Parametrage.where(code: 'Standard').first
+#      @param.param_rentabilite = ParamRentabilite.new
+#      @param.param_rentabilite.param_cadres << ParamCadre.new(cadre: 'A+')
+#      @param.param_rentabilite.param_cadres[0].param_cout_annuels << ParamCoutAnnuel.new(annee: 2004,montant: 77)
+#      @param.param_rentabilite.param_cadres[0].param_cout_annuels << ParamCoutAnnuel.new(annee: 2005,montant: 79)
+#      @param.param_rentabilite.param_cadres[0].param_cout_annuels << ParamCoutAnnuel.new(annee: 2006,montant: 80)
+#      montant_prec = 80
+#      (2007..2040).each do |annee|
+#        montant_prec *= 1.0149
+#        @param.param_rentabilite.param_cadres[0].param_cout_annuels << ParamCoutAnnuel.new(annee: annee,montant: montant_prec.round(1))
+#      end
+#      @param.param_rentabilite.param_cadres << ParamCadre.new(cadre: 'A',defaut: 80)
+#      @param.param_rentabilite.param_cadres[1].param_cout_annuels << ParamCoutAnnuel.new(annee: 2004,montant: 59)
+#      @param.param_rentabilite.param_cadres[1].param_cout_annuels << ParamCoutAnnuel.new(annee: 2005,montant: 60)
+#      @param.param_rentabilite.param_cadres[1].param_cout_annuels << ParamCoutAnnuel.new(annee: 2006,montant: 61)
+#      montant_prec = 61
+#      (2007..2040).each do |annee|
+#        montant_prec *= 1.0149
+#        @param.param_rentabilite.param_cadres[1].param_cout_annuels << ParamCoutAnnuel.new(annee: annee,montant: montant_prec.round(1))
+#      end
+#      @param.param_rentabilite.param_cadres << ParamCadre.new(cadre: 'B',defaut: 20)
+#      @param.param_rentabilite.param_cadres[2].param_cout_annuels << ParamCoutAnnuel.new(annee: 2004,montant: 45)
+#      @param.param_rentabilite.param_cadres[2].param_cout_annuels << ParamCoutAnnuel.new(annee: 2005,montant: 46)
+#      @param.param_rentabilite.param_cadres[2].param_cout_annuels << ParamCoutAnnuel.new(annee: 2006,montant: 47)
+#      montant_prec = 47
+#      (2007..2040).each do |annee|
+#        montant_prec *= 1.0149
+#        @param.param_rentabilite.param_cadres[2].param_cout_annuels << ParamCoutAnnuel.new(annee: annee,montant: montant_prec.round(1))
+#      end
+#      @param.param_rentabilite.param_cadres << ParamCadre.new(cadre: 'C')
+#      @param.param_rentabilite.param_cadres[3].param_cout_annuels << ParamCoutAnnuel.new(annee: 2004,montant: 36)
+#      @param.param_rentabilite.param_cadres[3].param_cout_annuels << ParamCoutAnnuel.new(annee: 2005,montant: 36)
+#      @param.param_rentabilite.param_cadres[3].param_cout_annuels << ParamCoutAnnuel.new(annee: 2006,montant: 37)
+#      montant_prec = 37
+#      (2007..2040).each do |annee|
+#        montant_prec *= 1.0149
+#        @param.param_rentabilite.param_cadres[3].param_cout_annuels << ParamCoutAnnuel.new(annee: annee,montant: montant_prec.round(1))
+#      end
+#    end
+  end
 end
 

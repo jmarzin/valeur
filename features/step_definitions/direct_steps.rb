@@ -21,12 +21,13 @@ Quand(/^dans la zone (.+) je clique sur (.+)$/) do  |zone,bouton|
 end
 
 Alors(/^je vois le tableau des coûts détaillés$/) do
-  page.should have_selector('article.direct_detail')
+  page.should have_selector('article#detail')
 end
 
 Alors(/^je vois le tableau des coûts cumulés par nature$/) do
-  page.should have_selector('article.direct_somme')
+  page.should have_selector('article#somme')
 end
+
 
 Quand(/^je remplis le tableau des coûts détaillés$/) do
   within('tr#1') do

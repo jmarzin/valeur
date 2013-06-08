@@ -26,6 +26,27 @@ class ParamStrategie
   embeds_many :param_groupes
 end
 
+class ParamCoutAnnuel
+  include Mongoid::Document
+  embedded_in :param_cadre
+  field :annee, type: Integer
+  field :montant, type: Float
+end
+
+class ParamCadre
+  include Mongoid::Document
+  embedded_in :param_rentabilite
+  field :cadre, type: String
+  field :defaut, type: Integer
+  embeds_many :param_cout_annuels
+end
+
+class ParamRentabilite
+  include Mongoid::Document
+  embedded_in :parametrage
+  embeds_many :param_cadres
+end
+
 class Parametrage
   include Mongoid::Document
   field :ministere, type: String
@@ -34,4 +55,5 @@ class Parametrage
   field :publie, type: Boolean
   field :date_publication, type: Date
   embeds_one :param_strategie
+  embeds_one :param_rentabilite
 end

@@ -1,0 +1,24 @@
+// Place all the styles related to the strategies controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com
+
+table#cadre {
+  width: 25%;
+  .categorie {
+    text-align: center;
+    width: 12rem;
+  }
+  .repart {
+    width: 10 rem;
+    text-align: center;
+  }
+}
+.unite {
+  text-align: center;
+}
+table#somme {
+  width: 60%;
+  .nature {
+    width: 20rem;
+  }
+}

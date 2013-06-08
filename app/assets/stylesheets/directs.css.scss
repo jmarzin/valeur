@@ -5,10 +5,10 @@
   font-size: 80%;
   padding: 0;
 }
-article.direct_detail {
+article#detail {
   overflow: auto;
 }
-table.direct_detail {
+table#detail {
   width: auto;
   .description {
     width: 10rem;
@@ -31,7 +31,7 @@ table.direct_detail {
     width: 10em;
   }
 }
-table.direct_somme {
+table#somme {
   width: 50%;
   .nature {
     width: 15rem;
