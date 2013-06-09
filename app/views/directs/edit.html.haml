@@ -21,7 +21,7 @@
       -@direct.details.each do |detail|
         = dir_form.fields_for :details,detail do |detail_form|
           %tr{:id => [i]}
-            %td= dir_form.submit 'Del', :class => 'action', :name => "d#{i}"
+            %td= dir_form.submit 'Sup', :class => 'action', :name => "s#{i}"
             %td= dir_form.submit 'Ins^', :class => 'action', :name => "h#{i}"
             %td= dir_form.submit 'Insv', :class => 'action', :name => "b#{i}"
             %td.description= detail_form.text_field :description,:size => 20

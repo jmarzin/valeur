@@ -33,8 +33,8 @@ class Etude
     objet
   end
 
-  def supprime_detail(del,objet)
-    i = del.delete(del[0]).to_i - 1
+  def supprime_detail(sup,objet)
+    i = sup.delete(sup[0]).to_i - 1
     objet.details.delete(objet.details[i])
     objet
   end
@@ -45,8 +45,7 @@ class Etude
     return self.insere_detail(ins,objet) if ins
     ins = params.key('Insv')
     return self.insere_detail(ins,objet) if ins
-    del = params.key('Del')
-    return self.supprime_detail(params.key('Del'),objet)
+    return self.supprime_detail(params.key('Sup'),objet)
   end
 
   def somme_pourcent(params)

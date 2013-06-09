@@ -48,7 +48,7 @@ Quand(/^je remplis le tableau des coûts indirects détaillés$/) do
     click_button('Insv')
   end
   within('tr#6') do
-    click_button('Del')
+    click_button('Sup')
   end
   within('tr#7') do
     fill_in 'indirect_details_attributes_6_description', :with => 'Ligne 7'
