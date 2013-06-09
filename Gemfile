@@ -44,6 +44,7 @@ group :test do
   gem 'cucumber-rails-training-wheels' # some pre-fabbed step definitions  
   gem 'pry'
   gem 'pry-rails'
+  gem 'pry-nav'
   gem "capybara", ">= 1.1.2"
   gem "database_cleaner"
   gem "ZenTest"

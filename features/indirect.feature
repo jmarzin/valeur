@@ -18,7 +18,7 @@ Fonctionnalité: saisie et modification des coûts d'investissement indirects
     Alors je me retrouve sur la page /indirects/1
     Et je vois le texte Commentaires
     Et je vois le lien Modif dans la zone header
-@en_cours
+
   Scénario: Atteinte de l'écran de modification des coûts d'investissements indirects
     Etant donné le projet Hélios dans la base
     Etant donné une étude complète au stade bilan non publiée sur le projet Hélios
@@ -29,20 +29,28 @@ Fonctionnalité: saisie et modification des coûts d'investissement indirects
     Alors je vois le tableau des coûts détaillés
     Et je vois le tableau des coûts cumulés par nature
 
+  Scénario: Gestion d'une errueur de répartition des catégories de personnel
+    Etant donné le projet Hélios dans la base
+    Etant donné une étude complète au stade bilan non publiée sur le projet Hélios
+    Etant donné que je suis sur la page /indirects/1/edit
+    Quand je saisis 80 pour les cadres A et 10 pour les cadres B
+    Quand dans la zone header je clique sur Actualiser
+    Alors je vois le texte La somme des contributions des catégories n'est pas égale à 100
+
   Scénario: Remplissage de l'écran et calcul des totaux
     Etant donné le projet Hélios dans la base
     Etant donné une étude complète au stade bilan non publiée sur le projet Hélios
-    Etant donné que je suis sur la page /directs/1/edit
-    Quand je remplis le tableau des coûts détaillés
+    Etant donné que je suis sur la page /indirects/1/edit
+    Quand je remplis le tableau des coûts indirects détaillés
     Quand dans la zone header je clique sur Actualiser
-    Alors je vois les cumuls calculés
+    Alors je vois les cumuls indirects calculés
 
   Scénario: Saisie d'un commentaire et validation de la saisie
     Etant donné le projet Hélios dans la base
     Etant donné une étude complète au stade bilan non publiée sur le projet Hélios
-    Etant donné que je suis sur la page /directs/1/edit
-    Quand je remplis le tableau des coûts détaillés
-    Quand je saisis un commentaire pour le matériel
+    Etant donné que je suis sur la page /indirects/1/edit
+    Quand je remplis le tableau des coûts indirects détaillés
+    Quand je saisis un commentaire pour la formation:temps formateur
     Quand dans la zone header je clique sur Enregistrer
-    Alors je me retrouve sur la page /directs/1
-    Et je vois le commentaire au bon endroit
+    Alors je me retrouve sur la page /indirects/1
+    Et je vois le commentaire au bon endroit formation:temps formateur

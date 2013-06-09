@@ -22,7 +22,7 @@
         %th.repart Répartition (%)
       -@indirect.repartitions.each do |repart|
         = indir_form.fields_for :repartitions,repart do |repart_form|
-          %tr
+          %tr{:id => [repart.cadre]}
           %td.categorie=repart.cadre
           %td.repart= repart_form.number_field :pourcent, :size => 1
   %br
@@ -54,9 +54,9 @@
           -i+=1
       -@indirect.calculees.each do |calc|
         %tr.totaux
-          %td
-          %td
-          %td
+          %td.touche
+          %td.touche
+          %td.touche
           %td.description{:colspan => 2}= calc.description
           -if calc.description =~ /personnel/ then prec = 1 else prec = 0 end
           %td.unite= calc.unite
@@ -68,8 +68,8 @@
   %article#somme
     %table#somme
       %tr
-        %th.nature Coûts directs pluriannuels 
-        %th.montant (k€)
+        %th.nature{:colspan => 2} Coûts indirects pluriannuels 
+        %th.montant Totaux
         %th.commentaire Commentaires
       - @indirect.sommes.each do |somme|
         = indir_form.fields_for :sommes,somme do |somme_form|

@@ -23,6 +23,9 @@ table#detail {
   .totaux {
     font-weight: bold;
     background: yellow;
+    .touche {
+    background: white;
+    }
   }
   td.totaux {
     width: 10em;

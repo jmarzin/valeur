@@ -119,6 +119,8 @@ GEM
       coderay (~> 1.0.5)
       method_source (~> 0.8)
       slop (~> 3.4)
+    pry-nav (0.2.3)
+      pry (~> 0.9.10)
     pry-rails (0.3.0)
       pry (>= 0.9.10)
     rack (1.4.5)
@@ -212,6 +214,7 @@ DEPENDENCIES
   mongoid (~> 3.1.2)
   mongoid-rspec
   pry
+  pry-nav
   pry-rails
   rails (= 3.2.13)
   random_text

@@ -24,7 +24,6 @@ class DirectsController < ApplicationController
   def update
     @etude = Etude.find(params[:id])
     respond_to do |format|
-      binding.pry
       if @etude.etude_rentabilite.direct.update_attributes(params[:direct])
         if params[:commit] then
           @etude.simplifie_direct
