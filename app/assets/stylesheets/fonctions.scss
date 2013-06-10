@@ -1,0 +1,19 @@
+// Place all the styles related to the strategies controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com
+table#cadre_com {
+  width: 100%;
+  th#repart {
+    width: 40%;
+    .categorie {
+      width: 50%;
+    }
+    .repart {
+      width: 50%;
+    }
+  }
+  th#commentaire {
+    vertical-align: top;
+    text-align: left;
+  }
+}

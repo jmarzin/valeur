@@ -2,7 +2,7 @@
 
 Fonctionnalité: saisie et modification des coûts d'investissement directs
 
-  Scénario: Atteinte de l'écran d'étude de rentabilité
+  Scénario: Atteinte par l'écran d'étude de rentabilité
     Etant donné le projet Hélios dans la base
     Etant donné une étude complète au stade bilan non publiée sur le projet Hélios
     Etant donné que je suis sur la page /projets/1/etudes/1

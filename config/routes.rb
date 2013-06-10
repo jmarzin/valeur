@@ -8,6 +8,8 @@ Valeur::Application.routes.draw do
 
   resources :indirects, only: [:show, :edit, :update]
 
+  resources :fonctions, only: [:show, :edit, :update]
+
   resources :detail, only: [:show]
 
   resources :parametrages

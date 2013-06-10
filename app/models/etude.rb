@@ -205,6 +205,22 @@ class Etude
                                                 << Calculee.new(description: 'Coûts indirects', unite: 'k€')\
                                                 << Calculee.new(description: 'Total des coûts indirects', unite: 'k€')
     end
+    if not self.etude_rentabilite.fonction then
+      self.etude_rentabilite.fonction = Fonction.new(total: 0,somme_pourcent: 100)
+      self.etude_rentabilite.fonction.situations << Situation.new(titre: 'actuelle', total: 0, somme_pourcent: 100)
+      self.etude_rentabilite.fonction.situations << Situation.new(titre: 'cible', total: 0, somme_pourcent: 100)
+      self.etude_rentabilite.fonction.situations.each do |situation|
+        self.etude_rentabilite.cadres.each do |cadre|
+          situation.repartitions << Repartition.new(cadre: cadre.cadre, pourcent: cadre.defaut)
+        end
+        situation.calculees << Calculee.new(description: 'Coûts indirects existant exprimés en ETP', unite: 'ETP')\
+                            << Calculee.new(description: 'Coût complet moyen du personnel', unite: 'k€/ETP')\
+                            << Calculee.new(description: 'Coûts indirects existant exprimés en ETP valorisés', unite: 'k€')\
+                            << Calculee.new(description: 'Coûts indirects  existant exprimés en k€', unite: 'k€')\
+                            << Calculee.new(description: 'TOTAL COÛTS INDIRECTS  EXISTANT', unite: 'k€')
+      end
+      self.etude_rentabilite.fonction.calculees << Calculee.new(description: 'IMPACTS SUR LES COÛTS DE FONCTIONNEMENT SI', unite: 'k€')
+    end
     self.etude_rentabilite
   end
 

@@ -10,6 +10,7 @@ gem 'kaminari'
 gem 'haml'
 gem 'haml-rails'
 gem 'xml-simple'
+gem 'simple_form'
 
 
 # Bundle edge Rails instead:

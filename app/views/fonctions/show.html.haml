@@ -1,0 +1,73 @@
+%p#notice= notice
+
+%h2 Impacts sur les coûts de fonctionnement de l'étude  #{@etude._id} du projet #{@etude.projet.nom}
+%header
+  = link_to 'Modif', edit_fonction_path(@etude)
+  \|
+  = link_to 'Rentabilité', rentabilite_path(@etude)
+  \|
+  = link_to 'Etude', projet_etude_path(@etude.projet, @etude)
+%br
+%br
+-@etude.etude_rentabilite.fonction.situations.each do |situation|
+  %article{:id => [situation.titre]}
+    %h3#situation Coûts de fonctionnement dans la situation #{situation.titre}
+    %table#cadre_com
+      %th#repart
+        %article#cadre
+        %table#cadre
+          %tr
+            %th.categorie Catégorie de personnel
+            %th.repart Répartition (%)
+          -situation.repartitions.each do |repart|
+            %tr
+              %td.categorie=repart.cadre
+              %td.repart=repart.pourcent
+      %th#commentaire
+        %article#commentaire
+          Commentaires :
+          =situation.commentaires
+    %br
+    %br
+    %article#detail
+      %table#detail
+        %tr
+          %th.description Description du coût
+          %th.nature Nature
+          %th.unite Exprimé en
+          %th.totaux --Totaux-- 
+          -situation.calculees[4].montants.each do |mt|
+            %th=mt.annee
+            -situation.details.each do |det|
+              %tr
+                %td.description= det.description
+                %td.nature=det.nature
+                %td.unite=det.unite
+                %td.totaux.montant=number_with_precision(det.total,options =  {delimiter: " ", precision: 0})
+                -i = 0
+                -situation.calculees[4].montants.each do |calc|
+                  -if det.montants[i] && det.montants[i].annee == calc.annee then
+                    %td.montant=number_with_precision(det.montants[i].montant, options = {delimiter: " ", precision: 0})
+                    -i += 1
+                  -else
+                    %td
+            -situation.calculees.each do |calc|
+              %tr.totaux
+                %td.description{:colspan => 2}= calc.description
+                %td.unite=calc.unite
+                %td.montant=number_with_precision(calc.total, options =  {delimiter: " ", precision: 0})
+                -i = 0
+                -situation.calculees[4].montants.each do |col|
+                  -if calc.montants[i] && calc.montants[i].annee == col.annee then
+                    %td.montant= number_with_precision(calc.montants[i].montant, options =  {delimiter: " ", precision: 0})
+                    -i += 1
+                  -else
+                    %td
+%br
+%br
+%footer
+  = link_to 'Modif', edit_fonction_path(@etude)
+  \|
+  = link_to 'Rentabilité', rentabilite_path(@etude)
+  \|
+  = link_to 'Etude', projet_etude_path(@etude.projet, @etude)

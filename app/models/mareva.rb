@@ -42,7 +42,7 @@ class Detail
   include Mongoid::Document
   embedded_in :direct
   embedded_in :indirect
-  embedded_in :fonctionnement
+  embedded_in :situation
   field :description, type: String
   field :nature, type: String
   field :unite, type: Symbol
@@ -55,7 +55,8 @@ class Calculee
   include Mongoid::Document
   embedded_in :direct
   embedded_in :indirect
-  embedded_in :fonctionnement
+  embedded_in :fonction
+  embedded_in :situation
   field :description, type: String
   field :nature, type: String
   field :unite, type: Symbol
@@ -68,7 +69,6 @@ class Somme
   include Mongoid::Document
   embedded_in :direct
   embedded_in :indirect
-  embedded_in :fonctionnement
   field :nature, type: String
   field :unite, type: Symbol
   field :valeur, type: Float
@@ -107,19 +107,28 @@ class Indirect
 end
 
 
-class Fonctionnement
+class Situation
   include Mongoid::Document
-  embedded_in :impact_fonctionnement
+  include Mongoid::MultiParameterAttributes
+  validates_with(CoherenceProjet)
+  embedded_in :fonctionnement
+  field :titre, type: String # 'actuelle' ou 'cible'
+  field :total, type: Float
+  field :somme_pourcent, type: Integer
+  field :commentaires, type: String
   embeds_many :details
   embeds_many :calculees
-  field :reference, type: Symbol  # :actuel ou :cible
-  field :part_cadre, type: Hash # :categorie, pourcentage en valeur, total = 100
+  embeds_many :repartitions
+  accepts_nested_attributes_for :details,:calculees,:repartitions
 end
 
-class ImpactFonctionnement
+class Fonction
   include Mongoid::Document
+  field :total, type: Float
   embedded_in :etude_rentabilite
-  embeds_many :fonctionnements
+  embeds_many :situations
+  embeds_many :calculees
+  accepts_nested_attributes_for :situations,:calculees
 end
 
 class CoutAnnuel
@@ -142,6 +151,6 @@ class EtudeRentabilite
   embedded_in :etude
   embeds_one :direct
   embeds_one :indirect
-  embeds_one :impact_fonctionnement
+  embeds_one :fonction
   embeds_many :cadres
 end

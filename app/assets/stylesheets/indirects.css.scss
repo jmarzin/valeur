@@ -3,12 +3,13 @@
 // You can use Sass (SCSS) here: http://sass-lang.com
 
 table#cadre {
-  width: 25%;
   .categorie {
+    vertical-align: top;
     text-align: center;
     width: 12rem;
   }
   .repart {
+    vertical-align: top;
     width: 10 rem;
     text-align: center;
   }
