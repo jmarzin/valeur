@@ -23,8 +23,8 @@
       -@indirect.repartitions.each do |repart|
         = indir_form.fields_for :repartitions,repart do |repart_form|
           %tr{:id => [repart.cadre]}
-          %td.categorie=repart.cadre
-          %td.repart= repart_form.number_field :pourcent, :size => 1
+            %td.categorie=repart.cadre
+            %td.repart= repart_form.number_field :pourcent, :size => 1
   %br
   %br
   %article#detail

@@ -169,6 +169,11 @@ class Etude
       'Autre' => 'ETP', 'Autre' => 'k€'}
   end
 
+  def self.liste_natures_fonctions
+    {'' => '', 'Coûts de personnel' => 'ETP', 'Maintenance matériel et infrastructure' => 'k€', 'Maintenance application' => 'k€',\
+      'Externalisations' => 'k€', 'Abonnements' => 'k€', 'Autres' => 'k€'}
+  end
+
   def lit_rentabilite
     if not self.etude_rentabilite
       param = Parametrage.where(code: 'Standard').first
@@ -226,7 +231,15 @@ class Etude
 
   def lit_direct_indirect(cas)
     @rentabilite = self.lit_rentabilite
-    if cas == 'indirect' then base = self.etude_rentabilite.indirect else base = self.etude_rentabilite.direct end
+    if cas == 'indirect' then
+      base = self.etude_rentabilite.indirect 
+    elsif cas == 'direct' then
+      base = self.etude_rentabilite.direct
+    elsif cas == 'fonction_actuelle' then
+      base = self.etude_rentabilite.fonction.situations[0]
+    else
+      base = self.etude_rentabilite.fonction.situations[1]
+    end
 #
 # préparation du tableau des montants par annee
 #
@@ -259,6 +272,12 @@ class Etude
       end
     end
     base
+  end
+
+  def lit_fonction
+    self.etude_rentabilite.fonction.situations[0] = self.lit_direct_indirect('fonction_actuelle')
+    self.etude_rentabilite.fonction.situations[1] = self.lit_direct_indirect('fonction_cible')
+    self.etude_rentabilite.fonction
   end
         
   def self.lit_niveau(objet_param,objet_etude)

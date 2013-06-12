@@ -16,7 +16,7 @@ class FonctionsController < ApplicationController
   # GET /fonctions/1/edit
   def edit
     @etude = Etude.find(params[:id])
-    @fonction = @etude.lit_fonction
+    @fonction=@etude.lit_fonction
   end
 
   # PUT /fonctions/1
