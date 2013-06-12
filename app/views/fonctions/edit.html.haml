@@ -4,10 +4,12 @@
 = form_for @fonction, :url => fonction_path(@etude) do |fonction_form|
   - if @fonction.errors.any?
     #error_explanation
-      %h2= "#{pluralize(@fonction.errors.count, "error")} : cette étude n'a pas pu être enregistrée"
-      %ul
-        - @fonction.errors.full_messages.each do |msg|
-          %li= msg
+      %h2= "#{pluralize(@fonction.errors.count, "erreur")}"
+      -@fonction.situations.each do |situation|
+        -if situation.errors.any?
+          %ul
+            -situation.errors.full_messages.each do |msg|
+              %li= msg
   %header
     = fonction_form.submit 'Actualiser'
     \
@@ -18,7 +20,7 @@
     = fonction_form.fields_for :situations,situation do |situation_form|
       %article{:id => [situation.titre]}
         %h3#situation Impacts sur les coûts de fonctionnement dans la situation #{situation.titre}
-        = fonction_form.hidden_field :somme_pourcent
+        = situation_form.hidden_field :somme_pourcent
         %table#cadre_com
           %th#repart
             %article#cadre
@@ -33,8 +35,8 @@
                     %td.repart= repart_form.number_field :pourcent, :size => 1
           %th#commentaire
             %article#commentaire
-              Commentaires :
-              = situation_form.text_area :commentaires, :cols => 80, :rows => 5
+              = situation_form.label :commentaires, :class => "commentaire"
+              = situation_form.text_area :commentaires, :cols => 80, :rows => 6
       %br
       %br
       %article#detail

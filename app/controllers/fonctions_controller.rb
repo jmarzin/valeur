@@ -16,6 +16,7 @@ class FonctionsController < ApplicationController
   # GET /fonctions/1/edit
   def edit
     @etude = Etude.find(params[:id])
+    @rentabilite=@etude.lit_rentabilite
     @fonction=@etude.lit_fonction
   end
 
@@ -24,7 +25,8 @@ class FonctionsController < ApplicationController
   def update
     @etude = Etude.find(params[:id])
     respond_to do |format|
-      params[:fonction] = @etude.somme_pourcent(params[:fonction])
+      params[:fonction][:situations_attributes]["0"] = @etude.somme_pourcent(params[:fonction][:situations_attributes]["0"])
+      params[:fonction][:situations_attributes]["1"] = @etude.somme_pourcent(params[:fonction][:situations_attributes]["1"])
       if @etude.etude_rentabilite.fonction.update_attributes(params[:fonction])
         if params[:commit] then
           @etude.simplifie_fonction

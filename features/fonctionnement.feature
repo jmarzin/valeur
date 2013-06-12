@@ -18,7 +18,7 @@ Fonctionnalité: saisie et modification des impacts sur les coûts de fonctionne
     Alors je me retrouve sur la page /fonctions/1
     Et je vois le texte Commentaires
     Et je vois le lien Modif dans la zone header
-@en_cours
+
   Scénario: Atteinte de l'écran de modification des impacts sur les coûts de fonctionnement
     Etant donné le projet Hélios dans la base
     Etant donné une étude complète au stade bilan non publiée sur le projet Hélios
@@ -28,13 +28,21 @@ Fonctionnalité: saisie et modification des impacts sur les coûts de fonctionne
     Alors je vois deux tableaux de répartition des cadres d'emplois 
     Et je vois deux tableaux des impacts détaillés
 
-  Scénario: Gestion d'une errueur de répartition des catégories de personnel
+  Scénario: Gestion d'une erreur de répartition des catégories de personnel situation actuelle
     Etant donné le projet Hélios dans la base
     Etant donné une étude complète au stade bilan non publiée sur le projet Hélios
-    Etant donné que je suis sur la page /indirects/1/edit
-    Quand je saisis 80 pour les cadres A et 10 pour les cadres B
+    Etant donné que je suis sur la page /fonctions/1/edit
+    Quand je saisis 80 pour les cadres A et 10 pour les cadres B dans la situation actuelle
     Quand dans la zone header je clique sur Actualiser
-    Alors je vois le texte La somme des contributions des catégories n'est pas égale à 100
+    Alors je vois le texte La somme des contributions des catégories n'est pas égale à 100 pour la situation actuelle
+@en_cours
+  Scénario: Gestion d'une erreur de répartition des catégories de personnel situation cible
+    Etant donné le projet Hélios dans la base
+    Etant donné une étude complète au stade bilan non publiée sur le projet Hélios
+    Etant donné que je suis sur la page /fonctions/1/edit
+    Quand je saisis 80 pour les cadres A et 10 pour les cadres B dans la situation cible
+    Quand dans la zone header je clique sur Actualiser
+    Alors je vois le texte La somme des contributions des catégories n'est pas égale à 100 pour la situation cible
 
   Scénario: Remplissage de l'écran et calcul des totaux
     Etant donné le projet Hélios dans la base

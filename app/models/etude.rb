@@ -57,6 +57,9 @@ class Etude
     params
   end
 
+  def simplifie_fonction
+  end
+
   def simplifie_indirect
     totaux_nature = Hash.new(0)
     totaux_annee = Hash.new

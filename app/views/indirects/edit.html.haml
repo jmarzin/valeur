@@ -4,7 +4,7 @@
 = form_for @indirect, :url => indirect_path(@etude) do |indir_form|
   - if @indirect.errors.any?
     #error_explanation
-      %h2= "#{pluralize(@indirect.errors.count, "error")} : cette étude n'a pas pu être enregistrée"
+      %h2= "#{pluralize(@indirect.errors.count, "erreur")}"
       %ul
         - @indirect.errors.full_messages.each do |msg|
           %li= msg

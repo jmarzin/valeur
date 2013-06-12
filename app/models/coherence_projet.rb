@@ -43,6 +43,10 @@ class CoherenceProjet < ActiveModel::Validator
       if rec.somme_pourcent != 100
         rec.errors[:base] << "La somme des contributions des catégories n'est pas égale à 100"
       end
+    elsif rec.class == Situation
+      if rec.somme_pourcent != 100
+        rec.errors[:base] << "La somme des contributions des catégories n'est pas égale à 100 pour la situation "+rec.titre
+      end
     end
   end
 end
