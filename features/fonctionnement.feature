@@ -35,7 +35,7 @@ Fonctionnalité: saisie et modification des impacts sur les coûts de fonctionne
     Quand je saisis 80 pour les cadres A et 10 pour les cadres B dans la situation actuelle
     Quand dans la zone header je clique sur Actualiser
     Alors je vois le texte La somme des contributions des catégories n'est pas égale à 100 pour la situation actuelle
-@en_cours
+
   Scénario: Gestion d'une erreur de répartition des catégories de personnel situation cible
     Etant donné le projet Hélios dans la base
     Etant donné une étude complète au stade bilan non publiée sur le projet Hélios
@@ -43,14 +43,14 @@ Fonctionnalité: saisie et modification des impacts sur les coûts de fonctionne
     Quand je saisis 80 pour les cadres A et 10 pour les cadres B dans la situation cible
     Quand dans la zone header je clique sur Actualiser
     Alors je vois le texte La somme des contributions des catégories n'est pas égale à 100 pour la situation cible
-
+@en_cours
   Scénario: Remplissage de l'écran et calcul des totaux
     Etant donné le projet Hélios dans la base
     Etant donné une étude complète au stade bilan non publiée sur le projet Hélios
-    Etant donné que je suis sur la page /indirects/1/edit
-    Quand je remplis le tableau des coûts indirects détaillés
+    Etant donné que je suis sur la page /fonctions/1/edit
+    Quand je remplis le tableau des impacts sur les coûts de fonctionnement
     Quand dans la zone header je clique sur Actualiser
-    Alors je vois les cumuls indirects calculés
+    Alors je vois les cumuls impacts calculés
 
   Scénario: Saisie d'un commentaire et validation de la saisie
     Etant donné le projet Hélios dans la base

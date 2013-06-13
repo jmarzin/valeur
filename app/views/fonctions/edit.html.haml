@@ -53,9 +53,9 @@
           -situation.details.each do |detail|
             = situation_form.fields_for :details,detail do |detail_form|
               %tr{:id => [i]}
-                %td= situation_form.submit 'Sup', :class => 'action', :name => "s#{i}"
-                %td= situation_form.submit 'Ins^', :class => 'action', :name => "h#{i}"
-                %td= situation_form.submit 'Insv', :class => 'action', :name => "b#{i}"
+                %td= situation_form.submit 'Sup', :class => 'action', :name => "s#{situation.titre}#{i}"
+                %td= situation_form.submit 'Ins^', :class => 'action', :name => "h#{situation.titre}#{i}"
+                %td= situation_form.submit 'Insv', :class => 'action', :name => "b#{situation.titre}#{i}"
                 %td.description= detail_form.text_field :description,:size => 20
                 %td.nature= detail_form.select :nature,Etude.liste_natures_fonctions.keys,:size => 10
                 %td.unite=detail.unite

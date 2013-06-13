@@ -15,17 +15,27 @@ class Etude
 
   def insere_detail(ins,objet)
     if ins[0] == 'h' then dec = 1 else dec = 0 end
-    i = ins.delete(ins[0]).to_i - dec
-    j = objet.details.count
-    objet.details << Detail.new
-    self.liste_annees.each { |annee| objet.details[-1].montants << Montant.new(annee: annee) }
+    if ins =~ /.actuelle(\d+)/ then
+      is = $1
+      obj = objet.situations[0]
+    elsif ins =~ /.cible(\d+)/ then
+      is = $1
+      obj = objet.situations[1]
+    else
+      obj = objet
+      is = ins.delete(ins[0])
+    end
+    i = is.to_i - dec
+    j = obj.details.count
+    obj.details << Detail.new
+    self.liste_annees.each { |annee| obj.details[-1].montants << Montant.new(annee: annee) }
     while j != i
-      objet.details[j].description,objet.details[j-1].description = objet.details[j-1].description,objet.details[j].description
-      objet.details[j].nature,objet.details[j-1].nature = objet.details[j-1].nature,objet.details[j].nature
-      objet.details[j].total,objet.details[j-1].total = objet.details[j-1].total,objet.details[j].total
+      obj.details[j].description,obj.details[j-1].description = obj.details[j-1].description,obj.details[j].description
+      obj.details[j].nature,obj.details[j-1].nature = obj.details[j-1].nature,obj.details[j].nature
+      obj.details[j].total,obj.details[j-1].total = obj.details[j-1].total,obj.details[j].total
       self.liste_annees.each_index do |ind|
-        objet.details[j].montants[ind].montant,objet.details[j-1].montants[ind].montant = \
-          objet.details[j-1].montants[ind].montant,objet.details[j].montants[ind].montant
+        obj.details[j].montants[ind].montant,obj.details[j-1].montants[ind].montant = \
+          obj.details[j-1].montants[ind].montant,obj.details[j].montants[ind].montant
       end
       j -= 1
     end
@@ -34,13 +44,29 @@ class Etude
   end
 
   def supprime_detail(sup,objet)
-    i = sup.delete(sup[0]).to_i - 1
-    objet.details.delete(objet.details[i])
+    if sup =~ /.actuelle(\d+)/ then
+      is = $1
+      obj = objet.situations[0]
+    elsif sup =~ /.cible(\d+)/ then
+      is = $1
+      obj = objet.situations[1]
+    else
+      obj = objet
+      is = sup.delete(sup[0])
+    end
+    i = is.to_i - 1
+    obj.details.delete(obj.details[i])
     objet
   end
 
   def traite_touche(params)
-    if params[:indirect] then objet = self.etude_rentabilite.indirect else objet = self.etude_rentabilite.direct end
+    if params[:indirect] then 
+      objet = self.etude_rentabilite.indirect
+    elsif params[:direct] then
+      objet = self.etude_rentabilite.direct
+    else
+      objet = self.etude_rentabilite.fonction
+    end
     ins = params.key('Ins^')
     return self.insere_detail(ins,objet) if ins
     ins = params.key('Insv')
