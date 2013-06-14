@@ -15,10 +15,10 @@ class Etude
 
   def insere_detail(ins,objet)
     if ins[0] == 'h' then dec = 1 else dec = 0 end
-    if ins =~ /.actuelle(\d+)/ then
+    if ins =~ /actuelle(\d+)/ then
       is = $1
       obj = objet.situations[0]
-    elsif ins =~ /.cible(\d+)/ then
+    elsif ins =~ /cible(\d+)/ then
       is = $1
       obj = objet.situations[1]
     else
@@ -84,6 +84,82 @@ class Etude
   end
 
   def simplifie_fonction
+    self.etude_rentabilite.fonction.situations.each do |situation|
+      totaux_annee = Hash.new(0)
+      totaux_annee[:ETP] = Hash.new(0)
+      totaux_annee[:k€] = Hash.new(0)
+      situation.details.where(description: "").destroy_all
+      situation.details.where(nature: "").destroy_all
+      situation.total = 0
+      situation.details.each do |detail|
+        detail.unite = Etude.liste_natures_fonctions[detail.nature]
+        detail.total = 0
+        detail.montants.where(montant: 0).destroy_all
+        detail.montants.where(montant: nil).destroy_all
+        detail.montants.each do |mt|
+          detail.total += mt.montant
+          totaux_annee[detail.unite][mt.annee] += mt.montant
+        end
+        situation.total += detail.total
+      end
+      situation.calculees[0].total = 0
+      situation.calculees[0].montants.each do |mt|
+        mt.montant = totaux_annee[:ETP][mt.annee]
+        situation.calculees[0].total += mt.montant if mt.montant
+      end
+      situation.calculees[0].montants.each_index do |i|
+        mt = situation.calculees[0].montants[i]
+        if mt.montant && mt.montant == 0
+          situation.calculees[1].montants[i].montant = 0
+        else
+          cout_moyen = 0
+          situation.repartitions.each do |repart|
+            if repart.pourcent && repart.pourcent != 0
+              cadre = self.etude_rentabilite.cadres.where(cadre: repart.cadre).first
+              cout_moyen += repart.pourcent * cadre.cout_annuels.where(:annee => mt.annee.match(/(\d+)/)[1]).first.montant
+            end
+          end
+          situation.calculees[1].montants[i].montant = cout_moyen/100
+        end
+      end
+      situation.calculees[2].total = 0
+      situation.calculees[0].montants.each_index do |i|
+        if situation.calculees[0].montants[i].montant != 0
+          situation.calculees[2].montants[i].montant = situation.calculees[0].montants[i].montant * \
+                                                       situation.calculees[1].montants[i].montant
+          situation.calculees[2].total += situation.calculees[2].montants[i].montant
+        else
+          situation.calculees[2].montants[i].montant = 0
+        end
+      end
+      situation.calculees[3].total = 0
+      situation.calculees[3].montants.each do |mt|
+        mt.montant = totaux_annee[:k€][mt.annee]
+        situation.calculees[3].total += mt.montant if mt.montant 
+      end
+      situation.calculees[4].total = 0
+      situation.calculees[2].montants.each_index do |i|
+        situation.calculees[4].montants[i].montant = situation.calculees[2].montants[i].montant
+        situation.calculees[4].total += situation.calculees[2].montants[i].montant
+        situation.calculees[4].montants[i].montant += situation.calculees[3].montants[i].montant
+        situation.calculees[4].total += situation.calculees[3].montants[i].montant
+      end
+    end
+    self.etude_rentabilite.fonction.calculees[0].total = 0
+    self.etude_rentabilite.fonction.situations[0].calculees[4].montants.each_index do |i|
+      self.etude_rentabilite.fonction.calculees[0].montants[i].montant = self.etude_rentabilite.fonction.situations[1].calculees[4].montants[i].montant - \
+                                                                         self.etude_rentabilite.fonction.situations[0].calculees[4].montants[i].montant
+      self.etude_rentabilite.fonction.calculees[0].total += self.etude_rentabilite.fonction.calculees[0].montants[i].montant
+    end
+    self.etude_rentabilite.fonction.situations.each do |situation|
+      situation.calculees.each do  |calc|
+        calc.montants.where(montant: 0).destroy_all
+        calc.montants.where(montant: nil).destroy_all
+      end
+    end
+    self.etude_rentabilite.fonction.calculees[0].montants.where(montant: 0).destroy_all
+    self.etude_rentabilite.fonction.calculees[0].montants.where(montant: 0).destroy_all
+    self.etude_rentabilite.fonction.save
   end
 
   def simplifie_indirect
@@ -121,7 +197,7 @@ class Etude
         self.etude_rentabilite.indirect.repartitions.each do |repart|
           if repart.pourcent && repart.pourcent != 0
             cadre = self.etude_rentabilite.cadres.where(cadre: repart.cadre).first
-            cout_moyen += repart.pourcent * cadre.cout_annuels.where(:annee => mt.annee).first.montant
+            cout_moyen += repart.pourcent * cadre.cout_annuels.where(:annee => mt.annee.match(/(\d+)/)[1]).first.montant
           end
         end
         self.etude_rentabilite.indirect.calculees[1].montants[i].montant = cout_moyen/100
@@ -266,22 +342,26 @@ class Etude
       base = self.etude_rentabilite.direct
     elsif cas == 'fonction_actuelle' then
       base = self.etude_rentabilite.fonction.situations[0]
-    else
+    elsif cas == 'fonction_cible' then
       base = self.etude_rentabilite.fonction.situations[1]
+    else
+      base = self.etude_rentabilite.fonction
     end
 #
 # préparation du tableau des montants par annee
 #
-    if base.details.count == 0 then base.details << Detail.new end
-    base.details.each do |detail|
-      mts = detail.montants.clone
-      detail.montants = nil
-      self.liste_annees.each do |annee|
-        if mts[0] && mts[0].annee == annee
-          detail.montants << Montant.new(annee: annee,montant: mts[0].montant)
-          mts.delete_at(0)
-        else
-          detail.montants << Montant.new(annee: annee)
+    if base.respond_to?(:details)
+      if base.details.count == 0 then base.details << Detail.new end
+      base.details.each do |detail|
+        mts = detail.montants.clone
+        detail.montants = nil
+        self.liste_annees.each do |annee|
+          if mts[0] && mts[0].annee == annee
+            detail.montants << Montant.new(annee: annee,montant: mts[0].montant)
+            mts.delete_at(0)
+          else
+            detail.montants << Montant.new(annee: annee)
+          end
         end
       end
     end
@@ -306,6 +386,7 @@ class Etude
   def lit_fonction
     self.etude_rentabilite.fonction.situations[0] = self.lit_direct_indirect('fonction_actuelle')
     self.etude_rentabilite.fonction.situations[1] = self.lit_direct_indirect('fonction_cible')
+    self.etude_rentabilite.fonction = self.lit_direct_indirect('fonction')
     self.etude_rentabilite.fonction
   end
         
