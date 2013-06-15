@@ -319,11 +319,11 @@ class Etude
         self.etude_rentabilite.cadres.each do |cadre|
           situation.repartitions << Repartition.new(cadre: cadre.cadre, pourcent: cadre.defaut)
         end
-        situation.calculees << Calculee.new(description: 'Coûts indirects existant exprimés en ETP', unite: 'ETP')\
+        situation.calculees << Calculee.new(description: 'Coûts indirects exprimés en ETP', unite: 'ETP')\
                             << Calculee.new(description: 'Coût complet moyen du personnel', unite: 'k€/ETP')\
-                            << Calculee.new(description: 'Coûts indirects existant exprimés en ETP valorisés', unite: 'k€')\
-                            << Calculee.new(description: 'Coûts indirects  existant exprimés en k€', unite: 'k€')\
-                            << Calculee.new(description: 'TOTAL COÛTS INDIRECTS  EXISTANT', unite: 'k€')
+                            << Calculee.new(description: 'Coûts indirects exprimés en ETP valorisés', unite: 'k€')\
+                            << Calculee.new(description: 'Coûts indirects exprimés en k€', unite: 'k€')\
+                            << Calculee.new(description: 'TOTAL COÛTS INDIRECTS', unite: 'k€')
       end
       self.etude_rentabilite.fonction.calculees << Calculee.new(description: 'IMPACTS SUR LES COÛTS DE FONCTIONNEMENT SI', unite: 'k€')
     end

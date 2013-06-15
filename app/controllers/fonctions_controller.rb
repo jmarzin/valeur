@@ -13,18 +13,19 @@ class FonctionsController < ApplicationController
       code = params.key('Ins^') if not code
       code = params.key('Sup') if not code
       m = /^(.)(\D*)(\d+)/.match(code)
+      ligne = m[3]
       if m[1] == 's' then
         if m[2] == 'actuelle' then
-          if m[3].to_i == @etude.etude_rentabilite.fonction.situations[0].details.count then
-            m[3] = m[3].prec
+          if ligne.to_i == @etude.etude_rentabilite.fonction.situations[0].details.count then
+            ligne = (ligne.to_i - 1).to_s
           end
-        elsif m[3].to_i == @etude.etude_rentabilite.fonction.situations[1].details.count then
-          m[3] =  (m[3].to_i - 1).to_s
+        elsif ligne.to_i == @etude.etude_rentabilite.fonction.situations[1].details.count then
+          ligne =  (ligne.to_i - 1).to_s
         end
       elsif m[1] == 'b' then
-        m[3] = m[3].succ
+        ligne = ligne.succ
       end
-      valeur = m[2]+m[3]
+      valeur = m[2]+ligne
     end
   end
   private :autofocus
