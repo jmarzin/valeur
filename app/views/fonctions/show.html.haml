@@ -38,31 +38,46 @@
           %th.totaux --Totaux-- 
           -situation.calculees[4].montants.each do |mt|
             %th=mt.annee
-            -situation.details.each do |det|
-              %tr
-                %td.description= det.description
-                %td.nature=det.nature
-                %td.unite=det.unite
-                %td.totaux.montant=number_with_precision(det.total,options =  {delimiter: " ", precision: 0})
-                -i = 0
-                -situation.calculees[4].montants.each do |calc|
-                  -if det.montants[i] && det.montants[i].annee == calc.annee then
-                    %td.montant=number_with_precision(det.montants[i].montant, options = {delimiter: " ", precision: 0})
-                    -i += 1
-                  -else
-                    %td
-            -situation.calculees.each do |calc|
-              %tr.totaux
-                %td.description{:colspan => 2}= calc.description
-                %td.unite=calc.unite
-                %td.montant=number_with_precision(calc.total, options =  {delimiter: " ", precision: 0})
-                -i = 0
-                -situation.calculees[4].montants.each do |col|
-                  -if calc.montants[i] && calc.montants[i].annee == col.annee then
-                    %td.montant= number_with_precision(calc.montants[i].montant, options =  {delimiter: " ", precision: 0})
-                    -i += 1
-                  -else
-                    %td
+        -situation.details.each do |det|
+          %tr
+            %td.description= det.description
+            %td.nature=det.nature
+            %td.unite=det.unite
+            %td.totaux.montant=number_with_precision(det.total,options =  {delimiter: " ", precision: 0})
+            -i = 0
+            -situation.calculees[4].montants.each do |calc|
+              -if det.montants[i] && det.montants[i].annee == calc.annee then
+                %td.montant=number_with_precision(det.montants[i].montant, options = {delimiter: " ", precision: 0})
+                -i += 1
+              -else
+                %td
+        -situation.calculees.each do |calc|
+          %tr.totaux
+            %td.description{:colspan => 2}= calc.description
+            %td.unite=calc.unite
+            %td.montant=number_with_precision(calc.total, options =  {delimiter: " ", precision: 0})
+            -i = 0
+            -situation.calculees[4].montants.each do |col|
+              -if calc.montants[i] && calc.montants[i].annee == col.annee then
+                %td.montant= number_with_precision(calc.montants[i].montant, options =  {delimiter: " ", precision: 0})
+                -i += 1
+              -else
+                %td
+        -if situation.titre == 'cible'
+          %tr
+          %tr
+          -@etude.etude_rentabilite.fonction.calculees.each do |calc|
+            %tr.totaux
+              %td.description{:colspan => 2}= calc.description
+              %td.unite=calc.unite
+              %td.montant=number_with_precision(calc.total, options =  {delimiter: " ", precision: 0})
+              -i = 0
+              -@etude.etude_rentabilite.fonction.calculees[0].montants.each do |col|
+                -if calc.montants[i] && calc.montants[i].annee == col.annee then
+                  %td.montant= number_with_precision(calc.montants[i].montant, options =  {delimiter: " ", precision: 0})
+                  -i += 1
+                -else
+                  %td
 %br
 %br
 %footer

@@ -14,18 +14,16 @@ require 'mareva'
 class Etude
 
   def insere_detail(ins,objet)
-    if ins[0] == 'h' then dec = 1 else dec = 0 end
-    if ins =~ /actuelle(\d+)/ then
-      is = $1
+    m = /^(.)(\D*)(\d+)/.match(ins)
+    if m[1] == 'h' then dec = 1 else dec = 0 end
+    if m[2] == 'actuelle'
       obj = objet.situations[0]
-    elsif ins =~ /cible(\d+)/ then
-      is = $1
+    elsif m[2] == 'cible' then
       obj = objet.situations[1]
     else
       obj = objet
-      is = ins.delete(ins[0])
     end
-    i = is.to_i - dec
+    i = m[3].to_i - dec
     j = obj.details.count
     obj.details << Detail.new
     self.liste_annees.each { |annee| obj.details[-1].montants << Montant.new(annee: annee) }
@@ -44,17 +42,15 @@ class Etude
   end
 
   def supprime_detail(sup,objet)
-    if sup =~ /.actuelle(\d+)/ then
-      is = $1
+    m = /^(.)(\D*)(\d+)/.match(sup)
+    if m[2] == 'actuelle' then
       obj = objet.situations[0]
-    elsif sup =~ /.cible(\d+)/ then
-      is = $1
+    elsif m[2] == 'cible' then
       obj = objet.situations[1]
     else
       obj = objet
-      is = sup.delete(sup[0])
     end
-    i = is.to_i - 1
+    i = m[3].to_i - 1
     obj.details.delete(obj.details[i])
     objet
   end

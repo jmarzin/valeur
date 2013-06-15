@@ -11,7 +11,7 @@
             -situation.errors.full_messages.each do |msg|
               %li= msg
   %header
-    = fonction_form.submit 'Actualiser'
+    = fonction_form.submit 'Actualiser', :autofocus => @auto == 'Actualiser'
     \
     = fonction_form.submit 'Enregistrer'
   %br
@@ -56,7 +56,7 @@
                 %td= situation_form.submit 'Sup', :class => 'action', :name => "s#{situation.titre}#{i}"
                 %td= situation_form.submit 'Ins^', :class => 'action', :name => "h#{situation.titre}#{i}"
                 %td= situation_form.submit 'Insv', :class => 'action', :name => "b#{situation.titre}#{i}"
-                %td.description= detail_form.text_field :description,:size => 20
+                %td.description= detail_form.text_field :description,:size => 20, :autofocus => (@auto == situation.titre+i.to_s)
                 %td.nature= detail_form.select :nature,Etude.liste_natures_fonctions.keys,:size => 10
                 %td.unite=detail.unite
                 %td.totaux.montant= number_with_precision(detail.total, options =  {delimiter: " ", precision: 0}) unless detail.total == 0
@@ -92,6 +92,6 @@
   %br
   %br
   %footer
-    = fonction_form.submit 'Actualiser'
+    = fonction_form.submit 'actualiser', :autofocus => @auto == 'actualiser'
     \
-    = fonction_form.submit 'Enregistrer'
+    = fonction_form.submit 'enregistrer'
