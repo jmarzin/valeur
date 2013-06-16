@@ -25,8 +25,8 @@ Fonctionnalité: saisie et modification des impacts sur les coûts de fonctionne
     Etant donné que je suis sur la page /fonctions/1
     Quand dans la zone header je suis le lien Modif
     Alors je me retrouve sur la page /fonctions/1/edit
-    Alors je vois deux tableaux de répartition des cadres d'emplois 
-    Et je vois deux tableaux des impacts détaillés
+    Alors je vois 2 tableaux de répartition des cadres d'emplois 
+    Et je vois 2 tableaux des coûts détaillés
 
   Scénario: Gestion d'une erreur de répartition des catégories de personnel situation actuelle
     Etant donné le projet Hélios dans la base

@@ -4,7 +4,9 @@
 = form_for @fonction, :url => fonction_path(@etude) do |fonction_form|
   - if @fonction.errors.any?
     #error_explanation
-      %h2= "#{pluralize(@fonction.errors.count, "erreur")}"
+      -nb_erreur = 0
+      -@fonction.situations.each { |s| nb_erreur += s.errors.count }
+      %h2= "#{pluralize(nb_erreur, "erreur")}"
       -@fonction.situations.each do |situation|
         -if situation.errors.any?
           %ul

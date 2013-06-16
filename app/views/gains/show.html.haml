@@ -9,7 +9,7 @@
   = link_to 'Etude', projet_etude_path(@etude.projet, @etude)
 %br
 %br
-%table#cadre_com
+%table#cadre_com1
   %th#repart
     %article#cadre
       %table#cadre
@@ -22,7 +22,7 @@
             %td=etp.titre
             -etp.repartitions.each do |repart|
               %td.repart=repart.pourcent
-  %th#commentaire
+  %th#commentaire1
     %article#commentaire
       Commentaires :
       =@etude.etude_rentabilite.gain.commentaires

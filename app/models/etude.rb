@@ -60,8 +60,10 @@ class Etude
       objet = self.etude_rentabilite.indirect
     elsif params[:direct] then
       objet = self.etude_rentabilite.direct
-    else
+    elsif params[:fonction] then
       objet = self.etude_rentabilite.fonction
+    else
+      objet = self.etude_rentabilite.gain
     end
     ins = params.key('Ins^')
     return self.insere_detail(ins,objet) if ins
@@ -156,6 +158,58 @@ class Etude
     self.etude_rentabilite.fonction.calculees[0].montants.where(montant: 0).destroy_all
     self.etude_rentabilite.fonction.calculees[0].montants.where(montant: 0).destroy_all
     self.etude_rentabilite.fonction.save
+  end
+
+  def simplifie_gain
+    totaux_unite_annee = Hash.new
+    totaux_annee = Hash.new(0)
+    self.etude_rentabilite.gain.total = 0
+    self.etude_rentabilite.gain.details.where(description: "").destroy_all
+    self.etude_rentabilite.gain.details.where(nom: "").destroy_all
+    self.etude_rentabilite.gain.details.where(nature: "").destroy_all
+    self.etude_rentabilite.gain.details.each do |detail|
+      detail.unite = 'k€' if detail.unite == ""
+      totaux_unite_annee[detail.unite] = Hash.new(0)
+      detail.total = 0
+      detail.montants.where(montant: 0).destroy_all
+      detail.montants.where(montant: nil).destroy_all
+      detail.montants.each do |mt|
+        detail.total += mt.montant
+        totaux_unite_annee[detail.unite][mt.annee] += mt.montant
+        totaux_annee[mt.annee] += mt.montant
+      end
+      self.etude_rentabilite.gain.total += detail.total
+    end
+
+    self.etude_rentabilite.gain.etp_reparts.each_index do |index|
+      cle = self.etude_rentabilite.gain.etp_reparts[index].titre.to_sym
+      if totaux_unite_annee[cle] then
+        self.etude_rentabilite.gain.calculees[index].total = 0.01
+        self.etude_rentabilite.gain.calculees[index].montants.each_index do |i_mt|
+          mt = self.etude_rentabilite.gain.calculees[index].montants[i_mt]
+          if totaux_unite_annee[cle][mt.annee] != 0 then
+            cout_moyen = 0
+            self.etude_rentabilite.gain.etp_reparts[index].repartitions.each do |repart|
+              if repart.pourcent && repart.pourcent != 0
+                cadre = self.etude_rentabilite.cadres.where(cadre: repart.cadre).first
+                cout_moyen += repart.pourcent * cadre.cout_annuels.where(:annee => mt.annee.match(/(\d+)/)[1]).first.montant
+              end
+            end
+            self.etude_rentabilite.gain.calculees[index].montants[i_mt].montant = cout_moyen/100            
+          else
+            self.etude_rentabilite.gain.calculees[index].montants[i_mt].montant = 0
+          end
+        end
+      else
+        self.etude_rentabilite.gain.calculees[index].total = 0
+        self.etude_rentabilite.gain.calculees[index].montants.each { |mt| mt.montant = 0 }
+      end
+    end
+    self.etude_rentabilite.gain.calculees.each do  |calc|
+      calc.montants.where(montant: 0).destroy_all
+      calc.montants.where(montant: nil).destroy_all
+    end
+    self.etude_rentabilite.gain.save
   end
 
   def simplifie_indirect
@@ -349,8 +403,8 @@ class Etude
         end
       end
       (1..5).each {|i| self.etude_rentabilite.gain.calculees << Calculee.new(description: "Coût complet moyen du personnel modèle ETP#{i}", unite: 'k€/ETP')}
-      Etude.liste_familles_gain.each { |famille| self.etude_rentabilite.gain.calculees << Calculee.new(description: famille) if famille != ''}
-      self.etude_rentabilite.gain.calculees << Calculee.new(description: 'TOTAL IMPACTS METIERS ANNUELS', unite:'k€')
+      Etude.liste_familles_gain.each { |famille| self.etude_rentabilite.gain.calculees << Calculee.new(description: famille, unite: 'k€') if famille != ''}
+      self.etude_rentabilite.gain.calculees << Calculee.new(description: 'TOTAL IMPACTS METIERS ANNUELS', unite: 'k€')
     end
     self.etude_rentabilite
   end
@@ -365,8 +419,10 @@ class Etude
       base = self.etude_rentabilite.fonction.situations[0]
     elsif cas == 'fonction_cible' then
       base = self.etude_rentabilite.fonction.situations[1]
-    else
+    elsif cas == 'fonction' then
       base = self.etude_rentabilite.fonction
+    else
+      base = self.etude_rentabilite.gain
     end
 #
 # préparation du tableau des montants par annee

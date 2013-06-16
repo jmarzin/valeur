@@ -1,0 +1,86 @@
+%p#notice= notice
+
+%h2 Saisie/modification des gains sur les dépenses métier de l'étude  #{@etude._id} du projet #{@etude.projet.nom}
+= form_for @gain, :url => gain_path(@etude) do |gain_form|
+  - if @gain.errors.any?
+    #error_explanation
+      -nb_erreur = 0
+      -@gain.etp_reparts.each { |e| nb_erreur += e.errors.count }
+      %h2= "#{pluralize(nb_erreur, "erreur")}"
+      -@gain.etp_reparts.each do |etp_repart|
+        -if etp_repart.errors.any?
+          %ul
+            -etp_repart.errors.full_messages.each do |msg|
+              %li= msg
+  %header
+    = gain_form.submit 'Actualiser', :autofocus => @auto == 'Actualiser'
+    \
+    = gain_form.submit 'Enregistrer'
+  %table#cadre_com1
+    %th#repart
+      %article#cadre
+        %table#cadre
+          %tr
+            %th.modele Modèle de répartition
+            -@gain.etp_reparts[0].repartitions.each do |repart|
+              %th.categorie=repart.cadre 
+          -@gain.etp_reparts.each do |etp_repart|
+            = gain_form.fields_for :etp_reparts,etp_repart do |etp_form|
+              %tr
+                %td.modele= etp_repart.titre
+                =etp_form.hidden_field :somme_pourcent
+                =etp_form.fields_for :repartitions do |repart_form|
+                  %td.repart= repart_form.number_field :pourcent, :size => 1
+    %th#commentaire1
+      %article#commentaire
+        = gain_form.label :commentaires, :class => "commentaire"
+        = gain_form.text_area :commentaires, :cols => 80, :rows => 8
+
+  %article#detail
+    %table#detail
+      %tr
+        %th{:colspan => 3} Actions
+        %th.nom{:rawspan => 2} Nom
+        %th.description{:rawspan => 2} Description de l'impact
+        %th.nature{:rawspan => 2} Famille d'impact
+        %th.unite{:rawspan => 2} Exprimé en
+        %th
+        %th.annees{:colspan => @etude.etude_rentabilite.gain.calculees[13].montants.count + 1} Impacts annuels (valeurs négatives si augmentation des coûts)
+      %tr
+        %td{:colspan => 7}
+        %td.totaux --Totaux--
+        - @etude.liste_annees.each do |annee|
+          %th=annee
+      -i=1
+      -@gain.details.each do |detail|
+        = gain_form.fields_for :details,detail do |detail_form|
+          %tr{:id => [i]}
+            %td= gain_form.submit 'Sup', :class => 'action', :name => "s#{i}"
+            %td= gain_form.submit 'Ins^', :class => 'action', :name => "h#{i}"
+            %td= gain_form.submit 'Insv', :class => 'action', :name => "b#{i}"
+            %td.nom= detail_form.text_field :nom, :size => 5
+            %td.description= detail_form.text_field :description,:size => 30
+            %td.nature= detail_form.select :nature,Etude.liste_familles_gain,:size => 5
+            %td.unite= detail_form.select :unite,Etude.liste_unites_gain,:size => 2
+            %td.totaux.montant= number_with_precision(detail.total, options =  {delimiter: " ", precision: 0}) unless detail.total == 0
+            -detail.montants.each do |montant|
+              = detail_form.fields_for :montants,montant do |montant_form|
+                %td.montant= montant_form.number_field :montant,:value => number_with_precision(montant.montant,options={precision: 0}), :size => 1
+          -i+=1
+      -@gain.calculees.each do |calc|
+        -if (calc.total && calc.total > 0.001) || calc.unite == :k€
+          %tr.totaux
+            %td.touche
+            %td.touche
+            %td.touche
+            %td.description{:colspan => 3}= calc.description
+            -if calc.unite == 'k€' then prec = 0 else prec = 1 end
+            %td.unite= calc.unite
+            %td.montant=number_with_precision(calc.total, options =  {delimiter: " ", precision: 0}) unless calc.total == nil || calc.total < 0.1
+            -calc.montants.each do |montant|
+              %td.montant= number_with_precision(montant.montant, options =  {delimiter: " ", precision: prec}) unless montant.montant == 0
+
+  %footer
+    = gain_form.submit 'actualiser', :autofocus => @auto == 'actualiser'
+    \
+    = gain_form.submit 'enregistrer'

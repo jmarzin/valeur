@@ -9,7 +9,7 @@ Fonctionnalité: saisie et modification des gains métier
     Quand je suis le lien Rentabilité
     Alors je me retrouve sur la page /rentabilites/1
     Et je vois le lien 0 dans la zone td#gain
-@en_cours
+
   Scénario: Atteinte de l'écran de consultation des gains métier
     Etant donné le projet Hélios dans la base
     Etant donné une étude complète au stade bilan non publiée sur le projet Hélios
@@ -19,38 +19,32 @@ Fonctionnalité: saisie et modification des gains métier
     Et je vois le texte Commentaires
     Et je vois le lien Modif dans la zone header
 
-  Scénario: Atteinte de l'écran de modification des impacts sur les coûts de fonctionnement
+  Scénario: Atteinte de l'écran de modification des gains métier
     Etant donné le projet Hélios dans la base
     Etant donné une étude complète au stade bilan non publiée sur le projet Hélios
-    Etant donné que je suis sur la page /fonctions/1
+    Etant donné que je suis sur la page /gains/1
     Quand dans la zone header je suis le lien Modif
-    Alors je me retrouve sur la page /fonctions/1/edit
-    Alors je vois deux tableaux de répartition des cadres d'emplois 
-    Et je vois deux tableaux des impacts détaillés
+    Alors je me retrouve sur la page /gains/1/edit
+    Alors je vois 1 tableau de répartition des cadres d'emplois 
+    Et je vois 1 tableau des coûts détaillés
 
-  Scénario: Gestion d'une erreur de répartition des catégories de personnel situation actuelle
+  Scénario: Gestion des erreurs de répartition des catégories de personnel
     Etant donné le projet Hélios dans la base
     Etant donné une étude complète au stade bilan non publiée sur le projet Hélios
-    Etant donné que je suis sur la page /fonctions/1/edit
-    Quand je saisis 80 pour les cadres A et 10 pour les cadres B dans la situation actuelle
+    Etant donné que je suis sur la page /gains/1/edit
+    Quand je saisis 80 pour les cadres A et 10 pour les cadres B pour ETP1
+    Quand je saisis 110 pour les cadres A+ pour ETP5
     Quand dans la zone header je clique sur Actualiser
-    Alors je vois le texte La somme des contributions des catégories n'est pas égale à 100 pour la situation actuelle
-
-  Scénario: Gestion d'une erreur de répartition des catégories de personnel situation cible
+    Alors je vois le texte La somme des contributions des catégories n'est pas égale à 100 pour le modèle ETP1
+    Et je vois le texte La somme des contributions des catégories n'est pas égale à 100 pour le modèle ETP5
+@en_cours
+  Scénario: Remplissage de l'écran des gains et calcul des totaux
     Etant donné le projet Hélios dans la base
     Etant donné une étude complète au stade bilan non publiée sur le projet Hélios
-    Etant donné que je suis sur la page /fonctions/1/edit
-    Quand je saisis 80 pour les cadres A et 10 pour les cadres B dans la situation cible
+    Etant donné que je suis sur la page /gains/1/edit
+    Quand je remplis le tableau des gains métier
     Quand dans la zone header je clique sur Actualiser
-    Alors je vois le texte La somme des contributions des catégories n'est pas égale à 100 pour la situation cible
-
-  Scénario: Remplissage de l'écran et calcul des totaux
-    Etant donné le projet Hélios dans la base
-    Etant donné une étude complète au stade bilan non publiée sur le projet Hélios
-    Etant donné que je suis sur la page /fonctions/1/edit
-    Quand je remplis le tableau des impacts sur les coûts de fonctionnement
-    Quand dans la zone header je clique sur Actualiser
-    Alors je vois les cumuls impacts calculés
+    Alors je vois les cumuls gains calculés
 
   Scénario: Saisie de commentaires et validation de la saisie
     Etant donné le projet Hélios dans la base
