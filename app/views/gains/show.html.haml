@@ -1,0 +1,78 @@
+%p#notice= notice
+
+%h2 Gains sur les dépenses métier de l'étude  #{@etude._id} du projet #{@etude.projet.nom}
+%header
+  = link_to 'Modif', edit_gain_path(@etude)
+  \|
+  = link_to 'Rentabilité', rentabilite_path(@etude)
+  \|
+  = link_to 'Etude', projet_etude_path(@etude.projet, @etude)
+%br
+%br
+%table#cadre_com
+  %th#repart
+    %article#cadre
+      %table#cadre
+        %tr
+          %th.modele Modèle de répartition
+          -@etude.etude_rentabilite.gain.etp_reparts[0].repartitions.each do |repart|
+            %th.categorie=repart.cadre 
+        -@etude.etude_rentabilite.gain.etp_reparts.each do |etp|
+          %tr
+            %td=etp.titre
+            -etp.repartitions.each do |repart|
+              %td.repart=repart.pourcent
+  %th#commentaire
+    %article#commentaire
+      Commentaires :
+      =@etude.etude_rentabilite.gain.commentaires
+%br
+%br
+%article#detail
+  %table#detail
+    %tr
+      %th.nom{:rawspan => 2} Nom
+      %th.description{:rawspan => 2} Description de l'impact
+      %th.nature{:rawspan => 2} Famille d'impact
+      %th.unite{:rawspan => 2} Exprimé en
+      %th.annees{:colspan => @etude.etude_rentabilite.gain.calculees[13].montants.count + 1} Impacts annuels
+    %tr
+      %th
+      %th
+      %th
+      %th
+      %th.totaux --Totaux-- 
+      -@etude.etude_rentabilite.gain.calculees[13].montants.each do |mt|
+        %th=mt.annee
+    -@etude.etude_rentabilite.gain.details.each do |det|
+      %tr
+        %td.nom= det.nom
+        %td.description= det.description
+        %td.nature=det.nature
+        %td.unite=det.unite
+        %td.totaux.montant=number_with_precision(det.total,options =  {delimiter: " ", precision: 0})
+        -i = 0
+        -@etude.etude_rentabilite.gain.calculees[13].montants.each do |calc|
+          -if det.montants[i] && det.montants[i].annee == calc.annee then
+            %td.montant=number_with_precision(det.montants[i].montant, options = {delimiter: " ", precision: 0})
+            -i += 1
+          -else
+            %td
+    -@etude.etude_rentabilite.gain.calculees.each do |calc|
+      %tr.totaux
+        %td.description{:colspan => 3}= calc.description
+        %td.unite=calc.unite
+        %td.montant=number_with_precision(calc.total, options =  {delimiter: " ", precision: 0})
+        -i = 0
+        -@etude.etude_rentabilite.gain.calculees[13].montants.each do |col|
+          -if calc.montants[i] && calc.montants[i].annee == col.annee then
+            %td.montant= number_with_precision(calc.montants[i].montant, options =  {delimiter: " ", precision: 0})
+            -i += 1
+          -else
+            %td
+%footer
+  = link_to 'Modif', edit_gain_path(@etude)
+  \|
+  = link_to 'Rentabilité', rentabilite_path(@etude)
+  \|
+  = link_to 'Etude', projet_etude_path(@etude.projet, @etude)

@@ -43,6 +43,7 @@ class Detail
   embedded_in :direct
   embedded_in :indirect
   embedded_in :situation
+  field :nom, type: String
   field :description, type: String
   field :nature, type: String
   field :unite, type: Symbol
@@ -131,6 +132,28 @@ class Fonction
   accepts_nested_attributes_for :situations,:calculees
 end
 
+class EtpRepart
+  include Mongoid::Document
+  include Mongoid::MultiParameterAttributes
+  validates_with(CoherenceProjet)
+  embedded_in :gain
+  field :titre, type: String
+  field :somme_pourcent, type: Integer
+  embeds_many :repartitions
+  accepts_nested_attributes_for :repartitions
+end
+
+class Gain
+  include Mongoid::Document
+  field :total, type: Float
+  field :commentaires, type: String
+  embedded_in :etude_rentabilite
+  embeds_many :etp_reparts
+  embeds_many :details
+  embeds_many :calculees
+  accepts_nested_attributes_for :etp_reparts,:details,:calculees
+end
+
 class CoutAnnuel
   include Mongoid::Document
   embedded_in :cadre
@@ -152,5 +175,6 @@ class EtudeRentabilite
   embeds_one :direct
   embeds_one :indirect
   embeds_one :fonction
+  embeds_one :gain
   embeds_many :cadres
 end

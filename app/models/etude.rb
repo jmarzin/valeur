@@ -275,6 +275,19 @@ class Etude
       'Externalisations' => 'k€', 'Abonnements' => 'k€', 'Autres' => 'k€'}
   end
 
+  def self.repart_defaut
+    [{"A" => 80,"B" => 20},{"A" => 80,"B" => 10,"C" => 10},{"B" => 100},{"C" => 100},{"A+" => 100}]
+  end
+
+  def self.liste_familles_gain
+    ['', 'Augmentation des recettes','Economies induites','Charge de travail','Dépenses additionnelles','Gain trésorerie',\
+     'Gain efficacité','Gain productivité','Autres gains']
+  end
+
+  def self.liste_unites_gain
+    ['','k€','ETP1','ETP2','ETP3','ETP4','ETP5']
+  end
+
   def lit_rentabilite
     if not self.etude_rentabilite
       param = Parametrage.where(code: 'Standard').first
@@ -326,6 +339,18 @@ class Etude
                             << Calculee.new(description: 'TOTAL COÛTS INDIRECTS', unite: 'k€')
       end
       self.etude_rentabilite.fonction.calculees << Calculee.new(description: 'IMPACTS SUR LES COÛTS DE FONCTIONNEMENT SI', unite: 'k€')
+    end
+    if not self.etude_rentabilite.gain then
+      self.etude_rentabilite.gain = Gain.new(total: 0)
+      (1..5).each do |i|
+        self.etude_rentabilite.gain.etp_reparts << EtpRepart.new(titre: "ETP#{i}", somme_pourcent: 100)
+        self.etude_rentabilite.cadres.each do |cadre|
+          self.etude_rentabilite.gain.etp_reparts[i-1].repartitions << Repartition.new(cadre: cadre.cadre, pourcent: Etude.repart_defaut[i-1][cadre.cadre])
+        end
+      end
+      (1..5).each {|i| self.etude_rentabilite.gain.calculees << Calculee.new(description: "Coût complet moyen du personnel modèle ETP#{i}", unite: 'k€/ETP')}
+      Etude.liste_familles_gain.each { |famille| self.etude_rentabilite.gain.calculees << Calculee.new(description: famille) if famille != ''}
+      self.etude_rentabilite.gain.calculees << Calculee.new(description: 'TOTAL IMPACTS METIERS ANNUELS', unite:'k€')
     end
     self.etude_rentabilite
   end

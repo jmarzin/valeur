@@ -10,6 +10,8 @@ Valeur::Application.routes.draw do
 
   resources :fonctions, only: [:show, :edit, :update]
 
+  resources :gains, only: [:show, :edit, :update]
+
   resources :detail, only: [:show]
 
   resources :parametrages
