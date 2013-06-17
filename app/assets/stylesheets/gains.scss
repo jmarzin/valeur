@@ -24,7 +24,7 @@ table#detail {
   th.annees {
     text-align: left;
   }
-  td.nature {
-    font-size: 75%;
-  }
+}
+article#detail {
+  overflow: auto;
 }

@@ -28,8 +28,10 @@ class Etude
     obj.details << Detail.new
     self.liste_annees.each { |annee| obj.details[-1].montants << Montant.new(annee: annee) }
     while j != i
+      obj.details[j].nom,obj.details[j-1].nom = obj.details[j-1].nom,obj.details[j].nom
       obj.details[j].description,obj.details[j-1].description = obj.details[j-1].description,obj.details[j].description
       obj.details[j].nature,obj.details[j-1].nature = obj.details[j-1].nature,obj.details[j].nature
+      obj.details[j].unite,obj.details[j-1].unite = obj.details[j-1].unite,obj.details[j].unite
       obj.details[j].total,obj.details[j-1].total = obj.details[j-1].total,obj.details[j].total
       self.liste_annees.each_index do |ind|
         obj.details[j].montants[ind].montant,obj.details[j-1].montants[ind].montant = \
@@ -149,6 +151,7 @@ class Etude
                                                                          self.etude_rentabilite.fonction.situations[0].calculees[4].montants[i].montant
       self.etude_rentabilite.fonction.calculees[0].total += self.etude_rentabilite.fonction.calculees[0].montants[i].montant
     end
+    self.etude_rentabilite.fonction.total = self.etude_rentabilite.fonction.calculees[0].total
     self.etude_rentabilite.fonction.situations.each do |situation|
       situation.calculees.each do  |calc|
         calc.montants.where(montant: 0).destroy_all
@@ -168,9 +171,9 @@ class Etude
     self.etude_rentabilite.gain.details.where(nature: "").destroy_all
     self.etude_rentabilite.gain.details.each do |detail|
       detail.unite = 'k€' if detail.unite == ""
-      totaux_unite_annee[detail.unite] = Hash.new(0)
-      totaux_nature_unite_annee[detail.nature] = Hash.new(0)
-      totaux_nature_unite_annee[detail.nature][detail.unite] = Hash.new(0)
+      totaux_unite_annee[detail.unite] = Hash.new(0) if not totaux_unite_annee.has_key?(detail.unite)
+      totaux_nature_unite_annee[detail.nature] = Hash.new(0) if not totaux_nature_unite_annee.has_key?(detail.nature)
+      totaux_nature_unite_annee[detail.nature][detail.unite] = Hash.new(0) if not totaux_nature_unite_annee[detail.nature].has_key?(detail.unite)
       detail.total = 0
       detail.montants.where(montant: 0).destroy_all
       detail.montants.where(montant: nil).destroy_all
@@ -213,7 +216,7 @@ class Etude
         self.etude_rentabilite.gain.calculees[index+4].montants.each { |mt| mt.montant = 0}
         if totaux_nature_unite_annee[famille] != 0
           totaux_nature_unite_annee[famille].each_pair do |unite,annees|
-            if unite == 'k€' then
+            if unite == :k€ then
               self.etude_rentabilite.gain.calculees[index+4].montants.each do |mt|
                 mt.montant += annees[mt.annee]
                 self.etude_rentabilite.gain.calculees[index+4].total += annees[mt.annee]

@@ -37,7 +37,7 @@ Fonctionnalité: saisie et modification des gains métier
     Quand dans la zone header je clique sur Actualiser
     Alors je vois le texte La somme des contributions des catégories n'est pas égale à 100 pour le modèle ETP1
     Et je vois le texte La somme des contributions des catégories n'est pas égale à 100 pour le modèle ETP5
-@en_cours
+
   Scénario: Remplissage de l'écran des gains et calcul des totaux
     Etant donné le projet Hélios dans la base
     Etant donné une étude complète au stade bilan non publiée sur le projet Hélios
@@ -49,10 +49,9 @@ Fonctionnalité: saisie et modification des gains métier
   Scénario: Saisie de commentaires et validation de la saisie
     Etant donné le projet Hélios dans la base
     Etant donné une étude complète au stade bilan non publiée sur le projet Hélios
-    Etant donné que je suis sur la page /fonctions/1/edit
-    Quand je remplis le tableau des impacts sur les coûts de fonctionnement
-    Quand je saisis un commentaire pour la situation actuelle
-    Quand je saisis un commentaire pour la situation cible
+    Etant donné que je suis sur la page /gains/1/edit
+    Quand je remplis le tableau des gains métier
+    Quand je saisis un commentaire sur les gains
     Quand dans la zone header je clique sur Enregistrer
-    Alors je me retrouve sur la page /fonctions/1
-    Et je vois les commentaires au bon endroit
+    Alors je me retrouve sur la page /gains/1
+    Et je vois le commentaire sur les gains

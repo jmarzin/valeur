@@ -58,7 +58,7 @@
             %td= gain_form.submit 'Sup', :class => 'action', :name => "s#{i}"
             %td= gain_form.submit 'Ins^', :class => 'action', :name => "h#{i}"
             %td= gain_form.submit 'Insv', :class => 'action', :name => "b#{i}"
-            %td.nom= detail_form.text_field :nom, :size => 5
+            %td.nom= detail_form.text_field :nom, :size => 5, :autofocus => @auto == i.to_s
             %td.description= detail_form.text_field :description,:size => 30
             %td.nature= detail_form.select :nature,Etude.liste_familles_gain,:size => 5
             %td.unite= detail_form.select :unite,Etude.liste_unites_gain,:size => 2
