@@ -10,11 +10,14 @@ article#detail {
 }
 table#detail {
   width: auto;
+  .nom {
+    width: 5rem;
+  }
   .description {
-    width: 10rem;
+    width: 15rem;
   }
   .nature {
-    width: 5rem;
+    width: 10rem;
   }
   .montant {
     width: 5rem;
@@ -23,12 +26,13 @@ table#detail {
   .totaux {
     font-weight: bold;
     background: yellow;
+    width: 5rem;
     .touche {
     background: white;
     }
   }
   td.totaux {
-    width: 10em;
+    width: 5rem;
   }
   th.totaux {
     width: 10em;

@@ -31,17 +31,13 @@
 %article#detail
   %table#detail
     %tr
-      %th.nom{:rawspan => 2} Nom
-      %th.description{:rawspan => 2} Description de l'impact
-      %th.nature{:rawspan => 2} Famille d'impact
-      %th.unite{:rawspan => 2} Exprimé en
+      %th.nom{:rowspan => 2} Nom
+      %th.description{:rowspan => 2} Description de l'impact
+      %th.nature{:rowspan => 2} Famille d'impact
+      %th.unite{:rowspan => 2} Exprimé en
+      %th.totaux{:rowspan => 2} --Totaux--
       %th.annees{:colspan => @etude.etude_rentabilite.gain.calculees[13].montants.count + 1} Impacts annuels
     %tr
-      %th
-      %th
-      %th
-      %th
-      %th.totaux --Totaux-- 
       -@etude.etude_rentabilite.gain.calculees[13].montants.each do |mt|
         %th=mt.annee
     -@etude.etude_rentabilite.gain.details.each do |det|
