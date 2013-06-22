@@ -14,11 +14,7 @@ class GainsController < ApplicationController
       m = /^(.)(\D*)(\d+)/.match(code)
       ligne = m[3]
       if m[1] == 's' then
-        if m[2] == 'actuelle' then
-          if ligne.to_i == @etude.etude_rentabilite.gain.details.count then
-            ligne = (ligne.to_i - 1).to_s
-          end
-        elsif ligne.to_i == @etude.etude_rentabilite.gain.details.count then
+        if ligne.to_i == @etude.etude_rentabilite.gain.details.count then
           ligne =  (ligne.to_i - 1).to_s
         end
       elsif m[1] == 'b' then
@@ -56,6 +52,7 @@ class GainsController < ApplicationController
       ("0".."4").each { |i| params[:gain][:etp_reparts_attributes][i] = @etude.somme_pourcent(params[:gain][:etp_reparts_attributes][i]) }
       if @etude.etude_rentabilite.gain.update_attributes(params[:gain])
         if params[:commit] then
+          @etude.etude_rentabilite.a_calculer = true
           @etude.simplifie_gain
           flash[:notice] = "Les impacts sur les gains métier ont bien été mis à jour."
           if params[:commit].capitalize == 'Actualiser' then

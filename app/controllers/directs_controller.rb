@@ -26,6 +26,7 @@ class DirectsController < ApplicationController
     respond_to do |format|
       if @etude.etude_rentabilite.direct.update_attributes(params[:direct])
         if params[:commit] then
+          @etude.etude_rentabilite.a_calculer = true
           @etude.simplifie_direct
           flash[:notice] = "Les coûts directs ont bien été mis à jour."
           if params[:commit] == 'Actualiser' then

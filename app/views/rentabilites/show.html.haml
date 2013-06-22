@@ -11,10 +11,42 @@
     %th.titre Coûts directs
     %th.titre Coûts indirects
   %tr
-    %td#direct= link_to number_with_precision(@etude.etude_rentabilite.direct.total, options = {delimiter: " ", precision: 0}), direct_path(@etude)
-    %td#indirect= link_to number_with_precision(@etude.etude_rentabilite.indirect.total, options = {delimiter: " ",precision: 0}), indirect_path(@etude)
-    %td#fonction= link_to number_with_precision(@etude.etude_rentabilite.fonction.total, options = {delimiter: " ",precision: 0}), fonction_path(@etude)
-    %td#gain= link_to number_with_precision(@etude.etude_rentabilite.gain.total, option = {delimiter: " ",precision: 0}), gain_path(@etude)
-%br
-%br
+    %td#direct= link_to number_with_precision(@rentabilite.direct.total, options = {delimiter: " ", precision: 0}), direct_path(@etude)
+    %td#indirect= link_to number_with_precision(@rentabilite.indirect.total, options = {delimiter: " ",precision: 0}), indirect_path(@etude)
+    %td#fonction= link_to number_with_precision(@rentabilite.fonction.total, options = {delimiter: " ",precision: 0}), fonction_path(@etude)
+    %td#gain= link_to number_with_precision(@rentabilite.gain.total, option = {delimiter: " ",precision: 0}), gain_path(@etude)
+
+%table#synthese
+  %tr#titres
+    %th.description
+    -@etude.liste_annees.each do |annee|
+      %th=annee
+  %tr#l_0
+    -if @rentabilite.direct && @rentabilite.direct.calculees[0]
+      %td.description=@rentabilite.direct.calculees[0].description
+      =render :partial => "ligne", :object => @rentabilite.direct.calculees[0].montants, :locals => { :annees => @etude.liste_annees , :signe => '-' }
+
+
+-# -self.etude_rentabilite.direct.calculees[0]
+-# -self.etude_rentabilite.indirect.calculees[4]
+-#  somme des deux self.etude_rentabilite.calculees[0]
+-#  somme des deux actualisée self.etude_rentabilite.calculees[1]
+-#  self.etude_rentabilite.gain.calculees[5]
+-#  self.etude_rentabilite.gain.calculees[6]
+-#  self.etude_rentabilite.gain.calculees[7]
+-#  self.etude_rentabilite.gain.calculees[8]
+-#  self.etude_rentabilite.gain.calculees[9]
+-#  self.etude_rentabilite.gain.calculees[10]
+-#  self.etude_rentabilite.gain.calculees[11]
+-#  self.etude_rentabilite.gain.calculees[12]
+-#  self.etude_rentabilite.gain.calculees[13]
+-#  self.etude_rentabilite.gain.calculees[13] actualisée self.etude_rentabilite.calculees[2]
+-#  -self.etude_rentabilite.fonction.situations[1].calculees[4]
+-#  -self.etude_rentabilite.fonction.situations[0].calculees[4]
+-#  -self.etude_rentabilite.fonction.calculees[0]
+-#  self.etude_rentabilite.fonction.calculees[0] actualisée self.etude_rentabilite.calculees[3]
+-#  self.etude_rentabilite.gain.calculees[13] - self.etude_rentabilite.fonction.calculees[0] [4]
+-# idem actualisée self.etude_rentabilite.calculees[5]
+-# somme des lignes actualisée self.etude_rentabilite.calculees[6]
+-# somme cumulée des lignes actualisée self.etude_rentabilite.calculees[7]
 = link_to 'Retour étude', projet_etude_path(@etude.projet, @etude)

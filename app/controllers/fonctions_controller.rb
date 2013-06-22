@@ -56,6 +56,7 @@ class FonctionsController < ApplicationController
       params[:fonction][:situations_attributes]["1"] = @etude.somme_pourcent(params[:fonction][:situations_attributes]["1"])
       if @etude.etude_rentabilite.fonction.update_attributes(params[:fonction])
         if params[:commit] then
+          @etude.etude_rentabilite.a_calculer = true
           @etude.simplifie_fonction
           flash[:notice] = "Les impacts sur les coûts de fonctionnement ont bien été mis à jour."
           if params[:commit].capitalize == 'Actualiser' then

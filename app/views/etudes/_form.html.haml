@@ -27,6 +27,9 @@
   .field
     = f.label :duree_vie, 'Durée de vie'
     = f.number_field :duree_vie, :disabled => ["partiel","total"].include?(@inactif)
+  .field
+    = f.label :taux_actu, "Taux d'actualisation (%)"
+    = f.number_field :taux_actu, :disabled => ["partiel","total"].include?(@inactif)
   - if params["action"] != "new" then
     .field
       = f.label :publie, 'Publié'

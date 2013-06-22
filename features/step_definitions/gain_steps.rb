@@ -45,7 +45,7 @@ Quand(/^je remplis le tableau des gains métier$/) do
     fill_in 'gain_details_attributes_3_nom', :with => 'Ligne 4'
     fill_in 'gain_details_attributes_3_description', :with => 'Description 4'
     select('Dépenses additionnelles', :from => 'gain_details_attributes_3_nature')
-    select('ETP4', :from => 'gain_details_attributes_3_unite')
+    select('ETP3', :from => 'gain_details_attributes_3_unite')
     fill_in 'gain_details_attributes_3_montants_attributes_3_montant', :with => '7'
     fill_in 'gain_details_attributes_3_montants_attributes_4_montant', :with => '8'
     click_button('Insv')
@@ -128,7 +128,7 @@ Alors(/^je vois les cumuls gains calculés$/) do
     find_field('gain_details_attributes_3_nom').value.should == 'Ligne 4'
     find_field('gain_details_attributes_3_description').value.should == 'Description 4'
     page.has_select?('gain_details_attributes_3_nature', :selected => 'Dépenses additionnelles').should be true
-    page.has_select?('gain_details_attributes_3_unite', :selected => 'ETP4').should be true
+    page.has_select?('gain_details_attributes_3_unite', :selected => 'ETP3').should be true
     find_field('gain_details_attributes_3_montants_attributes_3_montant').value.should == '7'
     find_field('gain_details_attributes_3_montants_attributes_4_montant').value.should == '8'
     page.should have_content('15')
@@ -178,12 +178,11 @@ Alors(/^je vois les cumuls gains calculés$/) do
     find_field('gain_details_attributes_8_montants_attributes_9_montant').value.should == '12'
     page.should have_content('23')
   end
-  page.text.should =~ %r{Coût complet moyen du personnel modèle ETP1 k€/ETP 65.5 65.5 72.7 73.7 Coût complet moyen du personnel modèle \
-ETP2 k€/ETP 64.4 65.4 Coût complet moyen du personnel modèle ETP3 k€/ETP 53.7 54.5 Coût complet moyen du personnel modèle ETP4 k€/ETP 42.9 \
-43.5 Coût complet moyen du personnel modèle ETP5 k€/ETP 94.1 95.5 Augmentation des recettes k€ 197 66 131 Economies induites k€ 455 193 261 \
-Charge de travail k€ 596 269 327 Dépenses additionnelles k€ 648 300 348 Gain trésorerie k€ 1 802 847 955 Gain efficacité k€ 3 000 1 000 2 000 \
-Gain productivité k€ 7 000 3 000 4 000 Autres gains k€ 12 685 5 000 6 800 885 TOTAL IMPACTS METIERS ANNUELS k€ 26 382 66 324 530 627 1 195 \
-1 955 5 000 9 000 6 800 885}
+  page.text.should =~ %r{Coût complet moyen du personnel modèle ETP1 k€/ETP 65.5 65.5 72.7 73.7 Coût complet moyen du personnel modèle ETP2 \
+k€/ETP 64.4 65.4 Coût complet moyen du personnel modèle ETP3 k€/ETP 53.7 54.5 55.3 Coût complet moyen du personnel modèle ETP5 k€/ETP 94.1 95.5 \
+Augmentation des recettes k€ 197 66 131 Economies induites k€ 455 193 261 Charge de travail k€ 596 269 327 Dépenses additionnelles k€ 824 382 442 \
+Gain trésorerie k€ 1 802 847 955 Gain efficacité k€ 3 000 1 000 2 000 Gain productivité k€ 7 000 3 000 4 000 Autres gains k€ 12 685 5 000 6 800 885 \
+TOTAL IMPACTS METIERS ANNUELS k€ 26 557 66 324 530 709 1 289 1 955 5 000 9 000 6 800 885}
 end
 
 Quand(/^je saisis un commentaire sur les gains$/) do

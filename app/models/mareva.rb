@@ -171,6 +171,7 @@ end
 
 class EtudeRentabilite
   include Mongoid::Document
+  field :a_calculer, type: Boolean, default: false
   embedded_in :etude
   embeds_one :direct
   embeds_one :indirect

@@ -1,0 +1,16 @@
+-i=0
+-annees.each do |annee|
+  -if ligne[i]
+    -if ligne[i].annee == annee
+      -if ligne[i].montant != 0
+        -if signe == '-'
+          %td.montant=number_with_precision(-ligne[i].montant, options = {delimiter: " ",precision: 0})
+        -else
+          %td.montant=number_with_precision(ligne[i].montant, options = {delimiter: " ",precision: 0})
+      -else
+        %td.montant
+      -i+=1
+    -else
+      %td.montant
+  -else
+    -break

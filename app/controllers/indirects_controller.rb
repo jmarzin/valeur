@@ -27,6 +27,7 @@ class IndirectsController < ApplicationController
       params[:indirect] = @etude.somme_pourcent(params[:indirect])
       if @etude.etude_rentabilite.indirect.update_attributes(params[:indirect])
         if params[:commit] then
+          @etude.etude_rentabilite.a_calculer = true
           @etude.simplifie_indirect
           flash[:notice] = "Les coûts indirects ont bien été mis à jour."
           if params[:commit] == 'Actualiser' then
