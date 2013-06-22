@@ -6,17 +6,15 @@
     = dir_form.submit 'Actualiser'
     \
     = dir_form.submit 'Enregistrer'
-  %br
-  %br
   %article#detail
     %table#detail
       %tr
-        %th{:colspan => 3} Actions
+        %th.touche{:colspan => 3} Actions
         %th.description Description du coût
         %th.nature Nature
         %th.totaux --Totaux--
         - @etude.liste_annees.each do |annee|
-          %th=annee
+          %th.annee=annee
       -i=1
       -@direct.details.each do |detail|
         = dir_form.fields_for :details,detail do |detail_form|
@@ -25,7 +23,7 @@
             %td= dir_form.submit 'Ins^', :class => 'action', :name => "h#{i}"
             %td= dir_form.submit 'Insv', :class => 'action', :name => "b#{i}"
             %td.description= detail_form.text_field :description,:size => 20
-            %td.nature= detail_form.select :nature,Etude.liste_natures_directs,:size => 10
+            %td.nature= detail_form.select :nature,Etude.liste_natures_directs,:size => 4
             %td.totaux.montant= number_with_precision(detail.total, options =  {delimiter: " ", precision: 0}) unless detail.total == 0
             -detail.montants.each do |montant|
               = detail_form.fields_for :montants,montant do |montant_form|
@@ -41,21 +39,21 @@
         -@direct.calculees[0].montants.each do |montant|
           %td.montant= number_with_precision(montant.montant, options =  {delimiter: " ", precision: 0}) unless montant.montant == 0
 
-  %br
-  %br
-  %article#somme
-    %table#somme
-      %tr
-        %th.nature Coûts directs pluriannuels 
-        %th.montant (k€)
-        %th.commentaire Commentaires
-      - @direct.sommes.each do |somme|
-        = dir_form.fields_for :sommes,somme do |somme_form|
+  %table#cadre_com_direct
+    %td#somme
+      %article#somme
+        %table#somme
           %tr
-            %td.nature= somme.nature
-            %td.montant= number_with_precision(somme.montant, options = {delimiter: " ", precision: 0}) unless somme.montant == 0
-            %td.commentaire= somme_form.text_field :commentaire,:size => 40
-
+            %th.nature Coûts directs pluriannuels 
+            %th (k€)
+          - @etude.etude_rentabilite.direct.sommes.each do |somme|
+            %tr
+              %td.nature= somme.nature
+              %td.montant= number_with_precision(somme.montant, options = {delimiter: " ", precision: 0}) unless somme.montant == 0
+    %th#commentaire_direct
+      %article#commentaire
+        =dir_form.label :commentaires, :class => "commentaire"
+        =dir_form.text_area :commentaires, :cols => 80, :rows => 6
   %footer
     = dir_form.submit 'Actualiser'
     \

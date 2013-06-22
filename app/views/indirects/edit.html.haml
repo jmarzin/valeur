@@ -30,13 +30,13 @@
   %article#detail
     %table#detail
       %tr
-        %th{:colspan => 3} Actions
+        %th.touche{:colspan => 3} Actions
         %th.description Description du coût
-        %th.nature Nature
+        %th.nature_ind Nature
         %th.unite Exprimé en
         %th.totaux --Totaux--
         - @etude.liste_annees.each do |annee|
-          %th=annee
+          %th.annee=annee
       -i=1
       -@indirect.details.each do |detail|
         = indir_form.fields_for :details,detail do |detail_form|

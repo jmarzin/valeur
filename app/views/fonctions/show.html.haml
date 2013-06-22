@@ -33,11 +33,11 @@
       %table#detail
         %tr
           %th.description Description du coût
-          %th.nature Nature
+          %th.nature_f Nature
           %th.unite Exprimé en
           %th.totaux --Totaux-- 
           -situation.calculees[4].montants.each do |mt|
-            %th=mt.annee
+            %th.annee=mt.annee
         -situation.details.each do |det|
           %tr
             %td.description= det.description

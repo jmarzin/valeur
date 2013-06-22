@@ -9,15 +9,15 @@ article#detail {
   overflow: auto;
 }
 table#detail {
-  width: auto;
+  table-layout:fixed;
   .nom {
-    width: 5rem;
+    width: 7.5rem;
   }
   .description {
-    width: 15rem;
+    width: 17.5rem;
   }
   .nature {
-    width: 10rem;
+    width: 10.5rem;
   }
   .montant {
     width: 5rem;
@@ -27,27 +27,39 @@ table#detail {
     font-weight: bold;
     background: yellow;
     width: 5rem;
-    .touche {
+  }
+  .touche {
     background: white;
-    }
+    width: 7rem;
+  }
+  th.annee {
+    width: 5rem;
   }
   td.totaux {
     width: 5rem;
-  }
-  th.totaux {
-    width: 10em;
+    text-align: right;
   }
 }
 table#somme {
-  width: 50%;
   .nature {
     width: 15rem;
-  }
-  th.commentaire{
-    text-align: left;
   }
   .montant {
     width: 10rem;
     text-align: right;
+  }
+}
+table#cadre_com_direct {
+  table-layout:fixed;
+  td#somme {
+    width: 40%;
+  }
+  .commentaire {
+    color: black;
+  }
+  th#commentaire_direct {
+    width: 60%;
+    text-align: left;
+    vertical-align: top;
   }
 }

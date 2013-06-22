@@ -1,7 +1,7 @@
 // Place all the styles related to the strategies controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com
-table.rentabilite {
+table#rentabilite {
   width: 50%;
   border: 2px solid blue;
   .titre_invest {
@@ -17,5 +17,30 @@ table.rentabilite {
   td {
   border: 2px solid blue;
   text-align: center;
+  }
+}
+article#synthese {
+  overflow: auto;
+}
+table#synthese {
+  table-layout: fixed;
+  .description {
+    width: 30rem;
+  }
+  .montant {
+    width: 5rem;
+    text-align: right;
+  }
+  .totaux {
+    font-weight: bold;
+    background: yellow;
+    width: 5rem;
+  }
+  th.annee {
+    width: 5rem;
+  }
+  td.totaux {
+    width: 5rem;
+    text-align: right;
   }
 }

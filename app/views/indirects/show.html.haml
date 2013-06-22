@@ -23,11 +23,11 @@
 %article#detail
   %table#detail
     %th.description Description du coût
-    %th.nature Nature
+    %th.nature_ind Nature
     %th.unite Exprimé en
     %th.totaux --Totaux-- 
     -@etude.etude_rentabilite.indirect.calculees[4].montants.each do |mt|
-      %th=mt.annee
+      %th.annee=mt.annee
     -@etude.etude_rentabilite.indirect.details.each do |det|
       %tr
         %td.description= det.description

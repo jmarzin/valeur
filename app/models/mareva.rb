@@ -58,6 +58,7 @@ class Calculee
   embedded_in :indirect
   embedded_in :fonction
   embedded_in :situation
+  embedded_in :etude_rentabilite
   field :description, type: String
   field :nature, type: String
   field :unite, type: Symbol
@@ -80,6 +81,7 @@ class Direct
   include Mongoid::Document
   embedded_in :etude_rentabilite
   field :total, type: Float
+  field :commentaires, type: String
   embeds_many :sommes
   embeds_many :details
   embeds_many :calculees
@@ -100,6 +102,7 @@ class Indirect
   embedded_in :etude_rentabilite
   field :total, type: Float
   field :somme_pourcent, type: Integer
+  field :commentaires, type: String
   embeds_many :details
   embeds_many :calculees
   embeds_many :sommes
@@ -178,4 +181,5 @@ class EtudeRentabilite
   embeds_one :fonction
   embeds_one :gain
   embeds_many :cadres
+  embeds_many :calculees
 end
