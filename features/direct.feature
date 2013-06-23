@@ -41,7 +41,16 @@ Fonctionnalité: saisie et modification des coûts d'investissement directs
     Etant donné une étude complète au stade bilan non publiée sur le projet Hélios
     Etant donné que je suis sur la page /directs/1/edit
     Quand je remplis le tableau des coûts détaillés
-    Quand je saisis un commentaire pour le matériel
+    Quand je saisis un commentaire sur les coûts directs
     Quand dans la zone header je clique sur Enregistrer
     Alors je me retrouve sur la page /directs/1
-    Et je vois le commentaire au bon endroit
+    Et je vois le commentaire sur les coûts directs
+
+  Scénario: Remplissage de l'écran et génération de la synthèse
+    Etant donné le projet Hélios dans la base
+    Etant donné une étude complète au stade bilan non publiée sur le projet Hélios
+    Etant donné que je suis sur la page /directs/1/edit
+    Quand je remplis le tableau des coûts détaillés
+    Quand dans la zone header je clique sur Enregistrer
+    Quand dans la zone header je suis le lien Rentabilité
+    Alors je vois la synthèse des coûts directs

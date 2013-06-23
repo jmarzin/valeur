@@ -4,6 +4,10 @@ Alors(/^je vois le tableau de répartition des cadres d'emplois$/) do
   page.should have_selector('article#cadre')
 end
 
+Alors(/^je vois le tableau des coûts indirects cumulés par nature$/) do
+  page.should have_selector('article#somme_ind')
+end
+
 Quand(/^je saisis (\d+) pour les cadres A et (\d+) pour les cadres B$/) do |arg1, arg2|
   fill_in 'indirect_repartitions_attributes_1_pourcent', :with => arg1
   fill_in 'indirect_repartitions_attributes_2_pourcent', :with => arg2
@@ -103,18 +107,17 @@ Alors(/^je vois les cumuls indirects calculés$/) do
     find_field('indirect_details_attributes_5_montants_attributes_5_montant').value.should == '3000'
     page.should have_content('6 000')
   end
-  page.text.should =~ %r{Coûts indirects en ETP ETP 55 5 7 9 18 16 Coût complet moyen du personnel k€\/ETP \
-65.5 66.5 67.5 68.5 69.5 Coûts indirects existant exprimés en ETP valorisés k€\
- 3 745 328 466 607 1 233 1 111 Coûts indirects k€ 6 000 1 000 2 000 3 000 Total des coûts indirects k€\
- 9 745 1 328 466 2 607 1 233 4 111}
-  page.text.should =~ /Coûts MOA ETP 28 Coûts MOE ETP 8 Formation:temps formateur ETP 9 Formation:temps stagiaire ETP 10 Autre k€ 6 000/
+  page.text.should =~ %r{Coûts indirects en ETP ETP 55 5 7 9 18 16 Coût complet moyen du personnel k€/ETP 66.5 67.5 68.5 69.5 70.5 Coûts indirects \
+existant exprimés en ETP valorisés k€ 3 800 333 472 617 1 250 1 128 Coûts indirects k€ 6 000 1 000 2 000 3 000 Total des coûts indirects k€ 9 800 \
+1 333 472 2 617 1 250 4 128 Coûts indirects pluriannuels Exprimés en Totaux Coûts MOA ETP 28 Coûts MOE ETP 8 Formation:temps formateur ETP 9 \
+Formation:temps stagiaire ETP 10 Autre k€ 6 000}
 end
 
-Quand(/^je saisis un commentaire pour la formation:temps formateur$/) do
-  fill_in 'indirect_sommes_attributes_2_commentaire', :with => 'Un commentaire sur la formation:temps formateur' 
+Quand(/^je saisis un commentaire sur les coûts indirects$/) do
+  fill_in 'indirect_commentaires', :with => 'Un commentaire sur les coûts indirects' 
 end
 
-Alors(/^je vois le commentaire au bon endroit formation:temps formateur$/) do
-  page.text.should =~ /Formation:temps formateur ETP 9 Un commentaire sur la formation:temps formateur Formation:temps stagiaire/
+Alors(/^je vois le commentaire sur les coûts indirects$/) do
+  page.text.should =~ /Un commentaire sur les coûts indirects/
 end
 

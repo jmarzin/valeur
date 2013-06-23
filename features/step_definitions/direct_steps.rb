@@ -103,14 +103,23 @@ Alors(/^je vois les cumuls calculés$/) do
     find_field('direct_details_attributes_3_montants_attributes_4_montant').value.should == '25'
     page.should have_content('75')
   end
-  page.text.should =~ /Totaux \(k€\) 1 010 675 1 100 5 200 4 325 1 000 025 25/
-  page.text.should =~ /Logiciel 7 000 Matériel 1 003 600 Prestation MOE Prestation MOA Formation Autre 75/
+  page.text.should =~ %r{Total des coûts directs 1 010 675 1 100 5 200 4 325 1 000 025 25}
+  page.text.should =~ %r{Logiciel 7 000 Matériel 1 003 600 Prestation MOE Prestation MOA Formation Autre 75}
 end
 
-Quand(/^je saisis un commentaire pour le matériel$/) do
-  fill_in 'direct_sommes_attributes_1_commentaire', :with => 'Un commentaire sur le matériel' 
+Quand(/^je saisis un commentaire sur les coûts directs$/) do
+  fill_in 'direct_commentaires', :with => 'Un commentaire sur les coûts directs' 
 end
 
-Alors(/^je vois le commentaire au bon endroit$/) do
-  page.text.should =~ /Matériel 1 003 600 Un commentaire sur le matériel/
+Alors(/^je vois le commentaire sur les coûts directs$/) do
+  page.text.should =~ /Un commentaire sur les coûts directs/
+end
+
+Alors(/^je vois la synthèse des coûts directs$/) do
+  page.text.should =~ %r{Total des coûts directs -1 010 675 -1 100 -5 200 -4 325 -1 000 025 -25 Total des coûts indirects Total Coûts d'investissement \
+initial -1 010 675 -1 100 -5 200 -4 325 -1 000 025 -25 Total Coûts d'investissement initial actualisés -899 139 -1 100 -5 000 -3 999 -889 019 -21 \
+Total des impacts métier Total Impacts Métiers actualisé Total des coûts indirects situation actuelle Total des coûts indirects situation cible Total \
+Impacts sur les coûts de fonctionnement des systèmes Total Impacts sur les coûts de fonctionnement SI actualisé Gains nets \(Impacts métiers \+ Impacts \
+fonctionnement système\) TOTAL FLUX ANNUELS non actualisés \(k€\) TOTAL FLUX ANNUELS actualisés -899 139 -1 100 -5 000 -3 999 -889 019 -21 TOTAL FLUX \
+ANNUELS CUMULES actualisés -5 000 -8 999 -898 017 -898 039}
 end

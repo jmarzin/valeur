@@ -62,7 +62,7 @@ class Calculee
   field :description, type: String
   field :nature, type: String
   field :unite, type: Symbol
-  field :total, type: Float
+  field :total, type: Float, default: 0
   embeds_many :montants
   accepts_nested_attributes_for :montants
 end

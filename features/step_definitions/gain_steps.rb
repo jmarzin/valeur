@@ -178,11 +178,11 @@ Alors(/^je vois les cumuls gains calculés$/) do
     find_field('gain_details_attributes_8_montants_attributes_9_montant').value.should == '12'
     page.should have_content('23')
   end
-  page.text.should =~ %r{Coût complet moyen du personnel modèle ETP1 k€/ETP 65.5 65.5 72.7 73.7 Coût complet moyen du personnel modèle ETP2 \
-k€/ETP 64.4 65.4 Coût complet moyen du personnel modèle ETP3 k€/ETP 53.7 54.5 55.3 Coût complet moyen du personnel modèle ETP5 k€/ETP 94.1 95.5 \
-Augmentation des recettes k€ 197 66 131 Economies induites k€ 455 193 261 Charge de travail k€ 596 269 327 Dépenses additionnelles k€ 824 382 442 \
-Gain trésorerie k€ 1 802 847 955 Gain efficacité k€ 3 000 1 000 2 000 Gain productivité k€ 7 000 3 000 4 000 Autres gains k€ 12 685 5 000 6 800 885 \
-TOTAL IMPACTS METIERS ANNUELS k€ 26 557 66 324 530 709 1 289 1 955 5 000 9 000 6 800 885}
+  page.text.should =~ %r{Coût complet moyen du personnel modèle ETP1 k€/ETP 65.5 66.5 73.7 74.8 Coût complet moyen du personnel modèle ETP2 k€/ETP \
+65.4 66.3 Coût complet moyen du personnel modèle ETP3 k€/ETP 54.5 55.3 56.1 Coût complet moyen du personnel modèle ETP5 k€/ETP 95.5 97.0 Augmentation \
+des recettes k€ 199 66 133 Economies induites k€ 461 196 265 Charge de travail k€ 604 273 332 Dépenses additionnelles k€ 836 387 449 Gain trésorerie k€ \
+1 830 860 970 Gain efficacité k€ 3 000 1 000 2 000 Gain productivité k€ 7 000 3 000 4 000 Autres gains k€ 12 709 5 000 6 811 898 Total des impacts métier \
+k€ 26 638 66 329 538 719 1 308 1 970 5 000 9 000 6 811 898}
 end
 
 Quand(/^je saisis un commentaire sur les gains$/) do
@@ -191,4 +191,15 @@ end
 
 Alors(/^je vois le commentaire sur les gains$/) do
   page.text.should =~ /Commentaires : Un commentaire sur les gains/
+end
+
+Alors(/^je vois la synthèse des gains$/) do
+  page.text.should =~ %r{Total des coûts directs Total des coûts indirects Total Coûts d'investissement initial Total Coûts d'investissement initial \
+actualisés Augmentation des recettes 199 66 133 Economies induites 461 196 265 Charge de travail 604 273 332 Dépenses additionnelles 836 387 449 Gain \
+trésorerie 1 830 860 970 Gain efficacité 3 000 1 000 2 000 Gain productivité 7 000 3 000 4 000 Autres gains 12 709 5 000 6 811 898 Total des impacts \
+métier 26 638 66 329 538 719 1 308 1 970 5 000 9 000 6 811 898 Total Impacts Métiers actualisé 20 654 66 316 497 639 1 118 1 619 3 952 6 839 4 977 631 \
+Total des coûts indirects situation actuelle Total des coûts indirects situation cible Total Impacts sur les coûts de fonctionnement des systèmes Total \
+Impacts sur les coûts de fonctionnement SI actualisé Gains nets \(Impacts métiers \+ Impacts fonctionnement système\) 26 638 66 329 538 719 1 308 1 970 \
+5 000 9 000 6 811 898 TOTAL FLUX ANNUELS non actualisés \(k€\) 20 654 66 316 497 639 1 118 1 619 3 952 6 839 4 977 631 TOTAL FLUX ANNUELS actualisés \
+41 308 131 633 994 1 278 2 237 3 238 7 903 13 679 9 954 1 261 TOTAL FLUX ANNUELS CUMULES actualisés 633 1 627 2 905 5 142 8 380 16 284 29 962 39 916 41 177}
 end

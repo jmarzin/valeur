@@ -1,19 +1,20 @@
--montant = ligne.total if signe == '+'
--montant = -ligne.total if signe == '-'
-%td.totaux=number_with_precision(montant, options = {delimiter: " ",precision: 0}) if montant != 0
--i=0
--annees.each do |annee|
-  -if ligne.montants[i]
-    -if ligne.montants[i].annee == annee
-      -if ligne.montants[i].montant != 0
-        -if signe == '-'
-          %td.montant=number_with_precision(-ligne.montants[i].montant, options = {delimiter: " ",precision: 0})
+-if ligne
+  -montant = ligne.total if signe == '+'
+  -montant = -ligne.total if signe == '-'
+  %td.totaux=number_with_precision(montant, options = {delimiter: " ",precision: 0}) if montant != 0
+  -i=0
+  -annees.each do |annee|
+    -if ligne.montants[i]
+      -if ligne.montants[i].annee == annee
+        -if ligne.montants[i].montant != 0
+          -if signe == '-'
+            %td.montant=number_with_precision(-ligne.montants[i].montant, options = {delimiter: " ",precision: 0})
+          -else
+            %td.montant=number_with_precision(ligne.montants[i].montant, options = {delimiter: " ",precision: 0})
         -else
-          %td.montant=number_with_precision(ligne.montants[i].montant, options = {delimiter: " ",precision: 0})
+          %td.montant
+        -i+=1
       -else
         %td.montant
-      -i+=1
     -else
-      %td.montant
-  -else
-    -break
+      -break

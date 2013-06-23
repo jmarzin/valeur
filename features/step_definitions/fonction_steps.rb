@@ -273,14 +273,14 @@ Alors(/^je vois les cumuls impacts calculés$/) do
     end
   end
   within('article#actuelle') do
-    page.text.should =~ %r{Coûts indirects exprimés en ETP ETP 6 2 2 2 Coût complet moyen du personnel k€/ETP 65.5 65.5 66.5 \
-Coûts indirects exprimés en ETP valorisés k€ 395 131 131 133 Coûts indirects exprimés en k€ k€ 30 2 4 6 6 6 4 2 TOTAL COÛTS \
-INDIRECTS k€ 425 131 133 137 6 6 6 4 2}
+    page.text.should =~ %r{Coûts indirects exprimés en ETP ETP 6 2 2 2 Coût complet moyen du personnel k€/ETP 65.5 66.5 67.5 Coûts indirects exprimés \
+en ETP valorisés k€ 399 131 133 135 Coûts indirects exprimés en k€ k€ 30 2 4 6 6 6 4 2 Total des coûts indirects situation actuelle k€ 429 131 135 139 \
+6 6 6 4 2}
   end
   within('article#cible') do
-    page.text.should =~ %r{Coûts indirects exprimés en ETP ETP 3 1 1 1 Coût complet moyen du personnel k€/ETP 65.5 65.5 66.5 \
-Coûts indirects exprimés en ETP valorisés k€ 198 66 66 67 Coûts indirects exprimés en k€ k€ 15 1 2 3 3 3 2 1 TOTAL COÛTS \
-INDIRECTS k€ 213 66 67 69 3 3 3 2 1 IMPACTS SUR LES COÛTS DE FONCTIONNEMENT SI k€ -213 -66 -67 -69 -3 -3 -3 -2 -1}
+    page.text.should =~ %r{Coûts indirects exprimés en ETP ETP 3 1 1 1 Coût complet moyen du personnel k€/ETP 65.5 66.5 67.5 Coûts indirects exprimés \
+en ETP valorisés k€ 200 66 67 67 Coûts indirects exprimés en k€ k€ 15 1 2 3 3 3 2 1 Total des coûts indirects situation cible k€ 215 66 68 69 3 3 3 2 1 \
+Total Impacts sur les coûts de fonctionnement des systèmes k€ -215 -66 -68 -69 -3 -3 -3 -2 -1}
   end
 end
 

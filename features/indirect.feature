@@ -27,7 +27,7 @@ Fonctionnalité: saisie et modification des coûts d'investissement indirects
     Alors je me retrouve sur la page /indirects/1/edit
     Alors je vois le tableau de répartition des cadres d'emplois 
     Alors je vois le tableau des coûts détaillés
-    Et je vois le tableau des coûts cumulés par nature
+    Et je vois le tableau des coûts indirects cumulés par nature
 
   Scénario: Gestion d'une errueur de répartition des catégories de personnel
     Etant donné le projet Hélios dans la base
@@ -50,7 +50,7 @@ Fonctionnalité: saisie et modification des coûts d'investissement indirects
     Etant donné une étude complète au stade bilan non publiée sur le projet Hélios
     Etant donné que je suis sur la page /indirects/1/edit
     Quand je remplis le tableau des coûts indirects détaillés
-    Quand je saisis un commentaire pour la formation:temps formateur
+    Quand je saisis un commentaire sur les coûts indirects
     Quand dans la zone header je clique sur Enregistrer
     Alors je me retrouve sur la page /indirects/1
-    Et je vois le commentaire au bon endroit formation:temps formateur
+    Et je vois le commentaire sur les coûts indirects
