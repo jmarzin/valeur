@@ -61,7 +61,7 @@
             %td.totaux.montant= number_with_precision(detail.total, options =  {delimiter: " ", precision: 0}) unless detail.total == 0
             -detail.montants.each do |montant|
               = detail_form.fields_for :montants,montant do |montant_form|
-                %td.montant= montant_form.number_field :montant,:value => number_with_precision(montant.montant,options={precision: 0}), :size => 1
+                %td.montant= montant_form.number_field :montant,:value => number_with_precision(montant.montant,options={precision: 1}), :size => 1
           -i+=1
       -@gain.calculees.each do |calc|
         -if calc.total && calc.total > 0.001
@@ -70,11 +70,10 @@
             %td.touche
             %td.touche
             %td.description{:colspan => 3}= calc.description
-            -if calc.unite == :k€ then prec = 0 else prec = 1 end
             %td.unite= calc.unite
-            %td.montant=number_with_precision(calc.total, options =  {delimiter: " ", precision: 0}) unless calc.total == nil || calc.total < 0.1
+            %td.montant=number_with_precision(calc.total, options =  {delimiter: " ", precision: 1}) unless calc.total == nil || calc.total < 0.1
             -calc.montants.each do |montant|
-              %td.montant= number_with_precision(montant.montant, options =  {delimiter: " ", precision: prec}) unless montant.montant == 0
+              %td.montant= number_with_precision(montant.montant, options =  {delimiter: " ", precision: 1}) unless montant.montant == 0
 
   %footer
     = gain_form.submit 'actualiser', :autofocus => @auto == 'actualiser'

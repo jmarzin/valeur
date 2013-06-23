@@ -52,10 +52,10 @@
             %td.description= detail_form.text_field :description,:size => 20
             %td.nature= detail_form.select :nature,Etude.liste_natures_indirects.keys,:size => 10
             %td.unite=detail.unite
-            %td.totaux.montant= number_with_precision(detail.total, options =  {delimiter: " ", precision: 0}) unless detail.total == 0
+            %td.totaux.montant= number_with_precision(detail.total, options =  {delimiter: " ", precision: 1}) unless detail.total == 0
             -detail.montants.each do |montant|
               = detail_form.fields_for :montants,montant do |montant_form|
-                %td.montant= montant_form.number_field :montant,:value => number_with_precision(montant.montant,options={precision: 0}), :size => 1
+                %td.montant= montant_form.number_field :montant, :value => number_with_precision(montant.montant,options={precision: 1}), :size => 1
           -i+=1
       -@indirect.calculees.each do |calc|
         %tr.totaux
@@ -63,11 +63,10 @@
           %td.touche
           %td.touche
           %td.description{:colspan => 2}= calc.description
-          -if calc.description =~ /personnel/ then prec = 1 else prec = 0 end
           %td.unite= calc.unite
-          %td.montant=number_with_precision(calc.total, options =  {delimiter: " ", precision: 0}) unless @indirect.total == nil || calc.total == 0
+          %td.montant=number_with_precision(calc.total, options =  {delimiter: " ", precision: 1}) unless @indirect.total == nil || calc.total == 0
           -calc.montants.each do |montant|
-            %td.montant= number_with_precision(montant.montant, options =  {delimiter: " ", precision: prec}) unless montant.montant == 0
+            %td.montant= number_with_precision(montant.montant, options =  {delimiter: " ", precision: 1}) unless montant.montant == 0
 
   %article#somme_ind
     %table#somme_ind
@@ -79,7 +78,7 @@
         %tr
           %td.nature= somme.nature
           %td.unite= somme.unite
-          %td.montant= number_with_precision(somme.montant, options = {delimiter: " ", precision: 0}) unless somme.montant == 0
+          %td.montant= number_with_precision(somme.montant, options = {delimiter: " ", precision: 1}) unless somme.montant == 0
 
 
   %footer

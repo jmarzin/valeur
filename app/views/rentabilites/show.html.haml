@@ -24,41 +24,41 @@
     %tr#l_0
       -if @rentabilite.direct && @rentabilite.direct.calculees[0]
         %td.description=@rentabilite.direct.calculees[0].description
-        =render :partial => "ligne", :object => @rentabilite.direct.calculees[0], :locals => { :annees => @etude.liste_annees , :signe => '-' }
+        =render :partial => "partages/ligne", :object => @rentabilite.direct.calculees[0], :locals => { :annees => @etude.liste_annees , :signe => '-' }
     %tr#l_1
       -if @rentabilite.indirect && @rentabilite.indirect.calculees[4]
         %td.description=@rentabilite.indirect.calculees[4].description
-        =render :partial => "ligne", :object => @rentabilite.indirect.calculees[4], :locals => { :annees => @etude.liste_annees, :signe => '-' }
+        =render :partial => "partages/ligne", :object => @rentabilite.indirect.calculees[4], :locals => { :annees => @etude.liste_annees, :signe => '-' }
     %tr#l_2
       %td.description=@rentabilite.calculees[0].description
-      =render :partial => "ligne", :object => @rentabilite.calculees[0], :locals => { :annees => @etude.liste_annees, :signe => '+' }
+      =render :partial => "partages/ligne", :object => @rentabilite.calculees[0], :locals => { :annees => @etude.liste_annees, :signe => '+' }
     %tr#l_3
       %td.description=@rentabilite.calculees[1].description
-      =render :partial => "ligne", :object => @rentabilite.calculees[1], :locals => { :annees => @etude.liste_annees, :signe => '+' }
+      =render :partial => "partages/ligne", :object => @rentabilite.calculees[1], :locals => { :annees => @etude.liste_annees, :signe => '+' }
     -if @rentabilite.gain
       -(5..12).each do |rang|
         -if @rentabilite.gain.calculees[rang].montants.count != 0
           %tr{:id => ["l_#{rang-1}"]}
             %td.description=@rentabilite.gain.calculees[rang].description
-            =render :partial => "ligne", :object => @rentabilite.gain.calculees[rang], :locals => { :annees => @etude.liste_annees, :signe => '+' }
+            =render :partial => "partages/ligne", :object => @rentabilite.gain.calculees[rang], :locals => { :annees => @etude.liste_annees, :signe => '+' }
     %tr#l_12
       %td.description=@rentabilite.gain.calculees[13].description
-      =render :partial => "ligne", :object => @rentabilite.gain.calculees[13], :locals => { :annees => @etude.liste_annees, :signe => '+' }
+      =render :partial => "partages/ligne", :object => @rentabilite.gain.calculees[13], :locals => { :annees => @etude.liste_annees, :signe => '+' }
     %tr#l_13
       %td.description=@rentabilite.calculees[2].description
-      =render :partial => "ligne", :object => @rentabilite.calculees[2], :locals => { :annees => @etude.liste_annees, :signe => '+' }
+      =render :partial => "partages/ligne", :object => @rentabilite.calculees[2], :locals => { :annees => @etude.liste_annees, :signe => '+' }
     %tr#l_14
       %td.description=@rentabilite.fonction.situations[0].calculees[4].description
-      =render :partial => "ligne", :object => @rentabilite.fonction.situations[0].calculees[4], :locals => { :annees => @etude.liste_annees, :signe => '+' }
+      =render :partial=>"partages/ligne",:object=>@rentabilite.fonction.situations[0].calculees[4],:locals=>{:annees=>@etude.liste_annees,:signe=>'+'}
     %tr#l_14
       %td.description=@rentabilite.fonction.situations[1].calculees[4].description
-      =render :partial => "ligne", :object => @rentabilite.fonction.situations[1].calculees[4], :locals => { :annees => @etude.liste_annees, :signe => '-' }
+      =render :partial=>"partages/ligne",:object=>@rentabilite.fonction.situations[1].calculees[4],:locals=>{:annees=>@etude.liste_annees,:signe=>'-'}
     %tr#l_15
       %td.description=@rentabilite.fonction.calculees[0].description
-      =render :partial => "ligne", :object => @rentabilite.fonction.calculees[0], :locals => { :annees => @etude.liste_annees, :signe => '-' }
+      =render :partial=>"partages/ligne",:object=>@rentabilite.fonction.calculees[0],:locals=>{:annees=>@etude.liste_annees,:signe=>'-'}
     -(16..20).each do |rang|
       %tr{:id => ["l_#{rang}"]}
         %td.description=@rentabilite.calculees[rang-13].description
-        =render :partial => "ligne", :object => @rentabilite.calculees[rang-13], :locals => { :annees => @etude.liste_annees, :signe => '+' }
+        =render :partial=>"partages/ligne",:object=>@rentabilite.calculees[rang-13],:locals=>{:annees=>@etude.liste_annees,:signe=>'+'}
 
 = link_to 'Retour étude', projet_etude_path(@etude.projet, @etude)

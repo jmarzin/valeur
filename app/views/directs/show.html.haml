@@ -17,14 +17,12 @@
       %tr
         %td.description= det.description
         %td.nature=det.nature
-        %td.totaux.montant=number_with_precision(det.total,options =  {delimiter: " ", precision: 0})
-        =render :partial => "partages/ligne_valeurs", :object => det.montants, :locals => { :annees => @etude.liste_annees }
+        =render :partial => "partages/ligne", :object => det, :locals => { :annees => @etude.liste_annees , :signe => '+' }
 
     %tr.totaux
       %td.description= @etude.etude_rentabilite.direct.calculees[0].description
       %td
-      %td.montant=number_with_precision(@etude.etude_rentabilite.direct.total, options =  {delimiter: " ", precision: 0})
-      =render :partial=>"partages/ligne_valeurs",:object=>@etude.etude_rentabilite.direct.calculees[0].montants,:locals=>{:annees=>@etude.liste_annees}
+      =render :partial=>"partages/ligne",:object=>@etude.etude_rentabilite.direct.calculees[0],:locals=>{:annees=>@etude.liste_annees,:signe=>'+'}
 
 %table#cadre_com_direct
   %td#somme
