@@ -19,9 +19,8 @@
   %table#synthese
     %tr#titres
       %th.description
-      %th.totaux --Total--
-      -@rentabilite.calculees[6].montants.each do |mt|
-        %th.annee=mt.annee
+      =render :partial=>"partages/ligne_annees",:object=>@rentabilite.calculees[6].montants,:locals=>{:annees=>@etude.liste_annees}
+
     %tr#l_0
       -if @rentabilite.direct && @rentabilite.direct.calculees[0]
         %td.description=@rentabilite.direct.calculees[0].description
@@ -62,10 +61,4 @@
         %td.description=@rentabilite.calculees[rang-13].description
         =render :partial => "ligne", :object => @rentabilite.calculees[rang-13], :locals => { :annees => @etude.liste_annees, :signe => '+' }
 
-
-
--#  self.etude_rentabilite.gain.calculees[13] - self.etude_rentabilite.fonction.calculees[0] [4]
--# idem actualisée self.etude_rentabilite.calculees[5]
--# somme des lignes actualisée self.etude_rentabilite.calculees[6]
--# somme cumulée des lignes actualisée self.etude_rentabilite.calculees[7]
 = link_to 'Retour étude', projet_etude_path(@etude.projet, @etude)

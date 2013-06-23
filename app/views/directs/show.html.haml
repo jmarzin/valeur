@@ -12,27 +12,20 @@
   %table#detail
     %th.description Description du coût
     %th.nature Nature
-    %th.totaux --Totaux-- 
-    -@etude.etude_rentabilite.direct.calculees[0].montants.each do |mt|
-      %th.annee=mt.annee
+    =render :partial=>"partages/ligne_annees",:object=>@etude.etude_rentabilite.direct.calculees[0].montants,:locals=>{:annees=>@etude.liste_annees}
     -@etude.etude_rentabilite.direct.details.each do |det|
       %tr
         %td.description= det.description
         %td.nature=det.nature
         %td.totaux.montant=number_with_precision(det.total,options =  {delimiter: " ", precision: 0})
-        -i = 0
-        -@etude.etude_rentabilite.direct.calculees[0].montants.each do |calc|
-          -if det.montants[i] && det.montants[i].annee == calc.annee then
-            %td.montant=number_with_precision(det.montants[i].montant, options = {delimiter: " ", precision: 0})
-            -i += 1
-          -else
-            %td
+        =render :partial => "partages/ligne_valeurs", :object => det.montants, :locals => { :annees => @etude.liste_annees }
+
     %tr.totaux
       %td.description= @etude.etude_rentabilite.direct.calculees[0].description
       %td
       %td.montant=number_with_precision(@etude.etude_rentabilite.direct.total, options =  {delimiter: " ", precision: 0})
-      -@etude.etude_rentabilite.direct.calculees[0].montants.each do |mt|
-        %td.montant= number_with_precision(mt.montant, options =  {delimiter: " ", precision: 0})
+      =render :partial=>"partages/ligne_valeurs",:object=>@etude.etude_rentabilite.direct.calculees[0].montants,:locals=>{:annees=>@etude.liste_annees}
+
 %table#cadre_com_direct
   %td#somme
     %article#somme
