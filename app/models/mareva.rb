@@ -74,7 +74,6 @@ class Somme
   field :nature, type: String
   field :unite, type: Symbol
   field :valeur, type: Float
-  field :commentaire, type: String
 end
 
 class Direct

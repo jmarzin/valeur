@@ -2,8 +2,9 @@
 
 %h2 Coûts indirects d'investissement de l'étude  #{@etude._id} du projet #{@etude.projet.nom}
 %header
-  = link_to 'Modif', edit_indirect_path(@etude)
-  \|
+  -if @modif
+    = link_to 'Modif', edit_indirect_path(@etude)
+    \|
   = link_to 'Rentabilité', rentabilite_path(@etude)
   \|
   = link_to 'Etude', projet_etude_path(@etude.projet, @etude)
@@ -69,8 +70,9 @@
         %td.montant= number_with_precision(somme.montant, options = {delimiter: " ", precision: 0}) unless somme.montant == 0
 
 %footer
-  = link_to 'Modif', edit_indirect_path(@etude)
-  \|
+  -if @modif
+    = link_to 'Modif', edit_indirect_path(@etude)
+    \|
   = link_to 'Rentabilité', rentabilite_path(@etude)
   \|
   = link_to 'Etude', projet_etude_path(@etude.projet, @etude)

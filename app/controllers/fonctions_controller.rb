@@ -33,6 +33,7 @@ class FonctionsController < ApplicationController
   def show
     @etude = Etude.find(params[:id])
     @etude.lit_rentabilite
+    @modif = Etude.modif_supp_apparents([@etude])[@etude._id][:modif]
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @etude }
@@ -64,6 +65,7 @@ class FonctionsController < ApplicationController
             format.html { render action: "edit"}
             format.json { head :no_content }
           else
+            @modif = Etude.modif_supp_apparents([@etude])[@etude._id][:modif]
             format.html { render action: "show"}
             format.json { head :no_content }
           end

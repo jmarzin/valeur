@@ -2,13 +2,12 @@
 
 %h2 Gains sur les dépenses métier de l'étude  #{@etude._id} du projet #{@etude.projet.nom}
 %header
-  = link_to 'Modif', edit_gain_path(@etude)
-  \|
+  -if @modif
+    = link_to 'Modif', edit_gain_path(@etude)
+    \|
   = link_to 'Rentabilité', rentabilite_path(@etude)
   \|
   = link_to 'Etude', projet_etude_path(@etude.projet, @etude)
-%br
-%br
 %table#cadre_com1
   %th#repart
     %article#cadre
@@ -26,8 +25,6 @@
     %article#commentaire
       Commentaires :
       =@etude.etude_rentabilite.gain.commentaires
-%br
-%br
 %article#detail
   %table#detail
     %tr
@@ -67,8 +64,9 @@
           -else
             %td
 %footer
-  = link_to 'Modif', edit_gain_path(@etude)
-  \|
+  -if @modif
+    = link_to 'Modif', edit_gain_path(@etude)
+    \|
   = link_to 'Rentabilité', rentabilite_path(@etude)
   \|
   = link_to 'Etude', projet_etude_path(@etude.projet, @etude)

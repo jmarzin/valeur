@@ -2,8 +2,9 @@
 
 %h2 Coûts directs d'investissement de l'étude  #{@etude._id} du projet #{@etude.projet.nom}
 %header
-  = link_to 'Modif', edit_direct_path(@etude)
-  \|
+  -if @modif
+    = link_to 'Modif', edit_direct_path(@etude)
+    \|
   = link_to 'Rentabilité', rentabilite_path(@etude)
   \|
   = link_to 'Etude', projet_etude_path(@etude.projet, @etude)
@@ -48,8 +49,9 @@
       Commentaires :
       =@etude.etude_rentabilite.direct.commentaires
 %footer
-  = link_to 'Modif', edit_direct_path(@etude)
-  \|
+  -if @modif
+    = link_to 'Modif', edit_direct_path(@etude)
+    \|
   = link_to 'Rentabilité', rentabilite_path(@etude)
   \|
   = link_to 'Etude', projet_etude_path(@etude.projet, @etude)

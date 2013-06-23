@@ -2,13 +2,13 @@
 
 %h2 Impacts sur les coûts de fonctionnement de l'étude  #{@etude._id} du projet #{@etude.projet.nom}
 %header
-  = link_to 'Modif', edit_fonction_path(@etude)
-  \|
+  -if @modif
+    = link_to 'Modif', edit_fonction_path(@etude)
+    \|
   = link_to 'Rentabilité', rentabilite_path(@etude)
   \|
   = link_to 'Etude', projet_etude_path(@etude.projet, @etude)
-%br
-%br
+
 -@etude.etude_rentabilite.fonction.situations.each do |situation|
   %article{:id => [situation.titre]}
     %h3#situation Coûts de fonctionnement dans la situation #{situation.titre}
@@ -27,8 +27,7 @@
         %article#commentaire
           Commentaires :
           =situation.commentaires
-    %br
-    %br
+
     %article#detail
       %table#detail
         %tr
@@ -78,11 +77,10 @@
                   -i += 1
                 -else
                   %td
-%br
-%br
 %footer
-  = link_to 'Modif', edit_fonction_path(@etude)
-  \|
+  -if @modif
+    = link_to 'Modif', edit_fonction_path(@etude)
+    \|
   = link_to 'Rentabilité', rentabilite_path(@etude)
   \|
   = link_to 'Etude', projet_etude_path(@etude.projet, @etude)
