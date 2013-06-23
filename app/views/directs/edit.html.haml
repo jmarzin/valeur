@@ -24,10 +24,10 @@
             %td= dir_form.submit 'Insv', :class => 'action', :name => "b#{i}"
             %td.description= detail_form.text_field :description,:size => 20
             %td.nature= detail_form.select :nature,Etude.liste_natures_directs,:size => 4
-            %td.totaux.montant= number_with_precision(detail.total, options =  {delimiter: " ", precision: 0}) unless detail.total == 0
+            %td.totaux.montant= number_with_precision(detail.total, options =  {delimiter: " ", precision: 1}) unless detail.total == 0
             -detail.montants.each do |montant|
               = detail_form.fields_for :montants,montant do |montant_form|
-                %td.montant= montant_form.number_field :montant,:value => number_with_precision(montant.montant,options={precision: 0}), :size => 1
+                %td.montant= montant_form.number_field :montant,:value => number_with_precision(montant.montant,options={precision: 1}), :size => 1
           -i+=1
       %tr.totaux
         %td.touche
@@ -35,9 +35,9 @@
         %td.touche
         %td.description= @direct.calculees[0].description
         %td
-        %td.montant=number_with_precision(@direct.total, options =  {delimiter: " ", precision: 0}) unless @direct.total == nil || @direct.total == 0
+        %td.montant=number_with_precision(@direct.total, options =  {delimiter: " ", precision: 1}) unless @direct.total == nil || @direct.total == 0
         -@direct.calculees[0].montants.each do |montant|
-          %td.montant= number_with_precision(montant.montant, options =  {delimiter: " ", precision: 0}) unless montant.montant == 0
+          %td.montant= number_with_precision(montant.montant, options =  {delimiter: " ", precision: 1}) unless montant.montant == 0
 
   %table#cadre_com_direct
     %td#somme
@@ -49,7 +49,7 @@
           - @etude.etude_rentabilite.direct.sommes.each do |somme|
             %tr
               %td.nature= somme.nature
-              %td.montant= number_with_precision(somme.montant, options = {delimiter: " ", precision: 0}) unless somme.montant == 0
+              %td.montant= number_with_precision(somme.montant, options = {delimiter: " ", precision: 1}) unless somme.montant == 0
     %th#commentaire_direct
       %article#commentaire
         =dir_form.label :commentaires, :class => "commentaire"

@@ -58,7 +58,7 @@
             %td.description= detail_form.text_field :description,:size => 20
             %td.nature= detail_form.select :nature,Etude.liste_familles_gain
             %td.unite= detail_form.select :unite,Etude.liste_unites_gain,:size => 2
-            %td.totaux.montant= number_with_precision(detail.total, options =  {delimiter: " ", precision: 0}) unless detail.total == 0
+            %td.totaux.montant= number_with_precision(detail.total, options =  {delimiter: " ", precision: 1}) unless detail.total == 0
             -detail.montants.each do |montant|
               = detail_form.fields_for :montants,montant do |montant_form|
                 %td.montant= montant_form.number_field :montant,:value => number_with_precision(montant.montant,options={precision: 1}), :size => 1

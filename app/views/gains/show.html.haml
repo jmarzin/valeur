@@ -28,41 +28,26 @@
 %article#detail
   %table#detail
     %tr
-      %th.nom{:rowspan => 2} Nom
-      %th.description{:rowspan => 2} Description de l'impact
-      %th.nature_g{:rowspan => 2} Famille d'impact
-      %th.unite{:rowspan => 2} Exprimé en
-      %th.totaux{:rowspan => 2} --Totaux--
-      %th.annees{:colspan => @etude.etude_rentabilite.gain.calculees[13].montants.count + 1} Impacts annuels
-    %tr
-      -@etude.etude_rentabilite.gain.calculees[13].montants.each do |mt|
-        %th.annee=mt.annee
+      %th.nom Nom
+      %th.description Description de l'impact
+      %th.nature_g Famille d'impact
+      %th.unite Exprimé en
+      =render :partial=>"partages/ligne_annees",:object=>@etude.etude_rentabilite.gain.calculees[13].montants,:locals=>{:annees=>@etude.liste_annees}
+
     -@etude.etude_rentabilite.gain.details.each do |det|
       %tr
         %td.nom= det.nom
         %td.description= det.description
         %td.nature=det.nature
         %td.unite=det.unite
-        %td.totaux.montant=number_with_precision(det.total,options =  {delimiter: " ", precision: 0})
-        -i = 0
-        -@etude.etude_rentabilite.gain.calculees[13].montants.each do |calc|
-          -if det.montants[i] && det.montants[i].annee == calc.annee then
-            %td.montant=number_with_precision(det.montants[i].montant, options = {delimiter: " ", precision: 0})
-            -i += 1
-          -else
-            %td
+        =render :partial => "partages/ligne", :object => det, :locals => { :annees => @etude.liste_annees , :signe => '+' }
+
     -@etude.etude_rentabilite.gain.calculees.each do |calc|
       %tr.totaux
         %td.description{:colspan => 3}= calc.description
         %td.unite=calc.unite
-        %td.montant=number_with_precision(calc.total, options =  {delimiter: " ", precision: 0})
-        -i = 0
-        -@etude.etude_rentabilite.gain.calculees[13].montants.each do |col|
-          -if calc.montants[i] && calc.montants[i].annee == col.annee then
-            %td.montant= number_with_precision(calc.montants[i].montant, options =  {delimiter: " ", precision: 0})
-            -i += 1
-          -else
-            %td
+        =render :partial=>"partages/ligne",:object=>calc,:locals=>{:annees=>@etude.liste_annees,:signe=>'+'}
+
 %footer
   -if @modif
     = link_to 'Modif', edit_gain_path(@etude)
