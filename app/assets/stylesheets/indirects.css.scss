@@ -21,9 +21,35 @@ table#cadre {
   text-align: center;
   width: 5rem;
 }
-table#somme {
-  width: 60%;
+table#somme_ind {
+  table-layout:fixed;
+  width: 40%;
   .nature {
-    width: 20rem;
+    width: 8rem;
+    text-align: left;
+  }
+  .unite {
+    width: 3rem;
+  }
+  .montant {
+    width: 5rem;
+    text-align: right;
+  }
+}
+table#cadre_com2 {
+  table-layout:fixed;
+  width: 100%;
+  th#repart {
+    width: 20%;
+    th.categorie {
+      width: 3%;
+    }
+  }
+  .commentaire {
+    color: black;
+  }
+  th#commentaire1 {
+    vertical-align: top;
+    text-align: left;
   }
 }

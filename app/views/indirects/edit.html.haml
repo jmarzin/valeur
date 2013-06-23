@@ -12,21 +12,26 @@
     = indir_form.submit 'Actualiser'
     \
     = indir_form.submit 'Enregistrer'
-  %br
-  %br
-  =indir_form.hidden_field :somme_pourcent
-  %article#cadre
-    %table#cadre
-      %tr
-        %th.categorie Catégorie de personnel
-        %th.repart Répartition (%)
-      -@indirect.repartitions.each do |repart|
-        = indir_form.fields_for :repartitions,repart do |repart_form|
-          %tr{:id => [repart.cadre]}
-            %td.categorie=repart.cadre
-            %td.repart= repart_form.number_field :pourcent, :size => 1
-  %br
-  %br
+
+
+  %table#cadre_com2
+    %th#repart
+      %article#cadre
+        =indir_form.hidden_field :somme_pourcent
+        %table#cadre
+          %tr
+            %th.categorie Catégorie de personnel
+            %th.repart Répartition (%)
+          -@indirect.repartitions.each do |repart|
+            = indir_form.fields_for :repartitions,repart do |repart_form|
+              %tr{:id => [repart.cadre]}
+                %td.categorie=repart.cadre
+                %td.repart= repart_form.number_field :pourcent, :size => 1
+    %th#commentaire1
+      %article#commentaire
+        =indir_form.label :commentaires, :class => "commentaire"
+        =indir_form.text_area :commentaires, :cols => 80, :rows => 8
+
   %article#detail
     %table#detail
       %tr
@@ -63,21 +68,19 @@
           %td.montant=number_with_precision(calc.total, options =  {delimiter: " ", precision: 0}) unless @indirect.total == nil || calc.total == 0
           -calc.montants.each do |montant|
             %td.montant= number_with_precision(montant.montant, options =  {delimiter: " ", precision: prec}) unless montant.montant == 0
-  %br
-  %br
-  %article#somme
-    %table#somme
+
+  %article#somme_ind
+    %table#somme_ind
       %tr
-        %th.nature{:colspan => 2} Coûts indirects pluriannuels 
+        %th.nature Coûts indirects pluriannuels
+        %th.unite Exprimés en 
         %th.montant Totaux
-        %th.commentaire Commentaires
       - @indirect.sommes.each do |somme|
-        = indir_form.fields_for :sommes,somme do |somme_form|
-          %tr
-            %td.nature= somme.nature
-            %td.unite= somme.unite
-            %td.montant= number_with_precision(somme.montant, options = {delimiter: " ", precision: 0}) unless somme.montant == 0
-            %td.commentaire= somme_form.text_field :commentaire,:size => 40
+        %tr
+          %td.nature= somme.nature
+          %td.unite= somme.unite
+          %td.montant= number_with_precision(somme.montant, options = {delimiter: " ", precision: 0}) unless somme.montant == 0
+
 
   %footer
     = indir_form.submit 'Actualiser'

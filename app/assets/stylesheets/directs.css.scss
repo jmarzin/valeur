@@ -41,24 +41,27 @@ table#detail {
   }
 }
 table#somme {
+  table-layout:fixed;
   .nature {
-    width: 15rem;
+    width: 8rem;
+    text-align: left;
   }
   .montant {
-    width: 10rem;
+    width: 5rem;
     text-align: right;
   }
 }
 table#cadre_com_direct {
   table-layout:fixed;
+  width: 80%;
   td#somme {
-    width: 40%;
+    width: 30%;
   }
   .commentaire {
     color: black;
   }
   th#commentaire_direct {
-    width: 60%;
+    width: 70%;
     text-align: left;
     vertical-align: top;
   }

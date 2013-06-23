@@ -45,7 +45,7 @@
         %table#somme
           %tr
             %th.nature Coûts directs pluriannuels 
-            %th (k€)
+            %th.montant Totaux (k€)
           - @etude.etude_rentabilite.direct.sommes.each do |somme|
             %tr
               %td.nature= somme.nature

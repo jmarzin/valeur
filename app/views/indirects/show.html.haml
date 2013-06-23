@@ -7,19 +7,22 @@
   = link_to 'Rentabilité', rentabilite_path(@etude)
   \|
   = link_to 'Etude', projet_etude_path(@etude.projet, @etude)
-%br
-%br
-%article#cadre
-  %table#cadre
-    %tr
-      %th.categorie Catégorie de personnel
-      %th.repart Répartition (%)
-    -@etude.etude_rentabilite.indirect.repartitions.each do |repart|
+
+%table#cadre_com2
+  %th#repart
+    %table#cadre
       %tr
-        %td.categorie=repart.cadre
-        %td.repart=repart.pourcent
-%br
-%br
+        %th.categorie Catégorie de personnel
+        %th.repart Répartition (%)
+      -@etude.etude_rentabilite.indirect.repartitions.each do |repart|
+        %tr
+          %td.categorie=repart.cadre
+          %td.repart=repart.pourcent
+  %th#commentaire1
+    %article#commentaire
+      Commentaires :
+      =@etude.etude_rentabilite.indirect.commentaires
+
 %article#detail
   %table#detail
     %th.description Description du coût
@@ -53,23 +56,18 @@
             -i += 1
           -else
             %td
-%br
-%br
 %article#somme
-  %table#somme
+  %table#somme_ind
     %tr
       %th.nature Coûts directs pluriannuels 
       %th.unite  Exprimé en
       %th.montant Totaux
-      %th.commentaire Commentaires
     - @etude.etude_rentabilite.indirect.sommes.each do |somme|
       %tr
         %td.nature= somme.nature
         %td.unite= somme.unite
         %td.montant= number_with_precision(somme.montant, options = {delimiter: " ", precision: 0}) unless somme.montant == 0
-        %td.commentaire= somme.commentaire
-%br
-%br
+
 %footer
   = link_to 'Modif', edit_indirect_path(@etude)
   \|
