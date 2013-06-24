@@ -28,7 +28,6 @@
 %article#detail
   %table#detail
     %tr
-      %th.nom Nom
       %th.description Description de l'impact
       %th.nature_g Famille d'impact
       %th.unite Exprimé en
@@ -36,7 +35,6 @@
 
     -@etude.etude_rentabilite.gain.details.each do |det|
       %tr
-        %td.nom= det.nom
         %td.description= det.description
         %td.nature=det.nature
         %td.unite=det.unite
@@ -44,7 +42,7 @@
 
     -@etude.etude_rentabilite.gain.calculees.each do |calc|
       %tr.totaux
-        %td.description{:colspan => 3}= calc.description
+        %td.description{:colspan => 2}= calc.description
         %td.unite=calc.unite
         =render :partial=>"partages/ligne",:object=>calc,:locals=>{:annees=>@etude.liste_annees,:signe=>'+'}
 

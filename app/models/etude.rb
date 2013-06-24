@@ -28,7 +28,6 @@ class Etude
     obj.details << Detail.new
     self.liste_annees.each { |annee| obj.details[-1].montants << Montant.new(annee: annee) }
     while j != i
-      obj.details[j].nom,obj.details[j-1].nom = obj.details[j-1].nom,obj.details[j].nom
       obj.details[j].description,obj.details[j-1].description = obj.details[j-1].description,obj.details[j].description
       obj.details[j].nature,obj.details[j-1].nature = obj.details[j-1].nature,obj.details[j].nature
       obj.details[j].unite,obj.details[j-1].unite = obj.details[j-1].unite,obj.details[j].unite
@@ -167,7 +166,6 @@ class Etude
     totaux_unite_annee = Hash.new
     totaux_nature_unite_annee = Hash.new(0)
     self.etude_rentabilite.gain.details.where(description: "").destroy_all
-    self.etude_rentabilite.gain.details.where(nom: "").destroy_all
     self.etude_rentabilite.gain.details.where(nature: "").destroy_all
     self.etude_rentabilite.gain.details.each do |detail|
       detail.unite = 'k€' if detail.unite == ""
@@ -501,7 +499,16 @@ class Etude
         calculee.montants << Montant.new(annee: annee,montant: 0)
       end
     end
-    # calculees[0]
+
+      self.etude_rentabilite.calculees << Calculee.new(description: "",unite: 'k€')
+      self.etude_rentabilite.calculees << Calculee.new(description: "",unite: 'k€')
+      self.etude_rentabilite.calculees << Calculee.new(description: "",unite: 'k€')
+      self.etude_rentabilite.calculees << Calculee.new(description: "",unite: 'k€')
+      self.etude_rentabilite.calculees << Calculee.new(description: "TOTAL FLUX ANNUELS CUMULES actualisés",unite: 'k€')
+
+
+
+    # calculees[0] Total Coûts d'investissement initial
     if self.etude_rentabilite.direct && self.etude_rentabilite.direct.calculees[0] then
       # ajouter direct.calculees[0] à rentabilite.calculees[0]
       self.etude_rentabilite.calculees[0] = self.calcul_somme(self.etude_rentabilite.calculees[0],self.etude_rentabilite.direct.calculees[0],'-')
@@ -510,36 +517,30 @@ class Etude
       # ajouter indirect.calculees[4] à rentabilite.calculees[0]
       self.etude_rentabilite.calculees[0] = self.calcul_somme(self.etude_rentabilite.calculees[0],self.etude_rentabilite.indirect.calculees[4],'-')
     end
-    # calculees[1]
+    # calculees[1] Total Coûts d'investissement initial actualisés
     self.etude_rentabilite.calculees[1] = self.actualise(self.etude_rentabilite.calculees[1],self.etude_rentabilite.calculees[0],'+')
-    # calculees[2]
+    # calculees[2] Total Impacts Métiers actualisé
     if self.etude_rentabilite.gain && self.etude_rentabilite.gain.calculees[13] then
       self.etude_rentabilite.calculees[2] = self.actualise(self.etude_rentabilite.calculees[2],self.etude_rentabilite.gain.calculees[13],'+')
     end
-    # calculees[3]
+    # calculees[3] Total Impacts sur les coûts de fonctionnement SI actualisé
     if self.etude_rentabilite.fonction && self.etude_rentabilite.fonction.calculees[0] then
       self.etude_rentabilite.calculees[3] = self.actualise(self.etude_rentabilite.calculees[3],self.etude_rentabilite.fonction.calculees[0],'-')
     end
-    # calculees[4]
+    # calculees[4] Gains nets (Impacts métiers + Impacts fonctionnement système) 
     if self.etude_rentabilite.gain && self.etude_rentabilite.gain.calculees[13] then
       self.etude_rentabilite.calculees[4] = self.calcul_somme(self.etude_rentabilite.calculees[4],self.etude_rentabilite.gain.calculees[13],'+')
     end
     if self.etude_rentabilite.fonction && self.etude_rentabilite.fonction.calculees[0] then
       self.etude_rentabilite.calculees[4] = self.calcul_somme(self.etude_rentabilite.calculees[4],self.etude_rentabilite.fonction.calculees[0],'-')
     end
-    # calculees[5]
-    self.etude_rentabilite.calculees[5] = self.actualise(self.etude_rentabilite.calculees[5],self.etude_rentabilite.calculees[4],'+')
-    # calculees[6] (ajout de 1,2, 3 et 5)
-    self.etude_rentabilite.calculees[6].total = self.etude_rentabilite.calculees[1].total + \
-                                                self.etude_rentabilite.calculees[2].total + \
-                                                self.etude_rentabilite.calculees[3].total + \
-                                                self.etude_rentabilite.calculees[5].total
-    self.etude_rentabilite.calculees[6].montants.each_index do |rang|
-      self.etude_rentabilite.calculees[6].montants[rang].montant = self.etude_rentabilite.calculees[1].montants[rang].montant + \
-                                                                   self.etude_rentabilite.calculees[2].montants[rang].montant + \
-                                                                   self.etude_rentabilite.calculees[3].montants[rang].montant + \
-                                                                   self.etude_rentabilite.calculees[5].montants[rang].montant
-    end
+    # calculees[5] TOTAL FLUX ANNUELS non actualisés (k€)
+    self.etude_rentabilite.calculees[5] = self.calcul_somme(self.etude_rentabilite.calculees[5],self.etude_rentabilite.calculees[0],'+')
+    self.etude_rentabilite.calculees[5] = self.calcul_somme(self.etude_rentabilite.calculees[5],self.etude_rentabilite.calculees[4],'+')
+    # calculees[6] (ajout de 1,2 et 3) TOTAL FLUX ANNUELS actualisés
+    self.etude_rentabilite.calculees[6] = self.calcul_somme(self.etude_rentabilite.calculees[6],self.etude_rentabilite.calculees[1],'+')
+    self.etude_rentabilite.calculees[6] = self.calcul_somme(self.etude_rentabilite.calculees[6],self.etude_rentabilite.calculees[2],'+')
+    self.etude_rentabilite.calculees[6] = self.calcul_somme(self.etude_rentabilite.calculees[6],self.etude_rentabilite.calculees[3],'+')
     # calculees[7] cumuls
     self.etude_rentabilite.calculees[7].montants.each_index do |rang|
       if rang == 0 then

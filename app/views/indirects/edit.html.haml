@@ -49,7 +49,7 @@
             %td= indir_form.submit 'Sup', :class => 'action', :name => "s#{i}"
             %td= indir_form.submit 'Ins^', :class => 'action', :name => "h#{i}"
             %td= indir_form.submit 'Insv', :class => 'action', :name => "b#{i}"
-            %td.description= detail_form.text_field :description,:size => 20
+            %td.description= detail_form.text_area :description,:cols => 54,:rows => 1
             %td.nature= detail_form.select :nature,Etude.liste_natures_indirects.keys,:size => 10
             %td.unite=detail.unite
             %td.totaux.montant= number_with_precision(detail.total, options =  {delimiter: " ", precision: 1}) unless detail.total == 0

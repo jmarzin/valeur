@@ -40,7 +40,6 @@
     %table#detail
       %tr
         %th.touche{:colspan => 3} Actions
-        %th.nom Nom
         %th.description Description de l'impact
         %th.nature_g Famille d'impact
         %th.unite Exprimé en
@@ -54,8 +53,7 @@
             %td= gain_form.submit 'Sup', :class => 'action', :name => "s#{i}"
             %td= gain_form.submit 'Ins^', :class => 'action', :name => "h#{i}"
             %td= gain_form.submit 'Insv', :class => 'action', :name => "b#{i}"
-            %td.nom= detail_form.text_field :nom, :size => 5, :autofocus => @auto == i.to_s
-            %td.description= detail_form.text_field :description,:size => 20
+            %td.description= detail_form.text_area :description,:autofocus => @auto == i.to_s,:cols => 54,:rows => 1
             %td.nature= detail_form.select :nature,Etude.liste_familles_gain
             %td.unite= detail_form.select :unite,Etude.liste_unites_gain,:size => 2
             %td.totaux.montant= number_with_precision(detail.total, options =  {delimiter: " ", precision: 1}) unless detail.total == 0
@@ -69,7 +67,7 @@
             %td.touche
             %td.touche
             %td.touche
-            %td.description{:colspan => 3}= calc.description
+            %td.description{:colspan => 2}= calc.description
             %td.unite= calc.unite
             %td.montant=number_with_precision(calc.total, options =  {delimiter: " ", precision: 1}) unless calc.total == nil || calc.total < 0.1
             -calc.montants.each do |montant|
