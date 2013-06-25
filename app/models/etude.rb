@@ -517,6 +517,7 @@ class Etude
       # ajouter indirect.calculees[4] à rentabilite.calculees[0]
       self.etude_rentabilite.calculees[0] = self.calcul_somme(self.etude_rentabilite.calculees[0],self.etude_rentabilite.indirect.calculees[4],'-')
     end
+    self.cout = -self.etude_rentabilite.calculees[0].total
     # calculees[1] Total Coûts d'investissement initial actualisés
     self.etude_rentabilite.calculees[1] = self.actualise(self.etude_rentabilite.calculees[1],self.etude_rentabilite.calculees[0],'+')
     # calculees[2] Total Impacts Métiers actualisé
@@ -541,6 +542,7 @@ class Etude
     self.etude_rentabilite.calculees[6] = self.calcul_somme(self.etude_rentabilite.calculees[6],self.etude_rentabilite.calculees[1],'+')
     self.etude_rentabilite.calculees[6] = self.calcul_somme(self.etude_rentabilite.calculees[6],self.etude_rentabilite.calculees[2],'+')
     self.etude_rentabilite.calculees[6] = self.calcul_somme(self.etude_rentabilite.calculees[6],self.etude_rentabilite.calculees[3],'+')
+    self.van = self.etude_rentabilite.calculees[6].total
     # calculees[7] cumuls
     self.etude_rentabilite.calculees[7].montants.each_index do |rang|
       if rang == 0 then
@@ -862,6 +864,7 @@ class Etude
   validates :type_produit, :inclusion => { :in => [:back_office,:front_office,:specifique],
     :message => "%{value} invalide" }
   field :duree_vie, type: Integer
+  field :duree_vie_totale, type: Float
   field :taux_actu, type: Float, default: 4
   validates :taux_actu, :presence => {:message => "obligatoire"} 
   field :publie, type: Boolean, default: false
@@ -875,6 +878,8 @@ class Etude
   field :delai_retour, type: Float
   validates :delai_retour, :presence => {:message => "obligatoire pour une étude publiée",
 	 :if => :publie }
+  field :van, type: Float
+  field :tri, type: Float
 
   embeds_one :etude_strategie
   embeds_one :etude_rentabilite

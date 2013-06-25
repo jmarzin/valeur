@@ -25,6 +25,9 @@
     %td.bold Durée de vie
     %td= @etude.duree_vie
   %tr
+    %td.bold Durée de vie totale
+    %td= number_with_precision(@etude.duree_vie_totale, options = {precision: 1})
+  %tr
     %td.bold Taux d'actualisation
     %td= number_to_percentage(@etude.taux_actu,:precision => 1) 
   %tr

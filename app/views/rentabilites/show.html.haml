@@ -15,8 +15,15 @@
     %td#indirect= link_to number_with_precision(@rentabilite.indirect.total, options = {delimiter: " ",precision: 0}), indirect_path(@etude)
     %td#gain= link_to number_with_precision(@rentabilite.gain.total, option = {delimiter: " ",precision: 0}), gain_path(@etude)
     %td#fonction= link_to number_with_precision(@rentabilite.fonction.total, options = {delimiter: " ",precision: 0}), fonction_path(@etude)
+%h3 Rappel des paramètres du projet
+%dl
+  %dt="Taux d'actualisation"
+  %dd="#{number_with_precision(@etude.taux_actu, options = {precision: 1})} %"
+  %dt="Durée de vie totale"
+  %dd="#{number_with_precision(@etude.duree_vie_totale, options = {precision: 1})} ans"
 %article#synthese
   %table#synthese
+    %caption Tableau des flux annuels
     %tr#titres
       %th.description
       =render :partial=>"partages/ligne_annees",:object=>@rentabilite.calculees[6].montants,:locals=>{:annees=>@etude.liste_annees}
@@ -60,5 +67,15 @@
       %tr{:id => ["l_#{rang}"]}
         %td.description=@rentabilite.calculees[rang-13].description
         =render :partial=>"partages/ligne",:object=>@rentabilite.calculees[rang-13],:locals=>{:annees=>@etude.liste_annees,:signe=>'+'}
+%h3 Indicateurs de rentabilité
+%dl
+  %dt="Valeur actualisée nette (VAN)"
+  %dd="#{number_with_precision(@etude.van,options = {delimiter: " ",precision: 1})} k€"
+  %dt="Taux de rendement interne (TRI)"
+  %dd="#{number_with_precision(@etude.tri,options = {precision: 1})} %"
+  %dt="Délai de retour"
+  %dd=" ans"
+  %dt="Coût total du projet"
+  %dd="#{number_with_precision(@etude.cout,options = {delimiter: " ",precision: 1})} k€"
 
 = link_to 'Retour étude', projet_etude_path(@etude.projet, @etude)

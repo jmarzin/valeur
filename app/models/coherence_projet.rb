@@ -38,6 +38,7 @@ class CoherenceProjet < ActiveModel::Validator
         rec.errors[:base] << "Durée de vie obligatoire"
       else
         rec.duree_vie = Etude.val_type_produit[rec.type_produit] if rec.type_produit != :specifique
+        rec.duree_vie_totale = rec.duree_vie + rec.duree_projet
       end
     elsif rec.class == Indirect
       if rec.somme_pourcent != 100
