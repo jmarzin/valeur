@@ -74,7 +74,7 @@
   %dt="Taux de rendement interne (TRI)"
   %dd="#{number_with_precision(@etude.tri,options = {precision: 1})} %"
   %dt="Délai de retour"
-  %dd=" ans"
+  %dd="#{number_with_precision(@etude.delai_retour,options = {precision: 1})} ans"
   %dt="Coût total du projet"
   %dd="#{number_with_precision(@etude.cout,options = {delimiter: " ",precision: 1})} k€"
 

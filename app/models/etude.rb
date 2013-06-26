@@ -1,6 +1,8 @@
 # encoding: utf-8 
 require 'coherence_projet'
 require 'mareva'
+require 'irr'
+
 #
 # la structure des champs option, appreciation et ponderation est voisine
 # la clé est le texte qui apparait en choix à l'utilisateur
@@ -538,11 +540,30 @@ class Etude
     # calculees[5] TOTAL FLUX ANNUELS non actualisés (k€)
     self.etude_rentabilite.calculees[5] = self.calcul_somme(self.etude_rentabilite.calculees[5],self.etude_rentabilite.calculees[0],'+')
     self.etude_rentabilite.calculees[5] = self.calcul_somme(self.etude_rentabilite.calculees[5],self.etude_rentabilite.calculees[4],'+')
+    flows = []
+    self.etude_rentabilite.calculees[5].montants.each { |mt| flows << mt.montant }
+    until flows[0] < 0 || flows.empty? do flows.delete(0) end
+    if flows.count >= 2 then self.tri = NewtonRaphsonIrrCalculator.calculate(flows,100,0.1)*100 else self.tri = nil end
     # calculees[6] (ajout de 1,2 et 3) TOTAL FLUX ANNUELS actualisés
     self.etude_rentabilite.calculees[6] = self.calcul_somme(self.etude_rentabilite.calculees[6],self.etude_rentabilite.calculees[1],'+')
     self.etude_rentabilite.calculees[6] = self.calcul_somme(self.etude_rentabilite.calculees[6],self.etude_rentabilite.calculees[2],'+')
     self.etude_rentabilite.calculees[6] = self.calcul_somme(self.etude_rentabilite.calculees[6],self.etude_rentabilite.calculees[3],'+')
     self.van = self.etude_rentabilite.calculees[6].total
+    if self.etude_rentabilite.calculees[6].montants[0].montant >= 0 then 
+      self.delai_retour = 0 
+    else
+      self.delai_retour = 1 - (self.date_debut.month -1)/12
+    end
+    (1..self.etude_rentabilite.calculees[6].montants.count - 1).each do |index|
+      if self.etude_rentabilite.calculees[6].montants[index-1].montant < 0 then
+        if self.etude_rentabilite.calculees[6].montants[index].montant < 0 then
+          self.delai_retour += 1
+        else
+          self.delai_retour -= self.etude_rentabilite.calculees[6].montants[index-1].montant / \
+            (self.etude_rentabilite.calculees[6].montants[index].montant - self.etude_rentabilite.calculees[6].montants[index-1].montant)
+        end
+      end
+    end
     # calculees[7] cumuls
     self.etude_rentabilite.calculees[7].montants.each_index do |rang|
       if rang == 0 then

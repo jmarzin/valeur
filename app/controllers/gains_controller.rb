@@ -30,7 +30,7 @@ include Autofocus
   def update
     @etude = Etude.find(params[:id])
     respond_to do |format|
-      @auto = autofocus(params,@etude.etude_rentabilite.gain.details.count)
+      @auto = autofocus(params,@etude.etude_rentabilite.gain.details.count,0)
       ("0".."4").each { |i| params[:gain][:etp_reparts_attributes][i] = @etude.somme_pourcent(params[:gain][:etp_reparts_attributes][i]) }
       if @etude.etude_rentabilite.gain.update_attributes(params[:gain])
         if params[:commit] then

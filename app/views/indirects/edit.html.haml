@@ -9,7 +9,7 @@
         - @indirect.errors.full_messages.each do |msg|
           %li= msg
   %header
-    = indir_form.submit 'Actualiser'
+    = indir_form.submit 'Actualiser', :autofocus => @auto == 'Actualiser'
     \
     = indir_form.submit 'Enregistrer'
 
@@ -49,7 +49,7 @@
             %td= indir_form.submit 'Sup', :class => 'action', :name => "s#{i}"
             %td= indir_form.submit 'Ins^', :class => 'action', :name => "h#{i}"
             %td= indir_form.submit 'Insv', :class => 'action', :name => "b#{i}"
-            %td.description= detail_form.text_area :description,:cols => 54,:rows => 1
+            %td.description= detail_form.text_area :description,:autofocus => @auto == i.to_s,:cols => 54,:rows => 1
             %td.nature= detail_form.select :nature,Etude.liste_natures_indirects.keys,:size => 10
             %td.unite=detail.unite
             %td.totaux.montant= number_with_precision(detail.total, options =  {delimiter: " ", precision: 1}) unless detail.total == 0
@@ -82,7 +82,7 @@
 
 
   %footer
-    = indir_form.submit 'Actualiser'
+    = indir_form.submit 'actualiser', :autofocus => @auto == 'actualiser'
     \
-    = indir_form.submit 'Enregistrer'
+    = indir_form.submit 'enregistrer'
 

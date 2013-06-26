@@ -1,34 +1,11 @@
 # -*- coding: utf-8 -*-
 require 'mareva'
-
+require 'autofocus'
 class FonctionsController < ApplicationController
   # GET /fonctions/1
   # GET /fonctions/1.json
-  def autofocus
-    valeur = ""
-    if params[:commit] then
-      valeur = params[:commit]
-    else
-      code = params.key('Insv')
-      code = params.key('Ins^') if not code
-      code = params.key('Sup') if not code
-      m = /^(.)(\D*)(\d+)/.match(code)
-      ligne = m[3]
-      if m[1] == 's' then
-        if m[2] == 'actuelle' then
-          if ligne.to_i == @etude.etude_rentabilite.fonction.situations[0].details.count then
-            ligne = (ligne.to_i - 1).to_s
-          end
-        elsif ligne.to_i == @etude.etude_rentabilite.fonction.situations[1].details.count then
-          ligne =  (ligne.to_i - 1).to_s
-        end
-      elsif m[1] == 'b' then
-        ligne = ligne.succ
-      end
-      valeur = m[2]+ligne
-    end
-  end
-  private :autofocus
+
+include Autofocus
 
   def show
     @etude = Etude.find(params[:id])
@@ -52,7 +29,7 @@ class FonctionsController < ApplicationController
   def update
     @etude = Etude.find(params[:id])
     respond_to do |format|
-      @auto = autofocus
+      @auto = autofocus(params,@etude.etude_rentabilite.fonction.situations[0].details.count,@etude.etude_rentabilite.fonction.situations[1].details.count)
       params[:fonction][:situations_attributes]["0"] = @etude.somme_pourcent(params[:fonction][:situations_attributes]["0"])
       params[:fonction][:situations_attributes]["1"] = @etude.somme_pourcent(params[:fonction][:situations_attributes]["1"])
       if @etude.etude_rentabilite.fonction.update_attributes(params[:fonction])

@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
 require 'mareva'
+require 'autofocus'
 
 class IndirectsController < ApplicationController
+
+include Autofocus
+
   # GET /indirects/1
   # GET /indirects/1.json
   def show
@@ -25,13 +29,14 @@ class IndirectsController < ApplicationController
   def update
     @etude = Etude.find(params[:id])
     respond_to do |format|
+      @auto = autofocus(params,@etude.etude_rentabilite.indirect.details.count,0)
       params[:indirect] = @etude.somme_pourcent(params[:indirect])
       if @etude.etude_rentabilite.indirect.update_attributes(params[:indirect])
         if params[:commit] then
           @etude.etude_rentabilite.a_calculer = true
           @etude.simplifie_indirect
           flash[:notice] = "Les coûts indirects ont bien été mis à jour."
-          if params[:commit] == 'Actualiser' then
+          if params[:commit].capitalize == 'Actualiser' then
             @indirect = @etude.lit_direct_indirect('indirect')
             format.html { render action: "edit"}
             format.json { head :no_content }

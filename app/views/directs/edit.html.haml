@@ -3,7 +3,7 @@
 %h2 Saisie/modification des coûts directs d'investissement de l'étude  #{@etude._id} du projet #{@etude.projet.nom}
 = form_for @direct, :url => direct_path(@etude) do |dir_form|
   %header
-    = dir_form.submit 'Actualiser'
+    = dir_form.submit 'Actualiser', :autofocus => @auto == 'Actualiser'
     \
     = dir_form.submit 'Enregistrer'
   %article#detail
@@ -22,7 +22,7 @@
             %td= dir_form.submit 'Sup', :class => 'action', :name => "s#{i}"
             %td= dir_form.submit 'Ins^', :class => 'action', :name => "h#{i}"
             %td= dir_form.submit 'Insv', :class => 'action', :name => "b#{i}"
-            %td.description= detail_form.text_area :description,:cols => 54,:rows => 1
+            %td.description= detail_form.text_area :description,:autofocus => @auto == i.to_s,:cols => 54,:rows => 1
             %td.nature= detail_form.select :nature,Etude.liste_natures_directs,:size => 4
             %td.totaux.montant= number_with_precision(detail.total, options =  {delimiter: " ", precision: 1}) unless detail.total == 0
             -detail.montants.each do |montant|
@@ -55,7 +55,7 @@
         =dir_form.label :commentaires, :class => "commentaire"
         =dir_form.text_area :commentaires, :cols => 80, :rows => 6
   %footer
-    = dir_form.submit 'Actualiser'
+    = dir_form.submit 'actualiser', :autofocus => @auto == 'actualiser'
     \
-    = dir_form.submit 'Enregistrer'
+    = dir_form.submit 'enregistrer'
 
