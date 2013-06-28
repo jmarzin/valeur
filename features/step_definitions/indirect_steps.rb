@@ -65,52 +65,52 @@ end
 
 Alors(/^je vois les cumuls indirects calculés$/) do
   within('tr#1') do
-    find_field('indirect_details_attributes_0_description').value.should == 'Ligne 1'
+    find_field('indirect_details_attributes_0_description').value.should =~ /Ligne 1/
     page.has_select?('indirect_details_attributes_0_nature', :selected => 'Coûts MOA').should be true
-    find_field('indirect_details_attributes_0_montants_attributes_1_montant').value.should == '1'
-    find_field('indirect_details_attributes_0_montants_attributes_2_montant').value.should == '2'
-    find_field('indirect_details_attributes_0_montants_attributes_3_montant').value.should == '3'
-    page.should have_content('6')
+    find_field('indirect_details_attributes_0_montants_attributes_1_montant').value.should == '1.0'
+    find_field('indirect_details_attributes_0_montants_attributes_2_montant').value.should == '2.0'
+    find_field('indirect_details_attributes_0_montants_attributes_3_montant').value.should == '3.0'
+    page.should have_content('6.0')
   end
   within('tr#2') do
-    find_field('indirect_details_attributes_1_description').value.should == 'Ligne 2'
+    find_field('indirect_details_attributes_1_description').value.should =~ /Ligne 2/
     page.has_select?('indirect_details_attributes_1_nature', :selected => 'Coûts MOA').should be true
-    find_field('indirect_details_attributes_1_montants_attributes_1_montant').value.should == '4'
-    find_field('indirect_details_attributes_1_montants_attributes_2_montant').value.should == '5'
-    find_field('indirect_details_attributes_1_montants_attributes_3_montant').value.should == '6'
-    find_field('indirect_details_attributes_1_montants_attributes_5_montant').value.should == '7'
-    page.should have_content('22')
+    find_field('indirect_details_attributes_1_montants_attributes_1_montant').value.should == '4.0'
+    find_field('indirect_details_attributes_1_montants_attributes_2_montant').value.should == '5.0'
+    find_field('indirect_details_attributes_1_montants_attributes_3_montant').value.should == '6.0'
+    find_field('indirect_details_attributes_1_montants_attributes_5_montant').value.should == '7.0'
+    page.should have_content('22.0')
   end
   within('tr#3') do
-    find_field('indirect_details_attributes_2_description').value.should == 'Ligne 3'
+    find_field('indirect_details_attributes_2_description').value.should =~ /Ligne 3/
     page.has_select?('indirect_details_attributes_2_nature', :selected => 'Coûts MOE').should be true
-    find_field('indirect_details_attributes_2_montants_attributes_4_montant').value.should == '8'
-    page.should have_content('8')
+    find_field('indirect_details_attributes_2_montants_attributes_4_montant').value.should == '8.0'
+    page.should have_content('8.0')
   end
   within('tr#4') do
-    find_field('indirect_details_attributes_3_description').value.should == 'Ligne 4'
+    find_field('indirect_details_attributes_3_description').value.should =~ /Ligne 4/
     page.has_select?('indirect_details_attributes_3_nature', :selected => 'Formation:temps formateur').should be true
-    find_field('indirect_details_attributes_3_montants_attributes_5_montant').value.should == '9'
-    page.should have_content('9')
+    find_field('indirect_details_attributes_3_montants_attributes_5_montant').value.should == '9.0'
+    page.should have_content('9.0')
   end
   within('tr#5') do
-    find_field('indirect_details_attributes_4_description').value.should == 'Ligne 5'
+    find_field('indirect_details_attributes_4_description').value.should =~ /Ligne 5/
     page.has_select?('indirect_details_attributes_4_nature', :selected => 'Formation:temps stagiaire').should be true
-    find_field('indirect_details_attributes_4_montants_attributes_4_montant').value.should == '10'
-    page.should have_content('10')
+    find_field('indirect_details_attributes_4_montants_attributes_4_montant').value.should == '10.0'
+    page.should have_content('10.0')
   end
   within('tr#6') do
-    find_field('indirect_details_attributes_5_description').value.should == 'Ligne 7'
+    find_field('indirect_details_attributes_5_description').value.should =~ /Ligne 7/
     page.has_select?('indirect_details_attributes_5_nature', :selected => 'Autre').should be true
-    find_field('indirect_details_attributes_5_montants_attributes_1_montant').value.should == '1000'
-    find_field('indirect_details_attributes_5_montants_attributes_3_montant').value.should == '2000'
-    find_field('indirect_details_attributes_5_montants_attributes_5_montant').value.should == '3000'
-    page.should have_content('6 000')
+    find_field('indirect_details_attributes_5_montants_attributes_1_montant').value.should == '1000.0'
+    find_field('indirect_details_attributes_5_montants_attributes_3_montant').value.should == '2000.0'
+    find_field('indirect_details_attributes_5_montants_attributes_5_montant').value.should == '3000.0'
+    page.should have_content('6 000.0')
   end
-  page.text.should =~ %r{Coûts indirects en ETP ETP 55 5 7 9 18 16 Coût complet moyen du personnel k€/ETP 66.5 67.5 68.5 69.5 70.5 Coûts indirects \
-existant exprimés en ETP valorisés k€ 3 800 333 472 617 1 250 1 128 Coûts indirects k€ 6 000 1 000 2 000 3 000 Total des coûts indirects k€ 9 800 \
-1 333 472 2 617 1 250 4 128 Coûts indirects pluriannuels Exprimés en Totaux Coûts MOA ETP 28 Coûts MOE ETP 8 Formation:temps formateur ETP 9 \
-Formation:temps stagiaire ETP 10 Autre k€ 6 000}
+  page.text.should =~ %r{Coûts indirects en ETP ETP 55\.0 5\.0 7\.0 9\.0 18\.0 16\.0 Coût complet moyen du personnel k€/ETP 66\.5 67\.5 68\.5 \
+69\.5 70\.5 Coûts indirects existant exprimés en ETP valorisés k€ 3 799\.8 332\.5 472\.2 616\.5 1 250\.3 1 128\.3 Coûts indirects k€ 6 000\.0 \
+1 000\.0 2 000\.0 3 000\.0 Total des coûts indirects k€ 9 799\.8 1 332\.5 472\.2 2 616\.5 1 250\.3 4 128\.3 Coûts indirects pluriannuels Exprimés \
+en Totaux Coûts MOA ETP 28\.0 Coûts MOE ETP 8\.0 Formation:temps formateur ETP 9\.0 Formation:temps stagiaire ETP 10\.0 Autre k€ 6 000\.0}
 end
 
 Quand(/^je saisis un commentaire sur les coûts indirects$/) do

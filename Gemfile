@@ -11,6 +11,7 @@ gem 'haml'
 gem 'haml-rails'
 gem 'xml-simple'
 gem 'simple_form'
+#gem 'gruff'
 
 
 # Bundle edge Rails instead:

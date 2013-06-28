@@ -1,5 +1,6 @@
 %th.totaux --Totaux-- 
--annees.each do |annee|
-  %th.annee=annee
-  -if annee == ligne_annees[-1].annee
-    -break
+-if not ligne_annees.empty?
+  -annees.each do |annee|
+    %th.annee=annee
+    -if annee == ligne_annees[-1].annee
+      -break
