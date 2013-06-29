@@ -63,6 +63,7 @@ class Calculee
   field :nature, type: String
   field :unite, type: Symbol
   field :total, type: Float, default: 0
+  field :affiche, type: Boolean, default: true
   embeds_many :montants
   accepts_nested_attributes_for :montants
 end
@@ -108,7 +109,6 @@ class Indirect
   embeds_many :repartitions
   accepts_nested_attributes_for :sommes,:details,:calculees,:repartitions
 end
-
 
 class Situation
   include Mongoid::Document

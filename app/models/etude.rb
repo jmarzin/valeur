@@ -84,101 +84,48 @@ class Etude
     params
   end
 
-  def reduction_details(objet)
-    totaux_nature = Hash.new(0)
-    totaux_annee = Hash.new (0)
-    totaux_annee[:ETP] = Hash.new(0)
-    totaux_annee[:k€] = Hash.new(0)
-    objet.details.where(description: "").destroy_all
-    objet.details.where(nature: "").destroy_all
-    objet.total = 0
-    objet.details.each do |detail|
-      detail.unite = Etude.liste_natures[objet.class][detail.nature] if objet.class != Gain
-      detail.total = 0
-      detail.montants.where(montant: 0).destroy_all
-      detail.montants.where(montant: nil).destroy_all
-      detail.montants.each do |mt|
-        detail.total += mt.montant
-        totaux_annee[detail.unite][mt.annee] += mt.montant
-      end
-      totaux_nature[detail.nature] += detail.total
-      objet.total += detail.total
+ def self.finalise_calculs(objet,index)
+    objet.calculees.each do |calculee|
+      calculee.total = 0
+      calculee.montants.each { |mt| calculee.total += mt.montant }
+      calculee.montants.where(montant: 0).destroy_all
+      calculee.montants.where(montant: nil).destroy_all
     end
-    {:nature => totaux_nature, :annee => totaux_annee}
+    objet.total = objet.calculees[index].total
+    true
   end
 
   def simplifie_fonction
     self.etude_rentabilite.fonction.situations.each do |situation|
       totaux = self.reduction_details(situation)
-
-      situation.calculees[0].total = 0
-      situation.calculees[0].montants.each do |mt|
-        mt.montant = totaux[:annee][:ETP][mt.annee]
-        situation.calculees[0].total += mt.montant if mt.montant
-      end
-      situation.calculees[0].montants.each_index do |i|
-        mt = situation.calculees[0].montants[i]
-        if mt.montant && mt.montant == 0
-          situation.calculees[1].montants[i].montant = 0
-        else
-          cout_moyen = 0
-          situation.repartitions.each do |repart|
-            if repart.pourcent && repart.pourcent != 0
-              cadre = self.etude_rentabilite.cadres.where(cadre: repart.cadre).first
-              cout_moyen += repart.pourcent * cadre.cout_annuels.where(:annee => mt.annee.match(/(\d+)/)[1]).first.montant
-            end
-          end
-          situation.calculees[1].montants[i].montant = cout_moyen/100
-        end
-      end
-      situation.calculees[2].total = 0
-      situation.calculees[0].montants.each_index do |i|
-        if situation.calculees[0].montants[i].montant != 0
-          situation.calculees[2].montants[i].montant = situation.calculees[0].montants[i].montant * \
-                                                       situation.calculees[1].montants[i].montant
-          situation.calculees[2].total += situation.calculees[2].montants[i].montant
-        else
-          situation.calculees[2].montants[i].montant = 0
-        end
-      end
-      situation.calculees[3].total = 0
-      situation.calculees[3].montants.each do |mt|
-        mt.montant = totaux[:annee][:k€][mt.annee]
-        situation.calculees[3].total += mt.montant if mt.montant 
-      end
-      situation.calculees[4].total = 0
+      self.calcul_cout_moyen(situation.repartitions, situation.calculees[0], totaux[:unite_annee][:ETP], situation.calculees[1], situation.calculees[2])
+      Etude.cout_mo_total(situation.calculees[3],totaux[:unite_annee][:k€])
       situation.calculees[2].montants.each_index do |i|
-        situation.calculees[4].montants[i].montant = situation.calculees[2].montants[i].montant
-        situation.calculees[4].total += situation.calculees[2].montants[i].montant
-        situation.calculees[4].montants[i].montant += situation.calculees[3].montants[i].montant
-        situation.calculees[4].total += situation.calculees[3].montants[i].montant
+        situation.calculees[4].montants[i].montant = situation.calculees[2].montants[i].montant + \
+                                                     situation.calculees[3].montants[i].montant
       end
     end
-    self.etude_rentabilite.fonction.calculees[0].total = 0
     self.etude_rentabilite.fonction.situations[0].calculees[4].montants.each_index do |i|
       self.etude_rentabilite.fonction.calculees[0].montants[i].montant = self.etude_rentabilite.fonction.situations[1].calculees[4].montants[i].montant - \
                                                                          self.etude_rentabilite.fonction.situations[0].calculees[4].montants[i].montant
-      self.etude_rentabilite.fonction.calculees[0].total += self.etude_rentabilite.fonction.calculees[0].montants[i].montant
     end
-    self.etude_rentabilite.fonction.total = self.etude_rentabilite.fonction.calculees[0].total
-    self.etude_rentabilite.fonction.situations.each do |situation|
-      situation.calculees.each do  |calc|
-        calc.montants.where(montant: 0).destroy_all
-        calc.montants.where(montant: nil).destroy_all
-      end
-    end
-    self.etude_rentabilite.fonction.calculees[0].montants.where(montant: 0).destroy_all
-    self.etude_rentabilite.fonction.calculees[0].montants.where(montant: 0).destroy_all
+    self.etude_rentabilite.fonction.situations.each { |situation| Etude.finalise_calculs(situation,4) }
+    Etude.finalise_calculs(self.etude_rentabilite.fonction,0)
     self.etude_rentabilite.save
   end
 
-  def simplifie_gain
-    totaux_unite_annee = Hash.new
+  def reduction_details(objet)
+    totaux_nature = Hash.new(0)
     totaux_nature_unite_annee = Hash.new(0)
-    self.etude_rentabilite.gain.details.where(description: "").destroy_all
-    self.etude_rentabilite.gain.details.where(nature: "").destroy_all
-    self.etude_rentabilite.gain.details.each do |detail|
-      detail.unite = 'k€' if detail.unite == ""
+    totaux_unite_annee = Hash.new (0)
+    objet.details.where(description: "").destroy_all
+    objet.details.where(nature: "").destroy_all
+    objet.details.each do |detail|
+      if objet.class == Gain
+        detail.unite = 'k€' if detail.unite == ''
+      else
+        detail.unite = Etude.liste_natures[objet.class][detail.nature] if objet.class != Gain
+      end
       totaux_unite_annee[detail.unite] = Hash.new(0) if not totaux_unite_annee.has_key?(detail.unite)
       totaux_nature_unite_annee[detail.nature] = Hash.new(0) if not totaux_nature_unite_annee.has_key?(detail.nature)
       totaux_nature_unite_annee[detail.nature][detail.unite] = Hash.new(0) if not totaux_nature_unite_annee[detail.nature].has_key?(detail.unite)
@@ -190,72 +137,96 @@ class Etude
         totaux_unite_annee[detail.unite][mt.annee] += mt.montant
         totaux_nature_unite_annee[detail.nature][detail.unite][mt.annee] += mt.montant
       end
+      totaux_nature[detail.nature] += detail.total
     end
+    {:nature => totaux_nature, :unite_annee => totaux_unite_annee, :nature_unite_annee => totaux_nature_unite_annee}
+  end
 
-    self.etude_rentabilite.gain.etp_reparts.each_index do |index|
-      cle = self.etude_rentabilite.gain.etp_reparts[index].titre.to_sym
-      if totaux_unite_annee[cle] then
-        self.etude_rentabilite.gain.calculees[index].total = 0.01
-        self.etude_rentabilite.gain.calculees[index].montants.each_index do |i_mt|
-          mt = self.etude_rentabilite.gain.calculees[index].montants[i_mt]
-          if totaux_unite_annee[cle][mt.annee] != 0 then
-            cout_moyen = 0
-            self.etude_rentabilite.gain.etp_reparts[index].repartitions.each do |repart|
-              if repart.pourcent && repart.pourcent != 0
-                cadre = self.etude_rentabilite.cadres.where(cadre: repart.cadre).first
-                cout_moyen += repart.pourcent * cadre.cout_annuels.where(:annee => mt.annee.match(/(\d+)/)[1]).first.montant
-              end
-            end
-            self.etude_rentabilite.gain.calculees[index].montants[i_mt].montant = cout_moyen/100            
-          else
-            self.etude_rentabilite.gain.calculees[index].montants[i_mt].montant = 0
+  def self.cout_mo_total(calculee,totaux€)
+    if totaux€ != 0
+      calculee.montants.each do |mt|
+        mt.montant = totaux€[mt.annee]
+      end
+    else
+      calculee.montants.each do |mt|
+        mt.montant = 0
+      end
+    end
+    true
+  end
+
+  def calcule_cout_moyen_unitaire(totaux_unite_annee,repartitions,calculee)
+    calculee.montants.each_index do |i_mt|
+      mt = calculee.montants[i_mt]
+      if totaux_unite_annee[mt.annee] != 0 then
+        cout_moyen = 0
+        repartitions.each do |repart|
+          if repart.pourcent && repart.pourcent != 0
+            cadre = self.etude_rentabilite.cadres.where(cadre: repart.cadre).first
+            cout_moyen += repart.pourcent * cadre.cout_annuels.where(:annee => mt.annee.match(/(\d+)/)[1]).first.montant
           end
         end
+        calculee.montants[i_mt].montant = cout_moyen/100
       else
-        self.etude_rentabilite.gain.calculees[index].total = 0
+        calculee.montants[i_mt].montant = 0
+      end
+    end
+    true            
+  end
+
+  def calcul_cout_moyen(repartitions, calculee_nb, totaux_unite_annee, calculee_un, calculee_ts)
+    calculee_nb.montants.each { |mt| mt.montant = totaux_unite_annee[mt.annee] }
+    self.calcule_cout_moyen_unitaire(totaux_unite_annee,repartitions,calculee_un)
+    calculee_nb.montants.each_index do |i|
+      if calculee_nb.montants[i].montant != 0
+        calculee_ts.montants[i].montant = calculee_nb.montants[i].montant * \
+                                          calculee_un.montants[i].montant
+      else
+        calculee_ts.montants[i].montant = 0
+      end
+    end
+    true
+  end
+
+  def simplifie_gain
+    totaux = self.reduction_details(self.etude_rentabilite.gain)
+    self.etude_rentabilite.gain.etp_reparts.each_index do |index|
+      cle = self.etude_rentabilite.gain.etp_reparts[index].titre.to_sym
+      if totaux[:unite_annee][cle] != 0 then
+        self.etude_rentabilite.gain.calculees[index].affiche = true
+        self.calcule_cout_moyen_unitaire(totaux[:unite_annee][cle],self.etude_rentabilite.gain.etp_reparts[index].repartitions,\
+                                         self.etude_rentabilite.gain.calculees[index])
+      else
+        self.etude_rentabilite.gain.calculees[index].affiche = false
         self.etude_rentabilite.gain.calculees[index].montants.each { |mt| mt.montant = 0 }
       end
     end
-
     Etude.liste_familles_gain.each_index do |index|
       famille = Etude.liste_familles_gain[index]
-      if famille != '' then
-        self.etude_rentabilite.gain.calculees[index+4].total = 0
-        self.etude_rentabilite.gain.calculees[index+4].montants.each { |mt| mt.montant = 0}
-        if totaux_nature_unite_annee[famille] != 0
-          totaux_nature_unite_annee[famille].each_pair do |unite,annees|
-            if unite == :k€ then
-              self.etude_rentabilite.gain.calculees[index+4].montants.each do |mt|
-                mt.montant += annees[mt.annee]
-                self.etude_rentabilite.gain.calculees[index+4].total += annees[mt.annee]
-              end
-            elsif m=/^ETP(\d+)/.match(unite)
-              self.etude_rentabilite.gain.calculees[index+4].montants.each_index do |i|
-                annee = self.etude_rentabilite.gain.calculees[index+4].montants[i].annee
-                valeur = annees[annee] * self.etude_rentabilite.gain.calculees[m[1].to_i-1].montants[i].montant
-                self.etude_rentabilite.gain.calculees[index+4].montants[i].montant += valeur
-                self.etude_rentabilite.gain.calculees[index+4].total += valeur
-              end
+      self.etude_rentabilite.gain.calculees[index+5].montants.each { |mt| mt.montant = 0}
+      if totaux[:nature_unite_annee][famille] != 0
+        totaux[:nature_unite_annee][famille].each_pair do |unite,annees|
+          if unite == :k€ then
+            self.etude_rentabilite.gain.calculees[index+5].montants.each do |mt|
+              mt.montant += annees[mt.annee]
+            end
+          elsif m=/^ETP(\d+)/.match(unite)
+            self.etude_rentabilite.gain.calculees[index+5].montants.each_index do |i|
+              annee = self.etude_rentabilite.gain.calculees[index+5].montants[i].annee
+              valeur = annees[annee] * self.etude_rentabilite.gain.calculees[m[1].to_i-1].montants[i].montant
+              self.etude_rentabilite.gain.calculees[index+5].montants[i].montant += valeur
             end
           end
         end
       end
     end
-
-    self.etude_rentabilite.gain.calculees[13].total = 0
     self.etude_rentabilite.gain.calculees[13].montants.each_index do |i|
       self.etude_rentabilite.gain.calculees[13].montants[i].montant = 0
       (5..12).each do |ligne|
         self.etude_rentabilite.gain.calculees[13].montants[i].montant += self.etude_rentabilite.gain.calculees[ligne].montants[i].montant
-        self.etude_rentabilite.gain.calculees[13].total += self.etude_rentabilite.gain.calculees[ligne].montants[i].montant
       end
     end
-    self.etude_rentabilite.gain.total = self.etude_rentabilite.gain.calculees[13].total
-      
-    self.etude_rentabilite.gain.calculees.each do  |calc|
-      calc.montants.where(montant: 0).destroy_all
-      calc.montants.where(montant: nil).destroy_all
-    end
+    Etude.finalise_calculs(self.etude_rentabilite.gain,13)
     self.etude_rentabilite.save
   end
 
@@ -265,48 +236,15 @@ class Etude
     self.etude_rentabilite.indirect.sommes.each do |somme|
       somme.montant = totaux[:nature][somme.nature]
     end
-    self.etude_rentabilite.indirect.calculees[0].montants.each { |mt| mt.montant = totaux[:annee][:ETP][mt.annee] }
-    self.etude_rentabilite.indirect.calculees[0].total = 0
-    self.etude_rentabilite.indirect.calculees[0].montants.each { |mt| self.etude_rentabilite.indirect.calculees[0].total += mt.montant if mt.montant }
-    self.etude_rentabilite.indirect.calculees[0].montants.each_index do |i|
-      mt = self.etude_rentabilite.indirect.calculees[0].montants[i]
-      if mt.montant && mt.montant == 0
-        self.etude_rentabilite.indirect.calculees[1].montants[i].montant = 0
-      else
-        cout_moyen = 0
-        self.etude_rentabilite.indirect.repartitions.each do |repart|
-          if repart.pourcent && repart.pourcent != 0
-            cadre = self.etude_rentabilite.cadres.where(cadre: repart.cadre).first
-            cout_moyen += repart.pourcent * cadre.cout_annuels.where(:annee => mt.annee.match(/(\d+)/)[1]).first.montant
-          end
-        end
-        self.etude_rentabilite.indirect.calculees[1].montants[i].montant = cout_moyen/100
-      end
-    end
-    self.etude_rentabilite.indirect.calculees[0].montants.each_index do |i|
-      if self.etude_rentabilite.indirect.calculees[0].montants[i].montant != 0
-        self.etude_rentabilite.indirect.calculees[2].montants[i].montant = self.etude_rentabilite.indirect.calculees[0].montants[i].montant * \
-                                                                           self.etude_rentabilite.indirect.calculees[1].montants[i].montant
-      else
-        self.etude_rentabilite.indirect.calculees[2].montants[i].montant = 0
-      end
-    end
-    self.etude_rentabilite.indirect.calculees[2].total = 0
-    self.etude_rentabilite.indirect.calculees[2].montants.each { |mt| self.etude_rentabilite.indirect.calculees[2].total += mt.montant if mt.montant }
-    self.etude_rentabilite.indirect.calculees[3].montants.each { |mt| mt.montant = totaux[:annee][:k€][mt.annee] }
-    self.etude_rentabilite.indirect.calculees[3].total = 0
-    self.etude_rentabilite.indirect.calculees[3].montants.each { |mt| self.etude_rentabilite.indirect.calculees[3].total += mt.montant if mt.montant }
-    self.etude_rentabilite.indirect.calculees[4].total = 0
+    self.calcul_cout_moyen(self.etude_rentabilite.indirect.repartitions, self.etude_rentabilite.indirect.calculees[0], \
+      totaux[:unite_annee][:ETP],self.etude_rentabilite.indirect.calculees[1], self.etude_rentabilite.indirect.calculees[2])
+
+    Etude.cout_mo_total(self.etude_rentabilite.indirect.calculees[3],totaux[:unite_annee][:k€])
     self.etude_rentabilite.indirect.calculees[2].montants.each_index do |i|
-      self.etude_rentabilite.indirect.calculees[4].montants[i].montant = self.etude_rentabilite.indirect.calculees[2].montants[i].montant
-      self.etude_rentabilite.indirect.calculees[4].total += self.etude_rentabilite.indirect.calculees[2].montants[i].montant
-      self.etude_rentabilite.indirect.calculees[4].montants[i].montant += self.etude_rentabilite.indirect.calculees[3].montants[i].montant
-      self.etude_rentabilite.indirect.calculees[4].total += self.etude_rentabilite.indirect.calculees[3].montants[i].montant
+      self.etude_rentabilite.indirect.calculees[4].montants[i].montant = self.etude_rentabilite.indirect.calculees[2].montants[i].montant + \
+                                                                         self.etude_rentabilite.indirect.calculees[3].montants[i].montant
     end
-    self.etude_rentabilite.indirect.calculees.each do  |calc|
-      calc.montants.where(montant: 0).destroy_all
-      calc.montants.where(montant: nil).destroy_all
-    end
+    Etude.finalise_calculs(self.etude_rentabilite.indirect,4)
     self.etude_rentabilite.save
   end
 
@@ -315,10 +253,8 @@ class Etude
     self.etude_rentabilite.direct.sommes.each do |somme|
       somme.montant = totaux[:nature][somme.nature]
     end
-    self.etude_rentabilite.direct.calculees[0].total = self.etude_rentabilite.direct.total
-    self.etude_rentabilite.direct.calculees[0].montants.each { |mt| mt.montant = totaux[:annee][:k€][mt.annee] }
-    self.etude_rentabilite.direct.calculees[0].montants.where(montant: 0).destroy_all
-    self.etude_rentabilite.direct.calculees[0].montants.where(montant: nil).destroy_all
+    self.etude_rentabilite.direct.calculees[0].montants.each { |mt| mt.montant = totaux[:unite_annee][:k€][mt.annee] }
+    Etude.finalise_calculs(self.etude_rentabilite.direct,0)
     self.etude_rentabilite.save
   end
 
@@ -337,22 +273,17 @@ class Etude
     liste
   end
 
-#  def self.liste_natures_fonctions
-#    {'' => '', 'Coûts de personnel' => 'ETP', 'Maintenance matériel et infrastructure' => 'k€', 'Maintenance application' => 'k€',\
-#      'Externalisations' => 'k€', 'Abonnements' => 'k€', 'Autres' => 'k€'}
-#  end
-
   def self.repart_defaut
     [{"A" => 80,"B" => 20},{"A" => 80,"B" => 10,"C" => 10},{"B" => 100},{"C" => 100},{"A+" => 100}]
   end
 
   def self.liste_familles_gain
-    ['', 'Augmentation des recettes','Economies induites','Charge de travail','Dépenses additionnelles','Gain trésorerie',\
+    ['Augmentation des recettes','Economies induites','Charge de travail','Dépenses additionnelles','Gain trésorerie',\
      'Gain efficacité','Gain productivité','Autres gains']
   end
 
   def self.liste_unites_gain
-    ['','k€','ETP1','ETP2','ETP3','ETP4','ETP5']
+    ['k€','ETP1','ETP2','ETP3','ETP4','ETP5']
   end
 
   def lit_rentabilite
@@ -430,7 +361,7 @@ class Etude
         end
       end
       (1..5).each {|i| self.etude_rentabilite.gain.calculees << Calculee.new(description: "Coût complet moyen du personnel modèle ETP#{i}", unite: 'k€/ETP')}
-      Etude.liste_familles_gain.each { |famille| self.etude_rentabilite.gain.calculees << Calculee.new(description: famille, unite: 'k€') if famille != ''}
+      Etude.liste_familles_gain.each { |famille| self.etude_rentabilite.gain.calculees << Calculee.new(description: famille, unite: 'k€')}
       self.etude_rentabilite.gain.calculees << Calculee.new(description: 'Total des impacts métier', unite: 'k€')
     end
     self.etude_rentabilite.save

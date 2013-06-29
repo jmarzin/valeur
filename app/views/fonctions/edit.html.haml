@@ -69,7 +69,7 @@
                 %td.touche
                 %td.description{:colspan => 2}= calc.description
                 %td.unite= calc.unite
-                %td.montant=number_with_precision(calc.total, options =  {delimiter: " ", precision: 1}) unless calc.total == nil || calc.total == 0
+                %td.montant=number_with_precision(calc.total, options =  {delimiter: " ", precision: 1}) unless calc.total == nil || calc.unite == :"k€/ETP"
                 -calc.montants.each do |montant|
                   %td.montant= number_with_precision(montant.montant, options =  {delimiter: " ", precision: 1}) unless montant.montant == 0
             -if situation.titre == 'cible'

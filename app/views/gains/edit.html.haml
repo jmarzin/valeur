@@ -54,22 +54,22 @@
             %td= gain_form.submit 'Ins^', :class => 'action', :name => "h#{i}"
             %td= gain_form.submit 'Insv', :class => 'action', :name => "b#{i}"
             %td.description= detail_form.text_area :description,:autofocus => @auto == i.to_s,:cols => 54,:rows => 1
-            %td.nature= detail_form.select :nature,Etude.liste_familles_gain
-            %td.unite= detail_form.select :unite,Etude.liste_unites_gain,:size => 2
+            %td.nature= detail_form.select :nature,Etude.liste_familles_gain,include_blank: true
+            %td.unite= detail_form.select :unite,Etude.liste_unites_gain,include_blank: true,:size => 2
             %td.totaux.montant= number_with_precision(detail.total, options =  {delimiter: " ", precision: 1}) unless detail.total == 0
             -detail.montants.each do |montant|
               = detail_form.fields_for :montants,montant do |montant_form|
                 %td.montant= montant_form.number_field :montant,:value => number_with_precision(montant.montant,options={precision: 1}), :size => 1
           -i+=1
       -@gain.calculees.each do |calc|
-        -if calc.total && calc.total > 0.001
+        -if calc.affiche
           %tr.totaux
             %td.touche
             %td.touche
             %td.touche
             %td.description{:colspan => 2}= calc.description
             %td.unite= calc.unite
-            %td.montant=number_with_precision(calc.total, options =  {delimiter: " ", precision: 1}) unless calc.total == nil || calc.total < 0.1
+            %td.montant=number_with_precision(calc.total, options =  {delimiter: " ", precision: 1}) unless calc.total == nil || calc.unite == :"k€/ETP"
             -calc.montants.each do |montant|
               %td.montant= number_with_precision(montant.montant, options =  {delimiter: " ", precision: 1}) unless montant.montant == 0
 
