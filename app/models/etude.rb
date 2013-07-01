@@ -487,7 +487,7 @@ class Etude
       calculee.montants.where(montant: 0).destroy_all
       calculee.montants.where(montant: nil).destroy_all
     end
-    self.etude_rentabilite.save
+    self.save
     self.etude_rentabilite
   end
 
