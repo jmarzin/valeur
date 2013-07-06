@@ -174,6 +174,7 @@ end
 class EtudeRentabilite
   include Mongoid::Document
   field :a_calculer, type: Boolean, default: false
+  field :graphe_flux_cumules, type: String
   embedded_in :etude
   embeds_one :direct
   embeds_one :indirect

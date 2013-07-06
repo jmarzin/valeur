@@ -482,6 +482,21 @@ class Etude
         end
       end
     end
+    # graphique des cumuls
+    url = "https://chart.googleapis.com/chart?chs=600x400&chtt=Flux cumulés&cht=lc&chxt=x,y,r&chxl=2:|0&chxp=2,0&chds=a&chd=t:"
+    annees = []
+    data = []
+    self.etude_rentabilite.calculees[7].montants.each { |mt| data << mt.montant.round(0) ; annees << mt.annee }
+    while (not data.empty?) && (data[-1] == 0) do
+      data.delete_at(-1)
+      annees.delete_at(-1)
+    end
+    data.each { |valeur| url << valeur.to_s << ',' }
+    url = url.chop << '&chxl=0:'
+    annees.each { |annee| url << '|' << annee.gsub(/\s/,'+') }
+    url << '&chxs=1N*s|2,0000dd,0,-1,t,000000&chxtc=0,-5|2,-4000&'
+    if data[-1] > 0 then url << 'chco=00FF00&chm=o,00FF00,0,-1,5' else url << 'chco=FF0000&chm=o,FF0000,0,-1,5' end
+    self.etude_rentabilite.graphe_flux_cumules = url
     self.etude_rentabilite.a_calculer = false
     self.etude_rentabilite.calculees.each do |calculee|
       calculee.montants.where(montant: 0).destroy_all

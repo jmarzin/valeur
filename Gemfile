@@ -11,7 +11,6 @@ gem 'haml'
 gem 'haml-rails'
 gem 'xml-simple'
 gem 'simple_form'
-gem "googlecharts"
 
 
 # Bundle edge Rails instead:

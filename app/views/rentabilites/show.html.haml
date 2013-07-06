@@ -78,7 +78,8 @@
   %dt="Coût total du projet"
   %dd="#{number_with_precision(@etude.cout,options = {delimiter: " ",precision: 1})} k€"
 %br
-
+%div#centre=image_tag(@etude.etude_rentabilite.graphe_flux_cumules, alt: 'Graphe des flux cumulés') if @etude.etude_rentabilite.graphe_flux_cumules != ''
+%br
 
 
 = link_to 'Retour étude', projet_etude_path(@etude.projet, @etude)
