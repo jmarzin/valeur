@@ -114,7 +114,7 @@ class Situation
   include Mongoid::Document
   include Mongoid::MultiParameterAttributes
   validates_with(CoherenceProjet)
-  embedded_in :fonctionnement
+  embedded_in :fonction
   field :titre, type: String # 'actuelle' ou 'cible'
   field :total, type: Float
   field :somme_pourcent, type: Integer

@@ -15,6 +15,39 @@ require 'irr'
 
 class Etude
 
+  def self.copie(objet,parent)
+    copie = objet.class.new
+    if objet._parent then
+      nom_parent = nil
+      objet.associations.each do |assoc|
+        if assoc[1][:relation] == Mongoid::Relations::Embedded::In then
+          nom_parent = assoc[0]
+          break
+        end
+      end
+      copie.send nom_parent+'=',parent if nom_parent
+    end
+    objet.fields.each do |champ|
+      copie[champ[0]] = objet[champ[0]] unless champ[0] == '_id'
+    end
+    if copie.class == Etude then
+      copie.code = 'Copie de ' + copie.code + ' (' + Time.now.tv_sec.to_s + ')'
+      copie.publie = false
+      copie.date_publication = nil
+    end
+    copie.save # ajouter avant la référence à l'objet père
+    objet.associations.each do |assoc|
+      if assoc[1][:relation] == Mongoid::Relations::Embedded::One && objet[assoc[0]]
+        copie.send assoc[0]+'=', Etude.copie((objet.send assoc[0]),copie)
+      elsif assoc[1][:relation] == Mongoid::Relations::Embedded::Many && objet[assoc[0]]
+        (objet.send assoc[0]).each do |element|
+          (copie.send assoc[0]) << Etude.copie(element,copie)
+        end
+      end
+    end
+    copie
+  end
+
   def insere_detail(ins,objet)
     m = /^(.)(\D*)(\d+)/.match(ins)
     if m[1] == 'h' then dec = 1 else dec = 0 end
@@ -759,7 +792,7 @@ class Etude
   def inactif
     # accessibilité des champs en modification et création
     if self.publie
-      if self.projet.resumes[-1].etude_id == self._id
+      if self.projet.resumes.count != 0 && self.projet.resumes[-1].etude_id == self._id
         "partiel"
       else
         "total"

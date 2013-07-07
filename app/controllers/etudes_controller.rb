@@ -41,6 +41,7 @@ class EtudesController < ApplicationController
   # GET /etudes/1/edit
   def edit
     @etude = @projet.etudes.find(params[:id])
+    @etude = Etude.copie(@etude,@etude.projet) if params[:copie]=='oui'
     @inactif = @etude.inactif
 
   end
