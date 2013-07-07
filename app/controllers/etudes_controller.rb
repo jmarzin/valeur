@@ -6,7 +6,7 @@ class EtudesController < ApplicationController
   # GET /etudes
   # GET /etudes.json
   def index
-    @etudes = @projet.etudes.all
+    @etudes = @projet.etudes.all.sort(_id: -1)
     @modif_supp = Etude.modif_supp_apparents(@etudes)
 
     respond_to do |format|

@@ -78,7 +78,7 @@
         %tr
           %td.nature= somme.nature
           %td.unite= somme.unite
-          %td.montant= number_with_precision(somme.montant, options = {delimiter: " ", precision: 1}) unless somme.montant == 0
+          %td.montant= number_with_precision(somme.valeur, options = {delimiter: " ", precision: 1}) unless somme.valeur == 0
 
 
   %footer

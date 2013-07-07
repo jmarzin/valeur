@@ -49,7 +49,7 @@
           - @etude.etude_rentabilite.direct.sommes.each do |somme|
             %tr
               %td.nature= somme.nature
-              %td.montant= number_with_precision(somme.montant, options = {delimiter: " ", precision: 1}) unless somme.montant == 0
+              %td.montant= number_with_precision(somme.valeur, options = {delimiter: " ", precision: 1}) unless somme.valeur == 0
     %th#commentaire_direct
       %article#commentaire
         =dir_form.label :commentaires, :class => "commentaire"

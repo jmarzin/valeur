@@ -16,7 +16,7 @@ require 'irr'
 class Etude
 
   def self.copie(objet,parent)
-    copie = objet.class.new
+    la_copie = objet.class.new
     if objet._parent then
       nom_parent = nil
       objet.associations.each do |assoc|
@@ -25,27 +25,27 @@ class Etude
           break
         end
       end
-      copie.send nom_parent+'=',parent if nom_parent
+      la_copie.send nom_parent+'=',parent if nom_parent
     end
     objet.fields.each do |champ|
-      copie[champ[0]] = objet[champ[0]] unless champ[0] == '_id'
+      la_copie[champ[0]] = objet[champ[0]] unless champ[0] == '_id'
     end
-    if copie.class == Etude then
-      copie.code = 'Copie de ' + copie.code + ' (' + Time.now.tv_sec.to_s + ')'
-      copie.publie = false
-      copie.date_publication = nil
+    if la_copie.class == Etude then
+      la_copie.code = 'Copie de ' + la_copie.code + ' (' + Time.now.tv_sec.to_s + ')'
+      la_copie.publie = false
+      la_copie.date_publication = nil
     end
-    copie.save # ajouter avant la référence à l'objet père
+    la_copie.save # ajouter avant la référence à l'objet père
     objet.associations.each do |assoc|
       if assoc[1][:relation] == Mongoid::Relations::Embedded::One && objet[assoc[0]]
-        copie.send assoc[0]+'=', Etude.copie((objet.send assoc[0]),copie)
+        la_copie.send assoc[0]+'=', Etude.copie((objet.send assoc[0]),la_copie)
       elsif assoc[1][:relation] == Mongoid::Relations::Embedded::Many && objet[assoc[0]]
         (objet.send assoc[0]).each do |element|
-          (copie.send assoc[0]) << Etude.copie(element,copie)
+          Etude.copie(element,la_copie)
         end
       end
     end
-    copie
+    la_copie
   end
 
   def insere_detail(ins,objet)
@@ -131,7 +131,9 @@ class Etude
   def simplifie_fonction
     self.etude_rentabilite.fonction.situations.each do |situation|
       totaux = self.reduction_details(situation)
-      self.calcul_cout_moyen(situation.repartitions, situation.calculees[0], totaux[:unite_annee][:ETP], situation.calculees[1], situation.calculees[2])
+      if totaux[:unite_annee][:ETP] != 0 then
+        self.calcul_cout_moyen(situation.repartitions, situation.calculees[0], totaux[:unite_annee][:ETP], situation.calculees[1], situation.calculees[2])
+      end
       Etude.cout_mo_total(situation.calculees[3],totaux[:unite_annee][:k€])
       situation.calculees[2].montants.each_index do |i|
         situation.calculees[4].montants[i].montant = situation.calculees[2].montants[i].montant + \
@@ -209,7 +211,7 @@ class Etude
 
   def calcul_cout_moyen(repartitions, calculee_nb, totaux_unite_annee, calculee_un, calculee_ts)
     calculee_nb.montants.each { |mt| mt.montant = totaux_unite_annee[mt.annee] }
-    self.calcule_cout_moyen_unitaire(totaux_unite_annee,repartitions,calculee_un)
+    self.calcule_cout_moyen_unitaire(totaux_unite_annee,repartitions,calculee_un) unless totaux_unite_annee == 0
     calculee_nb.montants.each_index do |i|
       if calculee_nb.montants[i].montant != 0
         calculee_ts.montants[i].montant = calculee_nb.montants[i].montant * \
@@ -267,7 +269,7 @@ class Etude
     totaux = self.reduction_details(self.etude_rentabilite.indirect)
 
     self.etude_rentabilite.indirect.sommes.each do |somme|
-      somme.montant = totaux[:nature][somme.nature]
+      somme.valeur = totaux[:nature][somme.nature]
     end
     self.calcul_cout_moyen(self.etude_rentabilite.indirect.repartitions, self.etude_rentabilite.indirect.calculees[0], \
       totaux[:unite_annee][:ETP],self.etude_rentabilite.indirect.calculees[1], self.etude_rentabilite.indirect.calculees[2])
@@ -284,7 +286,7 @@ class Etude
   def simplifie_direct
     totaux = self.reduction_details(self.etude_rentabilite.direct)
     self.etude_rentabilite.direct.sommes.each do |somme|
-      somme.montant = totaux[:nature][somme.nature]
+      somme.valeur = totaux[:nature][somme.nature]
     end
     self.etude_rentabilite.direct.calculees[0].montants.each { |mt| mt.montant = totaux[:unite_annee][:k€][mt.annee] }
     Etude.finalise_calculs(self.etude_rentabilite.direct,0)
