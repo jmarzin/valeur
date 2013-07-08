@@ -489,18 +489,22 @@ class Etude
     self.etude_rentabilite.calculees[6] = self.calcul_somme(self.etude_rentabilite.calculees[6],self.etude_rentabilite.calculees[2],'+')
     self.etude_rentabilite.calculees[6] = self.calcul_somme(self.etude_rentabilite.calculees[6],self.etude_rentabilite.calculees[3],'+')
     self.van = self.etude_rentabilite.calculees[6].total
-    if self.etude_rentabilite.calculees[6].montants[0].montant >= 0 then 
-      self.delai_retour = 0 
+    if self.van < 0 then
+      self.delai_retour = nil
     else
-      self.delai_retour = 1 - (self.date_debut.month - 1)/12
-    end
-    (1..self.etude_rentabilite.calculees[6].montants.count - 1).each do |index|
-      if self.etude_rentabilite.calculees[6].montants[index-1].montant < 0 then
-        if self.etude_rentabilite.calculees[6].montants[index].montant < 0 then
-          self.delai_retour += 1
-        else
-          self.delai_retour -= self.etude_rentabilite.calculees[6].montants[index-1].montant / \
-            (self.etude_rentabilite.calculees[6].montants[index].montant - self.etude_rentabilite.calculees[6].montants[index-1].montant)
+      if self.etude_rentabilite.calculees[6].montants[0].montant >= 0 then 
+        self.delai_retour = 0 
+      else
+        self.delai_retour = 1 - (self.date_debut.month - 1)/12
+      end
+      (1..self.etude_rentabilite.calculees[6].montants.count - 1).each do |index|
+        if self.etude_rentabilite.calculees[6].montants[index-1].montant < 0 then
+          if self.etude_rentabilite.calculees[6].montants[index].montant < 0 then
+            self.delai_retour += 1
+          else
+            self.delai_retour -= self.etude_rentabilite.calculees[6].montants[index-1].montant / \
+              (self.etude_rentabilite.calculees[6].montants[index].montant - self.etude_rentabilite.calculees[6].montants[index-1].montant)
+          end
         end
       end
     end
@@ -850,7 +854,7 @@ class Etude
 	 :if => :publie }
   field :cout, type: Float
   validates :cout, :presence => {:message => "obligatoire pour une étude publiée",
-	 :if => :publie }
+ 	 :if => :publie }
   field :delai_retour, type: Float
   validates :delai_retour, :presence => {:message => "obligatoire pour une étude publiée",
 	 :if => :publie }
