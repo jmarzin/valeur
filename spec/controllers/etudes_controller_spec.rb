@@ -27,13 +27,13 @@ describe EtudesController do
     {}
   end
 
-  describe "GET index" do
-    it "assigns all etudes as @etudes" do
-      etude = @projet.etudes.create! valid_attributes
-      get :index,{:projet_id => @projet._id}, valid_session
-      assigns(:etudes).should eq([etude])
-    end
-  end
+#  describe "GET index" do
+#    it "assigns all etudes as @etudes" do
+#      etude = @projet.etudes.create! valid_attributes
+#      get :index,{:projet_id => @projet._id}, valid_session
+#      assigns(:etudes).should eq([etude])
+#    end
+#  end
 
   describe "GET show" do
     it "assigns the requested etude as @etude" do

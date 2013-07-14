@@ -178,14 +178,13 @@ end
 
 Alors(/^je vois la synthèse des gains$/) do
   page.text.should =~ %r{Augmentation des recettes 198\.5 65\.5 133\.0 Economies induites 461\.3 196\.1 265\.2 Charge de travail 604\.3 272\.5 331\.8 \
-Dépenses additionnelles 835\.9 387\.1 448\.8 Gain trésorerie 1 829\.5 859\.5 970\.0 Gain efficacité 3 000\.0 1 000\.0 2 000\.0 Gain productivité \
-7 000\.0 3 000\.0 4 000\.0 Autres gains 12 708\.7 5 000\.0 6 811\.1 897\.6 Total des impacts métier 26 638\.3 65\.5 329\.1 537\.7 718\.9 1 308\.3 \
-1 970\.0 5 000\.0 9 000\.0 6 811\.1 897\.6 Total Impacts Métiers actualisé 20 654\.0 65\.5 316\.4 497\.1 639\.1 1 118\.3 1 619\.2 3 951\.6 6 839\.3 \
-4 976\.8 630\.6 Total des coûts indirects situation actuelle Total des coûts indirects situation cible Total Impacts sur les coûts de fonctionnement \
-des systèmes Total Impacts sur les coûts de fonctionnement SI actualisé Gains nets \(Impacts métiers \+ Impacts fonctionnement système\) 26 638\.3 \
-65\.5 329\.1 537\.7 718\.9 1 308\.3 1 970\.0 5 000\.0 9 000\.0 6 811\.1 897\.6 TOTAL FLUX ANNUELS non actualisés \(k€\) 26 638\.3 65\.5 329\.1 537\.7 \
-718\.9 1 308\.3 1 970\.0 5 000\.0 9 000\.0 6 811\.1 897\.6 TOTAL FLUX ANNUELS actualisés 20 654\.0 65\.5 316\.4 497\.1 639\.1 1 118\.3 1 619\.2 3 951\.6 \
-6 839\.3 4 976\.8 630\.6 TOTAL FLUX ANNUELS CUMULES actualisés 316\.4 813\.6 1 452\.7 2 571\.0 4 190\.2 8 141\.8 14 981\.0 19 957\.9 20 588\.5 \
-Indicateurs de rentabilité Valeur actualisée nette \(VAN\) 20 654\.0 k€ Taux de rendement interne \(TRI\) % Délai de retour 0\.0 ans Coût total du \
-projet 0\.0 k€}
+Dépenses additionnelles 835\.9 387\.1 448\.8 Gain trésorerie 1 829\.5 859\.5 970\.0 Gain efficacité 3 000\.0 1 000\.0 2 000\.0 Gain productivité 7 000\.0 \
+3 000\.0 4 000\.0 Autres gains 12 708\.7 5 000\.0 6 811\.1 897\.6 Total des impacts métier 26 638\.3 65\.5 329\.1 537\.7 718\.9 1 308\.3 1 970\.0 5 000\.0 \
+9 000\.0 6 811\.1 897\.6 Total Impacts Métiers actualisé 20 654\.0 65\.5 316\.4 497\.1 639\.1 1 118\.3 1 619\.2 3 951\.6 6 839\.3 4 976\.8 630\.6 Total \
+des coûts indirects situation actuelle Total des coûts indirects situation cible Total Impacts sur les coûts de fonctionnement des systèmes Total Impacts \
+sur les coûts de fonctionnement SI actualisé Gains nets \(Impacts métiers \+ Impacts fonctionnement système\) 26 638\.3 65\.5 329\.1 537\.7 718\.9 1 308\.3 \
+1 970\.0 5 000\.0 9 000\.0 6 811\.1 897\.6 TOTAL FLUX ANNUELS non actualisés \(k€\) 26 638\.3 65\.5 329\.1 537\.7 718\.9 1 308\.3 1 970\.0 5 000\.0 \
+9 000\.0 6 811\.1 897\.6 TOTAL FLUX ANNUELS actualisés 20 654\.0 65\.5 316\.4 497\.1 639\.1 1 118\.3 1 619\.2 3 951\.6 6 839\.3 4 976\.8 630\.6 TOTAL FLUX \
+ANNUELS CUMULES actualisés 65\.5 382\.0 879\.1 1 518\.2 2 636\.5 4 255\.7 8 207\.3 15 046\.6 20 023\.4 20 654\.0 Indicateurs de rentabilité Valeur \
+actualisée nette \(VAN\) 20 654\.0 k€ Taux de rendement interne \(TRI\) % Délai de retour 0\.0 ans Coût total du projet 0\.0}
 end

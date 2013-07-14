@@ -157,9 +157,9 @@ class Etude
     objet.details.where(nature: "").destroy_all
     objet.details.each do |detail|
       if objet.class == Gain
-        detail.unite = 'k€' if detail.unite == ''
+        detail.unite = 'k€' if detail.unite == :''
       else
-        detail.unite = Etude.liste_natures[objet.class][detail.nature] if objet.class != Gain
+        detail.unite = Etude.liste_natures[objet.class][detail.nature]
       end
       totaux_unite_annee[detail.unite] = Hash.new(0) if not totaux_unite_annee.has_key?(detail.unite)
       totaux_nature_unite_annee[detail.nature] = Hash.new(0) if not totaux_nature_unite_annee.has_key?(detail.nature)
@@ -479,11 +479,6 @@ class Etude
     # calculees[5] TOTAL FLUX ANNUELS non actualisés (k€)
     self.etude_rentabilite.calculees[5] = self.calcul_somme(self.etude_rentabilite.calculees[5],self.etude_rentabilite.calculees[0],'+')
     self.etude_rentabilite.calculees[5] = self.calcul_somme(self.etude_rentabilite.calculees[5],self.etude_rentabilite.calculees[4],'+')
-    flows = []
-    self.etude_rentabilite.calculees[5].montants.each { |mt| flows << mt.montant }
-    until flows.empty? || flows[0] < 0  do flows.delete_at(0) end
-    until flows.empty? || flows[-1] = 0 do flows.pop end
-    if flows.count >= 2 then self.tri = NewtonRaphsonIrrCalculator.calculate(flows,100,0.1)*100 else self.tri = nil end
     # calculees[6] (ajout de 1,2 et 3) TOTAL FLUX ANNUELS actualisés
     self.etude_rentabilite.calculees[6] = self.calcul_somme(self.etude_rentabilite.calculees[6],self.etude_rentabilite.calculees[1],'+')
     self.etude_rentabilite.calculees[6] = self.calcul_somme(self.etude_rentabilite.calculees[6],self.etude_rentabilite.calculees[2],'+')
@@ -491,33 +486,42 @@ class Etude
     self.van = self.etude_rentabilite.calculees[6].total
     if self.van < 0 then
       self.delai_retour = nil
+      self.tri = nil
     else
-      if self.etude_rentabilite.calculees[6].montants[0].montant >= 0 then 
-        self.delai_retour = 0 
-      else
-        self.delai_retour = 1 - (self.date_debut.month - 1)/12
-      end
-      (1..self.etude_rentabilite.calculees[6].montants.count - 1).each do |index|
-        if self.etude_rentabilite.calculees[6].montants[index-1].montant < 0 then
-          if self.etude_rentabilite.calculees[6].montants[index].montant < 0 then
-            self.delai_retour += 1
-          else
-            self.delai_retour -= self.etude_rentabilite.calculees[6].montants[index-1].montant / \
-              (self.etude_rentabilite.calculees[6].montants[index].montant - self.etude_rentabilite.calculees[6].montants[index-1].montant)
-          end
-        end
-      end
+      flows = []
+      self.etude_rentabilite.calculees[5].montants.each { |mt| flows << mt.montant }
+      until flows.empty? || flows[0] < 0  do flows.delete_at(0) end
+      until flows.empty? || flows[-1] != 0 do flows.pop end
+      if flows.count >= 2 then self.tri = NewtonRaphsonIrrCalculator.calculate(flows,100,0.1)*100 else self.tri = nil end
     end
     # calculees[7] cumuls
     self.etude_rentabilite.calculees[7].montants.each_index do |rang|
       if rang == 0 then
-        self.etude_rentabilite.calculees[7].montants[rang].montant = self.etude_rentabilite.calculees[6]
+        self.etude_rentabilite.calculees[7].montants[rang].montant = self.etude_rentabilite.calculees[6].montants[rang].montant
       else
         if self.etude_rentabilite.calculees[6].montants[rang].montant == 0 then
           break
         else
           self.etude_rentabilite.calculees[7].montants[rang].montant = self.etude_rentabilite.calculees[7].montants[rang-1].montant + \
                                                                        self.etude_rentabilite.calculees[6].montants[rang].montant
+        end
+      end
+    end
+    # calcul du delai de retour
+    if self.van >= 0 then
+      if self.etude_rentabilite.calculees[7].montants[0].montant >= 0 then 
+        self.delai_retour = 0 
+      else
+        self.delai_retour = 1 - (self.date_debut.month - 1)/12.0
+      end
+      (1..self.etude_rentabilite.calculees[7].montants.count - 1).each do |index|
+        if self.etude_rentabilite.calculees[7].montants[index-1].montant < 0 then
+          if self.etude_rentabilite.calculees[7].montants[index].montant < 0 then
+            self.delai_retour += 1
+          else
+            self.delai_retour -= self.etude_rentabilite.calculees[7].montants[index-1].montant / \
+              (self.etude_rentabilite.calculees[7].montants[index].montant - self.etude_rentabilite.calculees[7].montants[index-1].montant)
+          end
         end
       end
     end

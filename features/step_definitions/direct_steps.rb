@@ -116,12 +116,12 @@ Alors(/^je vois le commentaire sur les coûts directs$/) do
 end
 
 Alors(/^je vois la synthèse des coûts directs$/) do
-  page.text.should =~ %r{Total des coûts directs -1 010 675\.0 -1 100\.0 -5 200\.0 -4 325\.0 -1 000 025\.0 -25\.0 Total des coûts indirects Total \
-Coûts d'investissement initial -1 010 675\.0 -1 100\.0 -5 200\.0 -4 325\.0 -1 000 025\.0 -25\.0 Total Coûts d'investissement initial actualisés \
--899 138\.7 -1 100\.0 -5 000\.0 -3 998\.7 -889 018\.6 -21\.4 Total des impacts métier Total Impacts Métiers actualisé Total des coûts indirects \
-situation actuelle Total des coûts indirects situation cible Total Impacts sur les coûts de fonctionnement des systèmes Total Impacts sur les coûts \
-de fonctionnement SI actualisé Gains nets \(Impacts métiers \+ Impacts fonctionnement système\) TOTAL FLUX ANNUELS non actualisés \(k€\) -1 010 675\.0 \
--1 100\.0 -5 200\.0 -4 325\.0 -1 000 025\.0 -25\.0 TOTAL FLUX ANNUELS actualisés -899 138\.7 -1 100\.0 -5 000\.0 -3 998\.7 -889 018\.6 -21\.4 TOTAL \
-FLUX ANNUELS CUMULES actualisés -5 000\.0 -8 998\.7 -898 017\.3 -898 038\.7 Indicateurs de rentabilité Valeur actualisée nette \(VAN\) -899 138\.7 k€ \
-Taux de rendement interne \(TRI\) 1051907357\.6 % Délai de retour 6\.0 ans Coût total du projet 1 010 675\.0 k€}
+  page.text.should =~ %r{Total des coûts directs -1 010 675\.0 -1 100\.0 -5 200\.0 -4 325\.0 -1 000 025\.0 -25\.0 Total des coûts indirects Total Coûts \
+d'investissement initial -1 010 675\.0 -1 100\.0 -5 200\.0 -4 325\.0 -1 000 025\.0 -25\.0 Total Coûts d'investissement initial actualisés -899 138\.7 \
+-1 100\.0 -5 000\.0 -3 998\.7 -889 018\.6 -21\.4 Total des impacts métier Total Impacts Métiers actualisé Total des coûts indirects situation actuelle \
+Total des coûts indirects situation cible Total Impacts sur les coûts de fonctionnement des systèmes Total Impacts sur les coûts de fonctionnement SI \
+actualisé Gains nets \(Impacts métiers \+ Impacts fonctionnement système\) TOTAL FLUX ANNUELS non actualisés \(k€\) -1 010 675\.0 -1 100\.0 -5 200\.0 \
+-4 325\.0 -1 000 025\.0 -25\.0 TOTAL FLUX ANNUELS actualisés -899 138\.7 -1 100\.0 -5 000\.0 -3 998\.7 -889 018\.6 -21\.4 TOTAL FLUX ANNUELS CUMULES \
+actualisés -1 100\.0 -6 100\.0 -10 098\.7 -899 117\.3 -899 138\.7 Indicateurs de rentabilité Valeur actualisée nette \(VAN\) -899 138\.7 k€ Taux de \
+rendement interne \(TRI\) % Délai de retour ans Coût total du projet 1 010 675\.0 k€}
 end

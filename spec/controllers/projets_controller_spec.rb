@@ -22,13 +22,13 @@ describe ProjetsController do
     {}
   end
 
-  describe "GET index" do
-    it "assigns all projets as @projets" do
-      projet = Projet.create! valid_attributes
-      get :index, {}, valid_session
-      assigns(:projets).should eq([projet])
-    end
-  end
+#  describe "GET index" do
+#    it "assigns all projets as @projets" do
+#      projet = Projet.create! valid_attributes
+#      get :index, {}, valid_session
+#      assigns(:projets).should eq([projet])
+#    end
+#  end
 
   describe "GET show" do
     it "assigns the requested projet as @projet" do

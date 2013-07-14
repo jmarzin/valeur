@@ -128,7 +128,7 @@ end
 Alors(/^je peux dépublier l'étude (\d)$/) do |num|
   visit "/projets/1/etudes/#{num}/edit"
   expect(find_by_id("etude_publie").disabled?).to_not eq('disabled')    
-    @etude.projet.derive_cout.should_not be nil
+      @etude.projet.derive_cout.should_not be nil
     @etude.projet.derive_duree.should_not be nil
     uncheck('Publié')
     click_button('Enregistrer')
@@ -163,7 +163,6 @@ Alors(/^le lien (.+) est absent sur la ligne de la première$/) do |zone|
   reg = Regexp.new(zone)
   page.all('tr',:text => 'projet').first.text.should_not =~ reg
 end
-
 Alors(/^le lien (.+) est présent sur la ligne de la première$/) do |zone|
   reg = Regexp.new(zone)
   page.all('tr',:text => 'projet').first.text.should =~ reg
@@ -173,3 +172,28 @@ Alors(/^le lien Modif est absent$/) do
   page.text.should_not =~ /Modif/
 end
 
+Alors(/^j'ai créé une copie de l'étude 1$/) do
+  @etude1 = Etude.find("1")
+  @etude2 = Etude.find("2")
+  @etude1.fields.each_key do |nom|
+    case nom
+    when "_id", "code"
+      @etude1[nom].should_not == @etude2[nom]
+    else
+      @etude1[nom].should == @etude2[nom]
+    end
+  end
+  @enfants1 = @etude1._children
+  @enfants2 = @etude2._children
+  @enfants1.count.should == @enfants2.count
+  @enfants1.each_index do |i|
+    @enfants1[i].class.should == @enfants2[i].class
+    @enfants1[i].fields.each_key do |nom|
+      if nom == "_id" then
+        @enfants1[i][nom].should_not == @enfants2[i][nom]
+      else
+        @enfants1[i][nom].should == @enfants2[i][nom]
+      end
+    end
+  end
+end
