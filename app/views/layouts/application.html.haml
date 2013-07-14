@@ -9,6 +9,10 @@
   %body
     %table#bandeau
       %td.title Tableau de bord TIC !
+      -if utilisateur_signed_in?
+        %td.signin= link_to('Déconnexion de '+current_utilisateur.email, destroy_utilisateur_session_path, :method => :delete)
+      -else
+        %td.signin= link_to('Identification', new_utilisateur_session_path)
       %td.bouton= button_to('Aide', '/aide_projets', :method => :get)
     #main
       = yield

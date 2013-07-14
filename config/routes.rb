@@ -1,5 +1,7 @@
 Valeur::Application.routes.draw do
   
+  devise_for :utilisateurs
+
   resources :strategies, only: [:show, :edit, :update]
 
   resources :rentabilites, only: [:show]
